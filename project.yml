@@ -35,8 +35,23 @@ targets:
         CODE_SIGN_STYLE: Automatic
         CURRENT_PROJECT_VERSION: "1"
         MARKETING_VERSION: "0.1.0"
+        ENABLE_TESTABILITY: YES
     scheme:
-      testTargets: []
+      testTargets:
+        - HandProbeTests
+
+  HandProbeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: HandProbeTests
+    dependencies:
+      - target: HandProbe
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ada.ch5b.HandProbeTests
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: 1
 
   CoralAR:
     type: application

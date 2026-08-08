@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		196B5001923C637233BD26FC /* PinchStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67C90CD9138E146C95625B7 /* PinchStateMachine.swift */; };
 		1BE7A10ED0B698776CF6591A /* ProbeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190794F9D91B49DEF7CDCBE /* ProbeController.swift */; };
+		3A6B303B6B87CFE3377DA8BA /* PinchStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE875B2CFBA73FD13E2CC8C /* PinchStateMachineTests.swift */; };
 		3B375A1ED5F50A1052966507 /* LandmarkOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B344D6A0C62F9370B539C7D /* LandmarkOverlayView.swift */; };
 		48509D0EB5B14DDAE4C07F60 /* HandPoseDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */; };
 		9E9CE12DFEB9395E12AF42F1 /* LiveReadoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */; };
 		A3A9EB525C2116525717B256 /* HandProbeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEC0210C94D631C6AB7501B /* HandProbeApp.swift */; };
+		A4E3CAED46E73B8589F11AA0 /* GestureTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75511E48841B7DFDA3F7B215 /* GestureTuning.swift */; };
 		A86F4DC96D7432BCBF73C91D /* PinchRatioCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9425BC2517B6125E98244C2 /* PinchRatioCalculator.swift */; };
 		E111B523A49DD3509370FB04 /* CameraFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE2AA80D487DBA232E7CBDD /* CameraFeed.swift */; };
 		F3A1110B40216DF676004C71 /* CoralARApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3402AC91A154B23B20C2BA73 /* CoralARApp.swift */; };
@@ -19,19 +22,33 @@
 		F4CA67E825DD442DFF97D72C /* MetricsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B86A79F759179B40A8FEEA4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5C6E3942F75B1583A708265 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D176DCF505A2B4D46FA81BC6;
+			remoteInfo = HandProbe;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		03CD873F4C9BC8673C28D2CD /* HandProbe.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HandProbe.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0FBD9FB4D7D02224FEB0CC22 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		03CD873F4C9BC8673C28D2CD /* HandProbe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandProbe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FBD9FB4D7D02224FEB0CC22 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsLogger.swift; sourceTree = "<group>"; };
 		3402AC91A154B23B20C2BA73 /* CoralARApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoralARApp.swift; sourceTree = "<group>"; };
 		3B344D6A0C62F9370B539C7D /* LandmarkOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkOverlayView.swift; sourceTree = "<group>"; };
-		48095E55A59143DDD07820E6 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		48095E55A59143DDD07820E6 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseDetector.swift; sourceTree = "<group>"; };
-		746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
-		88E699C00A3BC14FF113DCA7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		6BE875B2CFBA73FD13E2CC8C /* PinchStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchStateMachineTests.swift; sourceTree = "<group>"; };
+		746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		75511E48841B7DFDA3F7B215 /* GestureTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureTuning.swift; sourceTree = "<group>"; };
+		88E699C00A3BC14FF113DCA7 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		9EE2AA80D487DBA232E7CBDD /* CameraFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFeed.swift; sourceTree = "<group>"; };
+		A67C90CD9138E146C95625B7 /* PinchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchStateMachine.swift; sourceTree = "<group>"; };
+		B85806F85EBAC753D687CFDE /* HandProbeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = HandProbeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9425BC2517B6125E98244C2 /* PinchRatioCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchRatioCalculator.swift; sourceTree = "<group>"; };
-		BEF1163D774B7E054214ECE5 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		BEF1163D774B7E054214ECE5 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		C190794F9D91B49DEF7CDCBE /* ProbeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProbeController.swift; sourceTree = "<group>"; };
 		CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveReadoutView.swift; sourceTree = "<group>"; };
 		CBEC0210C94D631C6AB7501B /* HandProbeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandProbeApp.swift; sourceTree = "<group>"; };
@@ -90,12 +107,14 @@
 			children = (
 				9EE2AA80D487DBA232E7CBDD /* CameraFeed.swift */,
 				D1551CAB3635FF2460F1F335 /* CameraPreviewView.swift */,
+				75511E48841B7DFDA3F7B215 /* GestureTuning.swift */,
 				5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */,
 				CBEC0210C94D631C6AB7501B /* HandProbeApp.swift */,
 				3B344D6A0C62F9370B539C7D /* LandmarkOverlayView.swift */,
 				CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */,
 				1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */,
 				B9425BC2517B6125E98244C2 /* PinchRatioCalculator.swift */,
+				A67C90CD9138E146C95625B7 /* PinchStateMachine.swift */,
 				C190794F9D91B49DEF7CDCBE /* ProbeController.swift */,
 			);
 			path = HandProbe;
@@ -106,6 +125,7 @@
 			children = (
 				10CB7F00073D270222DE64CB /* CoralAR */,
 				7AC47416C44922C51F4194D4 /* HandProbe */,
+				CB71BA0F19B55AC76753A7B6 /* HandProbeTests */,
 				E95D56D59BBDC78EAA9FF75F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -118,11 +138,20 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		CB71BA0F19B55AC76753A7B6 /* HandProbeTests */ = {
+			isa = PBXGroup;
+			children = (
+				6BE875B2CFBA73FD13E2CC8C /* PinchStateMachineTests.swift */,
+			);
+			path = HandProbeTests;
+			sourceTree = "<group>";
+		};
 		E95D56D59BBDC78EAA9FF75F /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				FF3660D74BC1117359540FE4 /* CoralAR.app */,
 				03CD873F4C9BC8673C28D2CD /* HandProbe.app */,
+				B85806F85EBAC753D687CFDE /* HandProbeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,6 +175,24 @@
 			productName = CoralAR;
 			productReference = FF3660D74BC1117359540FE4 /* CoralAR.app */;
 			productType = "com.apple.product-type.application";
+		};
+		BD0B53E84C67C7F273D9F1F0 /* HandProbeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DABFACAD5078D4B539FBE122 /* Build configuration list for PBXNativeTarget "HandProbeTests" */;
+			buildPhases = (
+				22DA7B8A677BC8DA1289BB11 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				22BE661526AB4513564D9D75 /* PBXTargetDependency */,
+			);
+			name = HandProbeTests;
+			packageProductDependencies = (
+			);
+			productName = HandProbeTests;
+			productReference = B85806F85EBAC753D687CFDE /* HandProbeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		D176DCF505A2B4D46FA81BC6 /* HandProbe */ = {
 			isa = PBXNativeTarget;
@@ -196,12 +243,21 @@
 			projectRoot = "";
 			targets = (
 				D176DCF505A2B4D46FA81BC6 /* HandProbe */,
+				BD0B53E84C67C7F273D9F1F0 /* HandProbeTests */,
 				504647463DA18237A0E89036 /* CoralAR */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		22DA7B8A677BC8DA1289BB11 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A6B303B6B87CFE3377DA8BA /* PinchStateMachineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		924FCA9E18B4232A16B5C59C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -216,17 +272,27 @@
 			files = (
 				E111B523A49DD3509370FB04 /* CameraFeed.swift in Sources */,
 				F3FAC3E3F52A17FB3CCC3E52 /* CameraPreviewView.swift in Sources */,
+				A4E3CAED46E73B8589F11AA0 /* GestureTuning.swift in Sources */,
 				48509D0EB5B14DDAE4C07F60 /* HandPoseDetector.swift in Sources */,
 				A3A9EB525C2116525717B256 /* HandProbeApp.swift in Sources */,
 				3B375A1ED5F50A1052966507 /* LandmarkOverlayView.swift in Sources */,
 				9E9CE12DFEB9395E12AF42F1 /* LiveReadoutView.swift in Sources */,
 				F4CA67E825DD442DFF97D72C /* MetricsLogger.swift in Sources */,
 				A86F4DC96D7432BCBF73C91D /* PinchRatioCalculator.swift in Sources */,
+				196B5001923C637233BD26FC /* PinchStateMachine.swift in Sources */,
 				1BE7A10ED0B698776CF6591A /* ProbeController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		22BE661526AB4513564D9D75 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D176DCF505A2B4D46FA81BC6 /* HandProbe */;
+			targetProxy = B86A79F759179B40A8FEEA4D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2911247B751C86A04FB35B01 /* Release */ = {
@@ -236,6 +302,8 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P23A73L3J8;
+				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = HandProbe;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to detect hand landmarks for the Phase 0–2 probe measurements.";
@@ -345,6 +413,23 @@
 			};
 			name = Debug;
 		};
+		8542CBD11821832D3647180E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b.HandProbeTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HandProbe.app/HandProbe";
+			};
+			name = Debug;
+		};
 		8790077B76ED6119ACD1C103 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -377,6 +462,8 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P23A73L3J8;
+				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = HandProbe;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to detect hand landmarks for the Phase 0–2 probe measurements.";
@@ -454,6 +541,23 @@
 			};
 			name = Release;
 		};
+		F1149F9D96FD239D4A113533 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b.HandProbeTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HandProbe.app/HandProbe";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -480,6 +584,15 @@
 			buildConfigurations = (
 				57765A0CAE1BBA0003E91822 /* Debug */,
 				BBF6D46CEF41E072D9C5D0F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DABFACAD5078D4B539FBE122 /* Build configuration list for PBXNativeTarget "HandProbeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8542CBD11821832D3647180E /* Debug */,
+				F1149F9D96FD239D4A113533 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

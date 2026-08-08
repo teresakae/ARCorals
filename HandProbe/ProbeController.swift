@@ -29,16 +29,23 @@ final class ProbeController: ObservableObject {
     @Published var bboxDiagMax: Double?
     @Published var palmWidthMin: Double?
     @Published var palmWidthMax: Double?
+    /// Latest PinchStateMachine phase name for on-screen label.
+    @Published var gesturePhaseName: String = "Possible"
+    @Published var lastGestureEventName: String = "—"
 
     let camera = CameraFeed()
     private let detector = HandPoseDetector()
     private let logger = MetricsLogger()
+    private var stateMachine = PinchStateMachine(tuning: .default)
+    private let tuning = GestureTuning.default
 
     private var fpsWindowStart = CACurrentMediaTime()
     private var fpsCount = 0
     private var rollWrist = RollingMinMax()
     private var rollBBox = RollingMinMax()
     private var rollPalm = RollingMinMax()
+    /// Monotonic clock for the state machine (independent of wall CSV timestamps).
+    private var machineTime: TimeInterval = 0
 
     func start() {
         requestCameraAccessAndRun()
@@ -129,6 +136,25 @@ final class ProbeController: ObservableObject {
 
         let ratios = PinchRatioCalculator.ratios(from: result.joints)
         latestRatios = ratios
+
+        // Phase 2: palmWidth only (ADR-015). Nil ratio / low obs → drop into grace path.
+        machineTime += tuning.inferenceInterval
+        let palm: Double?
+        let conf: Float?
+        if result.observationCount >= 1 {
+            palm = ratios.palmWidth
+            conf = result.observationConfidence
+        } else {
+            palm = nil
+            conf = nil
+        }
+        let events = stateMachine.process(
+            PinchObservation(timestamp: machineTime, pinchRatio: palm, confidence: conf)
+        )
+        gesturePhaseName = stateMachine.phase.name
+        if let last = events.last {
+            lastGestureEventName = last.name
+        }
 
         let now = CACurrentMediaTime()
         rollWrist.push(ratios.wristMCP, now: now)

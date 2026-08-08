@@ -31,7 +31,7 @@ final class MetricsLogger {
         # device=\(device) ios=\(ios)
         # rig=\(safeNotes)
         # initial_distance_cm=\(distanceCm)
-        # confidence_gate=\(GestureTuning.confidenceGate)
+        # confidence_gate=\(GestureTuning.default.confidenceGate)
         # coords=Vision NormalizedPoint after orientation:.right ; origin=bottom-left ; units=normalized
         # no pinch threshold — measurement only
         \(Self.csvColumns.joined(separator: ","))

@@ -45,6 +45,9 @@ private struct ContentView: View {
                     wristBand: (probe.wristMCPMin, probe.wristMCPMax),
                     bboxBand: (probe.bboxDiagMin, probe.bboxDiagMax),
                     palmBand: (probe.palmWidthMin, probe.palmWidthMax),
+                    gesturePhaseName: probe.gesturePhaseName,
+                    lastGestureEventName: probe.lastGestureEventName,
+                    pinchThreshold: GestureTuning.default.pinchThreshold,
                     onToggleLogging: { probe.toggleLogging() },
                     onSetGroundTruth: { probe.setGroundTruth($0) },
                     onClearGroundTruth: { probe.clearGroundTruth() }

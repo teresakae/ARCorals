@@ -15,12 +15,24 @@ struct LiveReadoutView: View {
     let wristBand: (min: Double?, max: Double?)
     let bboxBand: (min: Double?, max: Double?)
     let palmBand: (min: Double?, max: Double?)
+    let gesturePhaseName: String
+    let lastGestureEventName: String
+    let pinchThreshold: Double
     let onToggleLogging: () -> Void
     let onSetGroundTruth: (GroundTruthState) -> Void
     let onClearGroundTruth: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
+            Text(gesturePhaseName)
+                .font(.system(size: 36, weight: .bold, design: .monospaced))
+                .foregroundStyle(phaseColor)
+                .frame(maxWidth: .infinity, alignment: .center)
+            Text("last \(lastGestureEventName) · T=\(String(format: "%.1f", pinchThreshold)) palm")
+                .font(.caption.monospaced())
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .center)
+
             HStack {
                 Text("dist \(distanceCm.wrappedValue)cm")
                 Stepper("", value: distanceCm, in: 20...80, step: 10)
@@ -69,10 +81,11 @@ struct LiveReadoutView: View {
 
             Divider()
 
-            ratioRow("r_wrist", ratios?.wristMCP, wristBand)
-            ratioRow("r_bbox", ratios?.bboxDiag, bboxBand)
             ratioRow("r_palm", ratios?.palmWidth, palmBand)
             gridRow("raw t-i", opt(ratios?.rawThumbIndexDist))
+            // Secondary ratios still shown for A/B debugging; SM uses palm only.
+            ratioRow("r_wrist", ratios?.wristMCP, wristBand)
+            ratioRow("r_bbox", ratios?.bboxDiag, bboxBand)
 
             Divider()
 
@@ -80,14 +93,20 @@ struct LiveReadoutView: View {
             gridRow("obs", obs.map { "\($0.observationCount)" } ?? "—")
             gridRow("obs conf", format(obs?.observationConfidence))
             gridRow("fps", String(format: "%.1f", fps))
-            gridRow("wrist c", jointLine(obs, .wrist))
-            gridRow("thumbTip", jointLine(obs, .thumbTip))
-            gridRow("indexTip", jointLine(obs, .indexTip))
             gridRow("thermal", thermal())
         }
         .padding(10)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
         .padding(8)
+    }
+
+    private var phaseColor: Color {
+        switch gesturePhaseName {
+        case "Began", "Changed": return .green
+        case "Ended": return .blue
+        case "Cancelled", "Failed": return .red
+        default: return .primary
+        }
     }
 
     private func ratioRow(
