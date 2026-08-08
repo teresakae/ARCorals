@@ -1,0 +1,33 @@
+# Planning docs (local only)
+docs/AGENTS.md
+docs/ARCHITECTURE.md
+docs/DECISIONS.md
+docs/PRD.md
+docs/PROMPTS.md
+docs/RESEARCH.md
+docs/STEPS.md
+docs/TESTING.md
+
+# Xcode
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+build/
+*.xcuserstate
+*.xcscmblueprint
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Captured measurements (device pulls may leave temp files; keep CSVs)
+Measurements/*.tmp

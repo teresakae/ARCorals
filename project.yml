@@ -1,0 +1,63 @@
+name: Ch5B
+options:
+  bundleIdPrefix: com.ada.ch5b
+  deploymentTarget:
+    iOS: "26.0"
+  xcodeVersion: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    TARGETED_DEVICE_FAMILY: 1
+    IPHONEOS_DEPLOYMENT_TARGET: "26.0"
+    SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+    SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+
+targets:
+  HandProbe:
+    type: application
+    platform: iOS
+    sources:
+      - path: HandProbe
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ada.ch5b.HandProbe
+        PRODUCT_NAME: HandProbe
+        TARGETED_DEVICE_FAMILY: 1
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: HandProbe
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_NSCameraUsageDescription: Camera is used to detect hand landmarks for the Phase 0–2 probe measurements.
+        CODE_SIGN_STYLE: Automatic
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "0.1.0"
+    scheme:
+      testTargets: []
+
+  CoralAR:
+    type: application
+    platform: iOS
+    sources:
+      - path: CoralAR
+        excludes:
+          - "Resources/coral.usdz"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ada.ch5b.CoralAR
+        PRODUCT_NAME: CoralAR
+        TARGETED_DEVICE_FAMILY: 1
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: CoralAR
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_NSCameraUsageDescription: Camera is used for AR world tracking and hand-gesture placement of the coral model.
+        CODE_SIGN_STYLE: Automatic
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "0.1.0"
+    scheme:
+      testTargets: []

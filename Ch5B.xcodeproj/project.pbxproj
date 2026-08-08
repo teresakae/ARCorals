@@ -1,0 +1,490 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1BE7A10ED0B698776CF6591A /* ProbeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190794F9D91B49DEF7CDCBE /* ProbeController.swift */; };
+		3B375A1ED5F50A1052966507 /* LandmarkOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B344D6A0C62F9370B539C7D /* LandmarkOverlayView.swift */; };
+		48509D0EB5B14DDAE4C07F60 /* HandPoseDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */; };
+		9E9CE12DFEB9395E12AF42F1 /* LiveReadoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */; };
+		A3A9EB525C2116525717B256 /* HandProbeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEC0210C94D631C6AB7501B /* HandProbeApp.swift */; };
+		A86F4DC96D7432BCBF73C91D /* PinchRatioCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9425BC2517B6125E98244C2 /* PinchRatioCalculator.swift */; };
+		E111B523A49DD3509370FB04 /* CameraFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE2AA80D487DBA232E7CBDD /* CameraFeed.swift */; };
+		F3A1110B40216DF676004C71 /* CoralARApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3402AC91A154B23B20C2BA73 /* CoralARApp.swift */; };
+		F3FAC3E3F52A17FB3CCC3E52 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1551CAB3635FF2460F1F335 /* CameraPreviewView.swift */; };
+		F4CA67E825DD442DFF97D72C /* MetricsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03CD873F4C9BC8673C28D2CD /* HandProbe.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HandProbe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FBD9FB4D7D02224FEB0CC22 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsLogger.swift; sourceTree = "<group>"; };
+		3402AC91A154B23B20C2BA73 /* CoralARApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoralARApp.swift; sourceTree = "<group>"; };
+		3B344D6A0C62F9370B539C7D /* LandmarkOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkOverlayView.swift; sourceTree = "<group>"; };
+		48095E55A59143DDD07820E6 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseDetector.swift; sourceTree = "<group>"; };
+		746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		88E699C00A3BC14FF113DCA7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		9EE2AA80D487DBA232E7CBDD /* CameraFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFeed.swift; sourceTree = "<group>"; };
+		B9425BC2517B6125E98244C2 /* PinchRatioCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchRatioCalculator.swift; sourceTree = "<group>"; };
+		BEF1163D774B7E054214ECE5 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		C190794F9D91B49DEF7CDCBE /* ProbeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProbeController.swift; sourceTree = "<group>"; };
+		CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveReadoutView.swift; sourceTree = "<group>"; };
+		CBEC0210C94D631C6AB7501B /* HandProbeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandProbeApp.swift; sourceTree = "<group>"; };
+		D1551CAB3635FF2460F1F335 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		FF3660D74BC1117359540FE4 /* CoralAR.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CoralAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		10CB7F00073D270222DE64CB /* CoralAR */ = {
+			isa = PBXGroup;
+			children = (
+				2F9978D93C94DEB7DC746A3C /* AR */,
+				17A42D796AC8C4C52E43D86D /* Debug */,
+				737A1D8C0848E020DB32090F /* Gesture */,
+				B3A3536D6F5638F89DBDE955 /* Resources */,
+				5A225279337E7E1BAD8CC4B0 /* Vision */,
+				3402AC91A154B23B20C2BA73 /* CoralARApp.swift */,
+			);
+			path = CoralAR;
+			sourceTree = "<group>";
+		};
+		17A42D796AC8C4C52E43D86D /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				BEF1163D774B7E054214ECE5 /* .gitkeep */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		2F9978D93C94DEB7DC746A3C /* AR */ = {
+			isa = PBXGroup;
+			children = (
+				88E699C00A3BC14FF113DCA7 /* .gitkeep */,
+			);
+			path = AR;
+			sourceTree = "<group>";
+		};
+		5A225279337E7E1BAD8CC4B0 /* Vision */ = {
+			isa = PBXGroup;
+			children = (
+				0FBD9FB4D7D02224FEB0CC22 /* .gitkeep */,
+			);
+			path = Vision;
+			sourceTree = "<group>";
+		};
+		737A1D8C0848E020DB32090F /* Gesture */ = {
+			isa = PBXGroup;
+			children = (
+				48095E55A59143DDD07820E6 /* .gitkeep */,
+			);
+			path = Gesture;
+			sourceTree = "<group>";
+		};
+		7AC47416C44922C51F4194D4 /* HandProbe */ = {
+			isa = PBXGroup;
+			children = (
+				9EE2AA80D487DBA232E7CBDD /* CameraFeed.swift */,
+				D1551CAB3635FF2460F1F335 /* CameraPreviewView.swift */,
+				5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */,
+				CBEC0210C94D631C6AB7501B /* HandProbeApp.swift */,
+				3B344D6A0C62F9370B539C7D /* LandmarkOverlayView.swift */,
+				CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */,
+				1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */,
+				B9425BC2517B6125E98244C2 /* PinchRatioCalculator.swift */,
+				C190794F9D91B49DEF7CDCBE /* ProbeController.swift */,
+			);
+			path = HandProbe;
+			sourceTree = "<group>";
+		};
+		A0D958FCDEDC82CF62C21898 = {
+			isa = PBXGroup;
+			children = (
+				10CB7F00073D270222DE64CB /* CoralAR */,
+				7AC47416C44922C51F4194D4 /* HandProbe */,
+				E95D56D59BBDC78EAA9FF75F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B3A3536D6F5638F89DBDE955 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E95D56D59BBDC78EAA9FF75F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FF3660D74BC1117359540FE4 /* CoralAR.app */,
+				03CD873F4C9BC8673C28D2CD /* HandProbe.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		504647463DA18237A0E89036 /* CoralAR */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 166CA3C1C80B611043AC8821 /* Build configuration list for PBXNativeTarget "CoralAR" */;
+			buildPhases = (
+				924FCA9E18B4232A16B5C59C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoralAR;
+			packageProductDependencies = (
+			);
+			productName = CoralAR;
+			productReference = FF3660D74BC1117359540FE4 /* CoralAR.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D176DCF505A2B4D46FA81BC6 /* HandProbe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7A77D87D5062F228B23529C /* Build configuration list for PBXNativeTarget "HandProbe" */;
+			buildPhases = (
+				C486F015FDCE766CCD9159CF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HandProbe;
+			packageProductDependencies = (
+			);
+			productName = HandProbe;
+			productReference = 03CD873F4C9BC8673C28D2CD /* HandProbe.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B5C6E3942F75B1583A708265 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					504647463DA18237A0E89036 = {
+						ProvisioningStyle = Automatic;
+					};
+					D176DCF505A2B4D46FA81BC6 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = CA28AD5F51E3E699ED96EA6C /* Build configuration list for PBXProject "Ch5B" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A0D958FCDEDC82CF62C21898;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E95D56D59BBDC78EAA9FF75F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D176DCF505A2B4D46FA81BC6 /* HandProbe */,
+				504647463DA18237A0E89036 /* CoralAR */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		924FCA9E18B4232A16B5C59C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3A1110B40216DF676004C71 /* CoralARApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C486F015FDCE766CCD9159CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E111B523A49DD3509370FB04 /* CameraFeed.swift in Sources */,
+				F3FAC3E3F52A17FB3CCC3E52 /* CameraPreviewView.swift in Sources */,
+				48509D0EB5B14DDAE4C07F60 /* HandPoseDetector.swift in Sources */,
+				A3A9EB525C2116525717B256 /* HandProbeApp.swift in Sources */,
+				3B375A1ED5F50A1052966507 /* LandmarkOverlayView.swift in Sources */,
+				9E9CE12DFEB9395E12AF42F1 /* LiveReadoutView.swift in Sources */,
+				F4CA67E825DD442DFF97D72C /* MetricsLogger.swift in Sources */,
+				A86F4DC96D7432BCBF73C91D /* PinchRatioCalculator.swift in Sources */,
+				1BE7A10ED0B698776CF6591A /* ProbeController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2911247B751C86A04FB35B01 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = HandProbe;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to detect hand landmarks for the Phase 0–2 probe measurements.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b.HandProbe;
+				PRODUCT_NAME = HandProbe;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		57765A0CAE1BBA0003E91822 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		7808C4D4B7E84837FF56F85A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = CoralAR;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used for AR world tracking and hand-gesture placement of the coral model.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b.CoralAR;
+				PRODUCT_NAME = CoralAR;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		8790077B76ED6119ACD1C103 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = CoralAR;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used for AR world tracking and hand-gesture placement of the coral model.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b.CoralAR;
+				PRODUCT_NAME = CoralAR;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		B2E4C97F7DD6A059C9AD9C6E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = HandProbe;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to detect hand landmarks for the Phase 0–2 probe measurements.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b.HandProbe;
+				PRODUCT_NAME = HandProbe;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		BBF6D46CEF41E072D9C5D0F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		166CA3C1C80B611043AC8821 /* Build configuration list for PBXNativeTarget "CoralAR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7808C4D4B7E84837FF56F85A /* Debug */,
+				8790077B76ED6119ACD1C103 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C7A77D87D5062F228B23529C /* Build configuration list for PBXNativeTarget "HandProbe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2E4C97F7DD6A059C9AD9C6E /* Debug */,
+				2911247B751C86A04FB35B01 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CA28AD5F51E3E699ED96EA6C /* Build configuration list for PBXProject "Ch5B" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				57765A0CAE1BBA0003E91822 /* Debug */,
+				BBF6D46CEF41E072D9C5D0F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B5C6E3942F75B1583A708265 /* Project object */;
+}
