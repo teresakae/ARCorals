@@ -10,6 +10,16 @@ struct CoralARApp: App {
             ZStack {
                 ARViewContainer(session: session)
                     .ignoresSafeArea()
+                    .onGeometryChange(for: CGSize.self) { $0.size } action: { session.updateViewportSize($0) }
+
+                LandmarkDotsOverlay(viewportJoints: session.viewportJoints)
+                    .ignoresSafeArea()
+
+                HandDebugOverlay(
+                    pinchViewportPoint: session.pinchViewportPoint,
+                    raycastViewportPoint: session.raycastViewportPoint
+                )
+                .ignoresSafeArea()
 
                 ARStatusHUD(session: session)
             }
@@ -23,34 +33,12 @@ struct CoralARApp: App {
 private struct ARViewContainer: UIViewRepresentable {
     let session: ARSessionCoordinator
 
-    func makeCoordinator() -> TapBridge {
-        TapBridge(session: session)
-    }
-
     func makeUIView(context: Context) -> ARView {
-        let view = session.arView
-        let tap = UITapGestureRecognizer(
-            target: context.coordinator,
-            action: #selector(TapBridge.handleTap(_:))
-        )
-        view.addGestureRecognizer(tap)
-        return view
+        session.arView
     }
 
-    func updateUIView(_ uiView: ARView, context: Context) {}
-
-    @MainActor
-    final class TapBridge: NSObject {
-        let session: ARSessionCoordinator
-
-        init(session: ARSessionCoordinator) {
-            self.session = session
-        }
-
-        @objc func handleTap(_ gesture: UITapGestureRecognizer) {
-            guard let view = gesture.view else { return }
-            let point = gesture.location(in: view)
-            session.handleTap(at: point)
-        }
+    func updateUIView(_ uiView: ARView, context: Context) {
+        // Viewport size comes from .onGeometryChange in CoralARApp — updateUIView
+        // fires before the view is laid out on first call, so uiView.bounds is .zero then.
     }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.SwiftUI.sceneID</key>
+	<string>SwiftUI.ModifiedContent&lt;SwiftUI.ModifiedContent&lt;SwiftUI.ModifiedContent&lt;SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(SwiftUI.ModifiedContent&lt;SwiftUI.ModifiedContent&lt;CoralAR.(unknown context at $102c21cc0).ARViewContainer, SwiftUI._SafeAreaRegionsIgnoringLayout&gt;, SwiftUI._GeometryActionModifier&lt;__C.CGSize&gt;&gt;, SwiftUI.ModifiedContent&lt;CoralAR.LandmarkDotsOverlay, SwiftUI._SafeAreaRegionsIgnoringLayout&gt;, SwiftUI.ModifiedContent&lt;CoralAR.HandDebugOverlay, SwiftUI._SafeAreaRegionsIgnoringLayout&gt;, CoralAR.ARStatusHUD)&gt;&gt;, SwiftUI.TransactionalPreferenceModifier&lt;Swift.Bool, SwiftUI.StatusBarKey&gt;&gt;, SwiftUI._AppearanceActionModifier&gt;, SwiftUI._AppearanceActionModifier&gt;-1</string>
+</dict>
+</plist>

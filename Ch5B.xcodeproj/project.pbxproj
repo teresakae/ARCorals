@@ -25,6 +25,14 @@
 		A86F4DC96D7432BCBF73C91D /* PinchRatioCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9425BC2517B6125E98244C2 /* PinchRatioCalculator.swift */; };
 		E111B523A49DD3509370FB04 /* CameraFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE2AA80D487DBA232E7CBDD /* CameraFeed.swift */; };
 		F3A1110B40216DF676004C71 /* CoralARApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3402AC91A154B23B20C2BA73 /* CoralARApp.swift */; };
+		C01A10000000000000000010 /* FrameTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01A10000000000000000011 /* FrameTap.swift */; };
+		C01A10000000000000000012 /* HandPoseDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01A10000000000000000013 /* HandPoseDetector.swift */; };
+		C01A10000000000000000014 /* LandmarkFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01A10000000000000000015 /* LandmarkFrame.swift */; };
+		C01A10000000000000000016 /* LandmarkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01A10000000000000000017 /* LandmarkSpace.swift */; };
+		C01A10000000000000000018 /* GestureTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01A10000000000000000019 /* GestureTuning.swift */; };
+		C01A1000000000000000001A /* PinchRatioCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01A1000000000000000001B /* PinchRatioCalculator.swift */; };
+		C01A1000000000000000001C /* PinchStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01A1000000000000000001D /* PinchStateMachine.swift */; };
+		C01A1000000000000000001E /* HandDebugOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01A1000000000000000001F /* HandDebugOverlay.swift */; };
 		F3FAC3E3F52A17FB3CCC3E52 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1551CAB3635FF2460F1F335 /* CameraPreviewView.swift */; };
 		F4CA67E825DD442DFF97D72C /* MetricsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */; };
 /* End PBXBuildFile section */
@@ -43,8 +51,15 @@
 		03CD873F4C9BC8673C28D2CD /* HandProbe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandProbe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsLogger.swift; sourceTree = "<group>"; };
 		3402AC91A154B23B20C2BA73 /* CoralARApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoralARApp.swift; sourceTree = "<group>"; };
+		C01A10000000000000000011 /* FrameTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameTap.swift; sourceTree = "<group>"; };
+		C01A10000000000000000013 /* HandPoseDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseDetector.swift; sourceTree = "<group>"; };
+		C01A10000000000000000015 /* LandmarkFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkFrame.swift; sourceTree = "<group>"; };
+		C01A10000000000000000017 /* LandmarkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkSpace.swift; sourceTree = "<group>"; };
+		C01A10000000000000000019 /* GestureTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureTuning.swift; sourceTree = "<group>"; };
+		C01A1000000000000000001B /* PinchRatioCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchRatioCalculator.swift; sourceTree = "<group>"; };
+		C01A1000000000000000001D /* PinchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchStateMachine.swift; sourceTree = "<group>"; };
+		C01A1000000000000000001F /* HandDebugOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandDebugOverlay.swift; sourceTree = "<group>"; };
 		3B344D6A0C62F9370B539C7D /* LandmarkOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkOverlayView.swift; sourceTree = "<group>"; };
-		48095E55A59143DDD07820E6 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseDetector.swift; sourceTree = "<group>"; };
 		6BE875B2CFBA73FD13E2CC8C /* PinchStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchStateMachineTests.swift; sourceTree = "<group>"; };
 		746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
@@ -85,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				C01A10000000000000000002 /* ARStatusHUD.swift */,
+				C01A1000000000000000001F /* HandDebugOverlay.swift */,
 				C01A10000000000000000004 /* MetricsLogger.swift */,
 			);
 			path = Debug;
@@ -105,7 +121,10 @@
 		5A225279337E7E1BAD8CC4B0 /* Vision */ = {
 			isa = PBXGroup;
 			children = (
-				0FBD9FB4D7D02224FEB0CC22 /* .gitkeep */,
+				C01A10000000000000000011 /* FrameTap.swift */,
+				C01A10000000000000000013 /* HandPoseDetector.swift */,
+				C01A10000000000000000015 /* LandmarkFrame.swift */,
+				C01A10000000000000000017 /* LandmarkSpace.swift */,
 			);
 			path = Vision;
 			sourceTree = "<group>";
@@ -113,7 +132,9 @@
 		737A1D8C0848E020DB32090F /* Gesture */ = {
 			isa = PBXGroup;
 			children = (
-				48095E55A59143DDD07820E6 /* .gitkeep */,
+				C01A10000000000000000019 /* GestureTuning.swift */,
+				C01A1000000000000000001B /* PinchRatioCalculator.swift */,
+				C01A1000000000000000001D /* PinchStateMachine.swift */,
 			);
 			path = Gesture;
 			sourceTree = "<group>";
@@ -281,8 +302,16 @@
 				C01A10000000000000000005 /* ARSessionCoordinator.swift in Sources */,
 				C01A10000000000000000001 /* ARStatusHUD.swift in Sources */,
 				F3A1110B40216DF676004C71 /* CoralARApp.swift in Sources */,
+				C01A10000000000000000010 /* FrameTap.swift in Sources */,
+				C01A10000000000000000018 /* GestureTuning.swift in Sources */,
+				C01A1000000000000000001E /* HandDebugOverlay.swift in Sources */,
+				C01A10000000000000000012 /* HandPoseDetector.swift in Sources */,
+				C01A10000000000000000014 /* LandmarkFrame.swift in Sources */,
+				C01A10000000000000000016 /* LandmarkSpace.swift in Sources */,
 				C01A10000000000000000003 /* MetricsLogger.swift in Sources */,
 				C01A1000000000000000000B /* ModelProvider.swift in Sources */,
+				C01A1000000000000000001A /* PinchRatioCalculator.swift in Sources */,
+				C01A1000000000000000001C /* PinchStateMachine.swift in Sources */,
 				C01A10000000000000000007 /* PlacementService.swift in Sources */,
 				C01A1000000000000000000D /* PlaneScanCoordinator.swift in Sources */,
 				C01A10000000000000000009 /* SceneController.swift in Sources */,

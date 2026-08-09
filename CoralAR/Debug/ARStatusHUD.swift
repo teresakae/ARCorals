@@ -1,26 +1,25 @@
 import SwiftUI
 
-/// On-screen Phase 3 HUD: plane count, time-to-first-plane, raycast tier, plane-viz toggle.
+/// Phase 4 HUD: planes + pinch calibration + gesture + raycast tier.
 struct ARStatusHUD: View {
     @ObservedObject var session: ARSessionCoordinator
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 10) {
             if session.needsScanPrompt {
                 scanBanner
             }
 
-            HStack(alignment: .top) {
+            HStack(alignment: .top, spacing: 8) {
                 statusCard
-                Spacer()
-                Toggle(isOn: $session.showPlaneVisualization) {
-                    Text("Planes")
-                        .font(.caption.weight(.semibold))
+                Spacer(minLength: 0)
+                VStack(alignment: .trailing, spacing: 6) {
+                    toggle("Planes", isOn: $session.showPlaneVisualization, on: .teal)
+                    toggle("Dots", isOn: $session.showLandmarks, on: .green)
                 }
-                .toggleStyle(.button)
-                .buttonStyle(.borderedProminent)
-                .tint(session.showPlaneVisualization ? .teal : .gray)
             }
+
+            calibrationBar
 
             Spacer()
         }
@@ -47,10 +46,9 @@ struct ARStatusHUD: View {
     }
 
     private var statusCard: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 3) {
             Text("Planes: \(session.planeCount)")
                 .font(.subheadline.weight(.semibold).monospacedDigit())
-
             if let t = session.secondsToFirstPlane {
                 Text(String(format: "First plane: %.1fs", t))
                     .font(.caption.monospacedDigit())
@@ -58,15 +56,17 @@ struct ARStatusHUD: View {
                 Text("First plane: —")
                     .font(.caption.monospacedDigit())
             }
-
+            Text("Gesture: \(session.gesturePhaseName)")
+                .font(.caption.monospacedDigit().weight(.semibold))
             Text("Raycast: \(tierLabel(session.lastRaycastTier))")
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(tierColor(session.lastRaycastTier))
-
             Text("Tracking: \(session.trackingStateLabel)")
                 .font(.caption2.monospacedDigit())
                 .foregroundStyle(.secondary)
-
+            Text(String(format: "Vision %.0fHz  rx %d / ok %d", session.inferenceHz, session.framesReceived, session.framesProcessed))
+                .font(.caption2.monospacedDigit())
+                .foregroundStyle(.secondary)
             if let url = session.metrics.fileURL {
                 Text(url.lastPathComponent)
                     .font(.caption2)
@@ -76,6 +76,72 @@ struct ARStatusHUD: View {
         }
         .padding(12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+
+    private var calibrationBar: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("palmWidth")
+                    .font(.caption.weight(.semibold))
+                Text(ratioText(session.pinchRatio))
+                    .font(.caption.monospacedDigit().weight(.bold))
+                    .foregroundStyle(ratioColor(session.pinchRatio))
+                Text("thr \(String(format: "%.1f", session.tuning.pinchThreshold))")
+                    .font(.caption2.monospacedDigit())
+                    .foregroundStyle(.secondary)
+                Spacer()
+                if let mn = session.palmWidthMin, let mx = session.palmWidthMax {
+                    Text(String(format: "2s %.2f–%.2f", mn, mx))
+                        .font(.caption2.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Text("Hold Open/Pinched to label ARFrame ratios (seam #2 check vs HandProbe ≈5.9).")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 8) {
+                labelButton("Open", state: .open)
+                labelButton("Pinched", state: .pinched)
+                Button("Clear") { session.setGroundTruth(nil) }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+            }
+        }
+        .padding(12)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+
+    private func labelButton(_ title: String, state: GroundTruthState) -> some View {
+        let active = session.groundTruth == state
+        return Button(title) {
+            session.setGroundTruth(active ? nil : state)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(active ? (state == .pinched ? .orange : .blue) : .gray)
+        .controlSize(.small)
+    }
+
+    private func toggle(_ title: String, isOn: Binding<Bool>, on: Color) -> some View {
+        Toggle(isOn: isOn) {
+            Text(title).font(.caption.weight(.semibold))
+        }
+        .toggleStyle(.button)
+        .buttonStyle(.borderedProminent)
+        .tint(isOn.wrappedValue ? on : .gray)
+    }
+
+    private func ratioText(_ r: Double?) -> String {
+        guard let r else { return "—" }
+        return String(format: "%.2f", r)
+    }
+
+    private func ratioColor(_ r: Double?) -> Color {
+        guard let r else { return .secondary }
+        if r < session.tuning.pinchEnterThreshold { return .orange }
+        if r > session.tuning.pinchExitThreshold { return .blue }
+        return .yellow
     }
 
     private func tierLabel(_ tier: PlacementService.Tier) -> String {

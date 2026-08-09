@@ -1,13 +1,16 @@
 import ARKit
 import Foundation
 
-/// Phase 3 CSV logger — session/plane/placement events only (not per-frame).
+/// Phase 4 CSV — gesture + plane + calibration rows.
 final class MetricsLogger {
     enum Event: String {
         case sessionStart
         case firstPlane
         case planeUpdate
         case placement
+        case gesture
+        case calibration
+        case frameStats
     }
 
     private(set) var fileURL: URL?
@@ -27,11 +30,13 @@ final class MetricsLogger {
         stop()
 
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let url = docs.appendingPathComponent("phase3_planes_\(Self.fileStamp()).csv")
+        let url = docs.appendingPathComponent("phase4_join_\(Self.fileStamp()).csv")
 
         let header = """
-        # phase=3 file=\(url.lastPathComponent)
+        # phase=4 file=\(url.lastPathComponent)
         # device=\(Self.deviceModel()) ios=\(ProcessInfo.processInfo.operatingSystemVersionString)
+        # pinchThreshold=\(GestureTuning.default.pinchThreshold) hysteresisBand=\(GestureTuning.default.hysteresisBand)
+        # denominator=palmWidth seam=ARFrame.capturedImage orientation=.right
         # raycast_chain=existingPlaneGeometry>existingPlaneInfinite>estimatedPlane
         \(Self.csvColumns.joined(separator: ","))
 
@@ -61,7 +66,13 @@ final class MetricsLogger {
         planeCount: Int,
         planeExtentM2: Float,
         raycastTier: PlacementService.Tier,
-        trackingState: ARCamera.TrackingState
+        trackingState: ARCamera.TrackingState,
+        gesturePhase: String = "",
+        pinchRatio: Double? = nil,
+        handCoveragePct: Double? = nil,
+        framesReceived: Int = 0,
+        framesProcessed: Int = 0,
+        groundTruth: String = ""
     ) {
         guard let handle else { return }
 
@@ -81,7 +92,13 @@ final class MetricsLogger {
             String(format: "%.4f", planeExtentM2),
             raycastTier.rawValue,
             Self.trackingLabel(trackingState),
-            "", // placement_error_cm — measured by hand (TESTING.md Run B)
+            gesturePhase,
+            pinchRatio.map { String(format: "%.4f", $0) } ?? "",
+            handCoveragePct.map { String(format: "%.1f", $0) } ?? "",
+            String(framesReceived),
+            String(framesProcessed),
+            groundTruth,
+            "", // placement_error_cm — ruler (TESTING Run C)
         ].joined(separator: ",") + "\n"
 
         if let data = row.data(using: .utf8) {
@@ -97,6 +114,12 @@ final class MetricsLogger {
         "plane_extent_m2",
         "raycast_tier",
         "tracking_state",
+        "gesture_phase",
+        "pinch_ratio_palmWidth",
+        "hand_frame_coverage_pct",
+        "frames_received",
+        "frames_processed",
+        "ground_truth",
         "placement_error_cm",
     ]
 
@@ -116,7 +139,7 @@ final class MetricsLogger {
         }
     }
 
-    private static func trackingLabel(_ state: ARCamera.TrackingState) -> String {
+    static func trackingLabel(_ state: ARCamera.TrackingState) -> String {
         switch state {
         case .notAvailable: return "notAvailable"
         case .normal: return "normal"
