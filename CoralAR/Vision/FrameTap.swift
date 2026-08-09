@@ -24,7 +24,7 @@ struct FrameTap: Sendable {
     mutating func tryBegin(
         frame: ARFrame,
         viewportSize: CGSize,
-        interfaceOrientation: UIInterfaceOrientation = .portrait
+        interfaceOrientation: UIInterfaceOrientation = .landscapeRight
     ) -> FramePacket? {
         guard viewportSize.width > 1, viewportSize.height > 1 else { return nil }
         guard !inFlight else { return nil }

@@ -1,0 +1,10 @@
+# phase=5 file=phase5_manip_20260809_183728.csv
+# device=iPhone18,3 ios=Version 26.6 (Build 23G71)
+# pinchThreshold=1.98 hysteresisBand=1.0
+# scaleDeadzoneLog=0.18 yawDeadzoneRad=0.35
+# scaleSensitivity=1.0 yawSensitivity=1.0
+# scaleModeExitThreshold=3.5
+# denominator=palmWidth seam=ARFrame.capturedImage orientation=.right
+# mode_lock=dominant_axis_first_deadzone_crossing
+timestamp,event,seconds_since_start,plane_count,plane_extent_m2,raycast_tier,tracking_state,gesture_phase,pinch_ratio_palmWidth,hand_frame_coverage_pct,frames_received,frames_processed,ground_truth,placement_error_cm,gesture_id,pinch_ratio_at_began,scale_factor,yaw_angle_2d,yaw_palm_axis,yaw_at_began,applied_yaw_rad,mode,overshoot_count,final_error
+2026-08-09T10:37:29.096Z,sessionStart,0.000,0,0.0000,none,notAvailable,,,,0,0,,,,,,,,,,,,

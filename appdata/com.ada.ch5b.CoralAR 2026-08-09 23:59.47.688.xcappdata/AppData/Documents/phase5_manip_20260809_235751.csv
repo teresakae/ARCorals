@@ -1,0 +1,1081 @@
+# phase=5 file=phase5_manip_20260809_235751.csv
+# device=iPhone18,3 ios=Version 26.6 (Build 23G71)
+# pinchThreshold=1.98 hysteresisBand=1.0
+# scaleDeadzoneLog=0.18 yawDeadzoneRad=0.35
+# scaleSensitivity=1.0 yawSensitivity=1.0
+# scaleModeExitThreshold=3.5
+# denominator=palmWidth seam=ARFrame.capturedImage orientation=.right
+# mode_lock=dominant_axis_first_deadzone_crossing
+timestamp,event,seconds_since_start,plane_count,plane_extent_m2,raycast_tier,tracking_state,gesture_phase,pinch_ratio_palmWidth,hand_frame_coverage_pct,frames_received,frames_processed,ground_truth,placement_error_cm,gesture_id,pinch_ratio_at_began,scale_factor,yaw_angle_2d,yaw_palm_axis,yaw_at_began,applied_yaw_rad,mode,overshoot_count,final_error,yaw_wrist_axis
+2026-08-09T15:57:51.588Z,sessionStart,0.000,0,0.0000,none,notAvailable,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:01.295Z,firstPlane,9.715,1,0.1350,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:01.394Z,planeUpdate,9.814,1,0.1350,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:02.396Z,planeUpdate,10.816,1,0.1575,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:03.411Z,planeUpdate,11.831,1,0.2205,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:04.430Z,planeUpdate,12.850,1,0.2205,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:05.495Z,planeUpdate,13.915,1,0.4200,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:06.508Z,planeUpdate,14.928,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:07.593Z,planeUpdate,16.013,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:08.611Z,planeUpdate,17.031,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:09.281Z,gesture,17.701,2,1.0209,none,normal,Began,1.0072,4.1,1043,261,,,,,,0.3696,-1.4982,,,,,,0.2925
+2026-08-09T15:58:09.290Z,placement,17.710,2,1.0209,existingPlaneInfinite,normal,Began,1.0072,,1043,261,,,,,,,,,,,,,
+2026-08-09T15:58:09.359Z,gesture,17.779,2,1.0209,existingPlaneInfinite,normal,Changed,0.7168,3.5,1047,262,,,,,,0.3685,-1.7099,,,,,,0.3093
+2026-08-09T15:58:09.410Z,gesture,17.830,2,1.0209,existingPlaneInfinite,normal,Changed,0.7168,3.2,1050,263,,,,,,0.3330,-1.6860,,,,,,0.3156
+2026-08-09T15:58:09.477Z,gesture,17.897,2,1.0209,existingPlaneInfinite,normal,Changed,0.5999,2.9,1055,264,,,,,,0.4430,-1.7312,,,,,,0.3376
+2026-08-09T15:58:09.545Z,gesture,17.965,2,1.0209,existingPlaneInfinite,normal,Changed,0.5999,2.7,1058,265,,,,,,0.4368,-1.5483,,,,,,0.3627
+2026-08-09T15:58:09.610Z,gesture,18.030,2,1.0209,existingPlaneInfinite,normal,Changed,0.5883,2.5,1063,266,,,,,,0.3412,-1.6815,,,,,,0.3609
+2026-08-09T15:58:09.678Z,gesture,18.098,2,1.0209,existingPlaneInfinite,normal,Changed,0.4033,2.3,1067,267,,,,,,0.4158,-1.7023,,,,,,0.3550
+2026-08-09T15:58:09.709Z,planeUpdate,18.129,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:09.762Z,gesture,18.182,2,1.0209,existingPlaneInfinite,normal,Changed,0.3911,2.3,1071,268,,,,,,0.4642,-1.6772,,,,,,0.3453
+2026-08-09T15:58:09.797Z,gesture,18.217,2,1.0209,existingPlaneInfinite,normal,Changed,0.3326,2.2,1074,269,,,,,,0.3899,-1.8124,,,,,,0.3267
+2026-08-09T15:58:09.877Z,gesture,18.297,2,1.0209,existingPlaneInfinite,normal,Changed,0.3321,2.2,1079,270,,,,,,0.4056,-1.8460,,,,,,0.3064
+2026-08-09T15:58:09.945Z,gesture,18.365,2,1.0209,existingPlaneInfinite,normal,Changed,0.3321,2.2,1082,271,,,,,,0.3243,-2.0018,,,,,,0.2763
+2026-08-09T15:58:10.012Z,gesture,18.432,2,1.0209,existingPlaneInfinite,normal,Changed,0.3321,2.4,1087,272,,,,,,0.2163,-1.6311,,,,,,0.2849
+2026-08-09T15:58:10.080Z,gesture,18.500,2,1.0209,existingPlaneInfinite,normal,Changed,0.3566,3.0,1091,273,,,,,,0.2050,-1.6686,,,,,,0.1959
+2026-08-09T15:58:10.128Z,gesture,18.548,2,1.0209,existingPlaneInfinite,normal,Changed,0.4623,3.0,1094,274,,,,,,0.2117,-1.7878,,,,,,0.1719
+2026-08-09T15:58:10.210Z,gesture,18.630,2,1.0209,existingPlaneInfinite,normal,Changed,0.4826,3.1,1099,275,,,,,,0.2488,-1.4903,,,,,,0.2109
+2026-08-09T15:58:10.276Z,gesture,18.696,2,1.0209,existingPlaneInfinite,normal,Changed,0.4826,2.9,1103,276,,,,,,0.1602,-1.6112,,,,,,0.2179
+2026-08-09T15:58:10.343Z,gesture,18.763,2,1.0209,existingPlaneInfinite,normal,Changed,0.4623,2.7,1107,277,,,,,,0.2252,-1.8476,,,,,,0.1956
+2026-08-09T15:58:10.394Z,gesture,18.814,2,1.0209,existingPlaneInfinite,normal,Changed,0.4623,2.5,1110,278,,,,,,0.2556,-2.0859,,,,,,0.1855
+2026-08-09T15:58:10.477Z,gesture,18.897,2,1.0209,existingPlaneInfinite,normal,Changed,0.4484,2.6,1115,279,,,,,,0.1938,-2.0548,,,,,,0.1914
+2026-08-09T15:58:10.678Z,gesture,19.098,2,1.0209,existingPlaneInfinite,normal,Cancelled,,2.5,1127,282,,,,,,0.2186,,,,,,,0.1843
+2026-08-09T15:58:10.678Z,gesture,19.098,2,1.0209,existingPlaneInfinite,normal,Possible,,2.5,1127,282,,,,,,0.2186,,,,,,,0.1843
+2026-08-09T15:58:10.709Z,planeUpdate,19.129,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:11.677Z,gesture,20.097,2,1.0209,existingPlaneInfinite,normal,Began,0.3980,2.4,1187,297,,,,,,0.2245,-1.9273,,,,,,0.2261
+2026-08-09T15:58:11.677Z,manipulation,20.097,2,1.0209,existingPlaneInfinite,normal,Began,0.3980,2.4,1187,297,,,1,0.3980,1.0000,0.2245,-1.9273,0.2261,0.0000,ambiguous,,,0.2261
+2026-08-09T15:58:11.709Z,planeUpdate,20.129,2,1.0209,none,normal,,,,0,0,,,1,,,,,,,,,,
+2026-08-09T15:58:11.727Z,gesture,20.147,2,1.0209,existingPlaneInfinite,normal,Changed,0.3580,2.2,1190,298,,,1,,,0.1673,-2.0934,,,,,,0.2002
+2026-08-09T15:58:11.727Z,manipulation,20.147,2,1.0209,existingPlaneInfinite,normal,Changed,0.3580,2.2,1190,298,,,1,,1.0000,0.1673,-2.0934,,0.0000,ambiguous,,,0.2002
+2026-08-09T15:58:11.810Z,gesture,20.230,2,1.0209,existingPlaneInfinite,normal,Changed,0.4254,2.2,1195,299,,,1,,,0.1163,-2.1809,,,,,,0.1784
+2026-08-09T15:58:11.810Z,manipulation,20.230,2,1.0209,existingPlaneInfinite,normal,Changed,0.4254,2.2,1195,299,,,1,,1.0000,0.1163,-2.1809,,0.0000,ambiguous,,,0.1784
+2026-08-09T15:58:11.894Z,gesture,20.314,2,1.0209,existingPlaneInfinite,normal,Changed,0.3580,2.4,1200,300,,,1,,,0.1940,-2.2321,,,,,,0.1820
+2026-08-09T15:58:11.894Z,manipulation,20.314,2,1.0209,existingPlaneInfinite,normal,Changed,0.3580,2.4,1200,300,,,1,0.3580,1.0000,0.1940,-2.2321,0.1820,0.0000,ambiguous,,,0.1820
+2026-08-09T15:58:11.945Z,gesture,20.365,2,1.0209,existingPlaneInfinite,normal,Changed,0.3609,2.4,1203,301,,,1,,,0.1749,-2.2264,,,,,,0.1873
+2026-08-09T15:58:11.945Z,manipulation,20.365,2,1.0209,existingPlaneInfinite,normal,Changed,0.3609,2.4,1203,301,,,1,0.3580,1.0000,0.1749,-2.2264,0.1820,0.0000,ambiguous,,,0.1873
+2026-08-09T15:58:12.011Z,gesture,20.431,2,1.0209,existingPlaneInfinite,normal,Changed,0.3609,2.5,1207,302,,,1,,,0.2138,-2.1147,,,,,,0.1828
+2026-08-09T15:58:12.011Z,manipulation,20.431,2,1.0209,existingPlaneInfinite,normal,Changed,0.3609,2.5,1207,302,,,1,0.3580,1.0000,0.2138,-2.1147,0.1820,0.0000,ambiguous,,,0.1828
+2026-08-09T15:58:12.079Z,gesture,20.499,2,1.0209,existingPlaneInfinite,normal,Changed,0.4182,2.5,1211,303,,,1,,,0.1884,-2.0540,,,,,,0.1916
+2026-08-09T15:58:12.079Z,manipulation,20.499,2,1.0209,existingPlaneInfinite,normal,Changed,0.4182,2.5,1211,303,,,1,0.3580,1.0000,0.1884,-2.0540,0.1820,0.0000,ambiguous,,,0.1916
+2026-08-09T15:58:12.143Z,gesture,20.563,2,1.0209,existingPlaneInfinite,normal,Changed,0.4134,2.5,1215,304,,,1,,,0.1688,-2.1782,,,,,,0.2068
+2026-08-09T15:58:12.144Z,manipulation,20.564,2,1.0209,existingPlaneInfinite,normal,Changed,0.4134,2.5,1215,304,,,1,0.3580,1.0000,0.1688,-2.1782,0.1820,0.0000,ambiguous,,,0.2068
+2026-08-09T15:58:12.195Z,gesture,20.615,2,1.0209,existingPlaneInfinite,normal,Changed,0.4182,2.5,1218,305,,,1,,,0.1282,-2.2232,,,,,,0.2139
+2026-08-09T15:58:12.195Z,manipulation,20.615,2,1.0209,existingPlaneInfinite,normal,Changed,0.4182,2.5,1218,305,,,1,0.3580,1.0000,0.1282,-2.2232,0.1820,0.0000,ambiguous,,,0.2139
+2026-08-09T15:58:12.276Z,gesture,20.696,2,1.0209,existingPlaneInfinite,normal,Changed,0.4224,2.6,1223,306,,,1,,,0.1812,-2.1373,,,,,,0.2094
+2026-08-09T15:58:12.276Z,manipulation,20.696,2,1.0209,existingPlaneInfinite,normal,Changed,0.4224,2.6,1223,306,,,1,0.3580,1.0000,0.1812,-2.1373,0.1820,0.0000,ambiguous,,,0.2094
+2026-08-09T15:58:12.345Z,gesture,20.765,2,1.0209,existingPlaneInfinite,normal,Changed,0.4515,2.7,1227,307,,,1,,,0.1890,-2.1585,,,,,,0.2048
+2026-08-09T15:58:12.345Z,manipulation,20.766,2,1.0209,existingPlaneInfinite,normal,Changed,0.4515,2.7,1227,307,,,1,0.4224,1.0688,0.1890,-2.1585,0.2094,0.0000,scale,,,0.2048
+2026-08-09T15:58:12.394Z,gesture,20.814,2,1.0209,existingPlaneInfinite,normal,Changed,0.4752,2.7,1230,308,,,1,,,0.2065,-2.0668,,,scale ⏸,,,0.1878
+2026-08-09T15:58:12.394Z,manipulation,20.814,2,1.0209,existingPlaneInfinite,normal,Changed,0.4752,2.7,1230,308,,,1,0.4224,1.0688,0.2065,-2.0668,0.2094,0.0000,scale,,,0.1878
+2026-08-09T15:58:12.494Z,gesture,20.914,2,1.0209,existingPlaneInfinite,normal,Changed,0.4969,2.7,1236,309,,,1,,,0.2342,-2.0834,,,scale ✓,,,0.1945
+2026-08-09T15:58:12.495Z,manipulation,20.915,2,1.0209,existingPlaneInfinite,normal,Changed,0.4969,2.7,1236,309,,,1,0.4224,1.0688,0.2342,-2.0834,0.2094,0.0000,scale,,,0.1945
+2026-08-09T15:58:12.545Z,gesture,20.965,2,1.0209,existingPlaneInfinite,normal,Changed,0.5026,2.7,1239,310,,,1,,,0.1997,-2.1149,,,scale ✓,,,0.2002
+2026-08-09T15:58:12.545Z,manipulation,20.965,2,1.0209,existingPlaneInfinite,normal,Changed,0.5026,2.7,1239,310,,,1,0.4224,1.0688,0.1997,-2.1149,0.2094,0.0000,scale,,,0.2002
+2026-08-09T15:58:12.595Z,gesture,21.015,2,1.0209,existingPlaneInfinite,normal,Changed,0.5038,2.7,1242,311,,,1,,,0.1799,-2.0554,,,scale ✓,,,0.2099
+2026-08-09T15:58:12.596Z,manipulation,21.016,2,1.0209,existingPlaneInfinite,normal,Changed,0.5038,2.7,1242,311,,,1,0.4224,1.0688,0.1799,-2.0554,0.2094,0.0000,scale,,,0.2099
+2026-08-09T15:58:12.695Z,gesture,21.115,2,1.0209,existingPlaneInfinite,normal,Changed,0.5100,2.8,1248,312,,,1,,,0.2621,-1.9444,,,scale ✓,,,0.1995
+2026-08-09T15:58:12.695Z,manipulation,21.115,2,1.0209,existingPlaneInfinite,normal,Changed,0.5100,2.8,1248,312,,,1,0.4224,1.0688,0.2621,-1.9444,0.2094,0.0000,scale,,,0.1995
+2026-08-09T15:58:12.710Z,planeUpdate,21.130,2,1.0209,none,normal,,,,0,0,,,1,,,,,,,,,,
+2026-08-09T15:58:12.729Z,gesture,21.149,2,1.0209,existingPlaneInfinite,normal,Changed,0.7173,3.0,1250,313,,,1,,,0.4047,-1.4646,,,scale ✓,,,0.2183
+2026-08-09T15:58:12.730Z,manipulation,21.150,2,1.0209,existingPlaneInfinite,normal,Changed,0.7173,3.0,1250,313,,,1,0.4224,1.0688,0.4047,-1.4646,0.2094,0.0000,scale,,,0.2183
+2026-08-09T15:58:12.812Z,gesture,21.232,2,1.0209,existingPlaneInfinite,normal,Changed,0.8775,2.9,1255,314,,,1,,,0.4395,-1.1841,,,scale ✓,,,0.2333
+2026-08-09T15:58:12.812Z,manipulation,21.232,2,1.0209,existingPlaneInfinite,normal,Changed,0.8775,2.9,1255,314,,,1,0.4224,1.0688,0.4395,-1.1841,0.2094,0.0000,scale,,,0.2333
+2026-08-09T15:58:12.879Z,gesture,21.299,2,1.0209,existingPlaneInfinite,normal,Changed,1.4275,3.0,1259,315,,,1,,,0.4244,-2.0726,,,scale ✓,,,0.2314
+2026-08-09T15:58:12.879Z,manipulation,21.299,2,1.0209,existingPlaneInfinite,normal,Changed,1.4275,3.0,1259,315,,,1,0.4224,1.0688,0.4244,-2.0726,0.2094,0.0000,scale,,,0.2314
+2026-08-09T15:58:12.927Z,gesture,21.347,2,1.0209,existingPlaneInfinite,normal,Changed,1.6061,3.0,1262,316,,,1,,,0.6623,-1.5010,,,scale ✓,,,0.2436
+2026-08-09T15:58:12.928Z,manipulation,21.348,2,1.0209,existingPlaneInfinite,normal,Changed,1.6061,3.0,1262,316,,,1,0.4224,1.0688,0.6623,-1.5010,0.2094,0.0000,scale,,,0.2436
+2026-08-09T15:58:12.995Z,gesture,21.415,2,1.0209,existingPlaneInfinite,normal,Changed,2.0059,2.9,1266,317,,,1,,,0.8435,-1.2230,,,scale ✓,,,0.2559
+2026-08-09T15:58:12.995Z,manipulation,21.415,2,1.0209,existingPlaneInfinite,normal,Changed,2.0059,2.9,1266,317,,,1,0.4224,1.0688,0.8435,-1.2230,0.2094,0.0000,scale,,,0.2559
+2026-08-09T15:58:13.077Z,gesture,21.497,2,1.0209,existingPlaneInfinite,normal,Changed,2.1343,3.0,1271,318,,,1,,,0.4733,-1.3641,,,scale ✓,,,0.2730
+2026-08-09T15:58:13.077Z,manipulation,21.497,2,1.0209,existingPlaneInfinite,normal,Changed,2.1343,3.0,1271,318,,,1,0.4224,1.0688,0.4733,-1.3641,0.2094,0.0000,scale,,,0.2730
+2026-08-09T15:58:13.128Z,gesture,21.548,2,1.0209,existingPlaneInfinite,normal,Changed,2.2219,3.1,1274,319,,,1,,,0.1731,-1.8631,,,scale ✓,,,0.3033
+2026-08-09T15:58:13.129Z,manipulation,21.549,2,1.0209,existingPlaneInfinite,normal,Changed,2.2219,3.1,1274,319,,,1,0.4224,1.0688,0.1731,-1.8631,0.2094,0.0000,scale,,,0.3033
+2026-08-09T15:58:13.327Z,gesture,21.747,2,1.0209,existingPlaneInfinite,normal,Ended,10.7138,3.4,1286,322,,,1,,,0.1111,-1.2358,,,scale ✓,,,0.3471
+2026-08-09T15:58:13.328Z,manipulation,21.748,2,1.0209,existingPlaneInfinite,normal,Ended,10.7138,3.4,1286,322,,,1,,1.0688,0.1111,-1.2358,,0.0000,scale,,,0.3471
+2026-08-09T15:58:13.328Z,gesture,21.748,2,1.0209,existingPlaneInfinite,normal,Possible,10.7138,3.4,1286,322,,,,,,0.1111,-1.2358,,,,,,0.3471
+2026-08-09T15:58:13.711Z,planeUpdate,22.131,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:14.210Z,gesture,22.630,2,1.0209,existingPlaneInfinite,normal,Began,1.0130,2.7,1339,335,,,,,,0.2427,-2.2183,,,,,,0.2836
+2026-08-09T15:58:14.211Z,manipulation,22.631,2,1.0209,existingPlaneInfinite,normal,Began,1.0130,2.7,1339,335,,,2,1.0130,1.0688,0.2427,-2.2183,0.2836,0.0000,ambiguous,,,0.2836
+2026-08-09T15:58:14.277Z,gesture,22.697,2,1.0209,existingPlaneInfinite,normal,Changed,0.9154,2.7,1343,336,,,2,,,0.3135,-2.3476,,,,,,0.2812
+2026-08-09T15:58:14.277Z,manipulation,22.697,2,1.0209,existingPlaneInfinite,normal,Changed,0.9154,2.7,1343,336,,,2,,1.0688,0.3135,-2.3476,,0.0000,ambiguous,,,0.2812
+2026-08-09T15:58:14.331Z,gesture,22.751,2,1.0209,existingPlaneInfinite,normal,Changed,0.9890,2.7,1346,337,,,2,,,0.3256,-2.6529,,,,,,0.3031
+2026-08-09T15:58:14.331Z,manipulation,22.751,2,1.0209,existingPlaneInfinite,normal,Changed,0.9890,2.7,1346,337,,,2,,1.0688,0.3256,-2.6529,,0.0000,ambiguous,,,0.3031
+2026-08-09T15:58:14.412Z,gesture,22.832,2,1.0209,existingPlaneInfinite,normal,Changed,0.9890,2.9,1351,338,,,2,,,0.1938,2.8054,,,,,,0.3249
+2026-08-09T15:58:14.412Z,manipulation,22.832,2,1.0209,existingPlaneInfinite,normal,Changed,0.9890,2.9,1351,338,,,2,0.9890,1.0688,0.1938,2.8054,0.3031,0.0000,ambiguous,,,0.3249
+2026-08-09T15:58:14.477Z,gesture,22.897,2,1.0209,existingPlaneInfinite,normal,Changed,1.2064,3.1,1355,339,,,2,,,0.1355,2.3717,,,,,,0.3924
+2026-08-09T15:58:14.477Z,manipulation,22.897,2,1.0209,existingPlaneInfinite,normal,Changed,1.2064,3.1,1355,339,,,2,1.2064,1.0688,0.1355,2.3717,0.3924,0.0000,scale,,,0.3924
+2026-08-09T15:58:14.545Z,gesture,22.965,2,1.0209,existingPlaneInfinite,normal,Changed,1.2064,3.4,1359,340,,,2,,,0.1245,2.7584,,,scale,,,0.4039
+2026-08-09T15:58:14.546Z,manipulation,22.966,2,1.0209,existingPlaneInfinite,normal,Changed,1.2064,3.4,1359,340,,,2,1.2064,1.0688,0.1245,2.7584,0.3924,0.0000,scale,,,0.4039
+2026-08-09T15:58:14.748Z,gesture,23.168,2,1.0209,existingPlaneInfinite,normal,Ended,17.4788,3.8,1371,343,,,2,,,0.1168,-0.7770,,,scale,,,0.4305
+2026-08-09T15:58:14.748Z,manipulation,23.168,2,1.0209,existingPlaneInfinite,normal,Ended,17.4788,3.8,1371,343,,,2,,1.0688,0.1168,-0.7770,,0.0000,scale,,,0.4305
+2026-08-09T15:58:14.748Z,gesture,23.168,2,1.0209,existingPlaneInfinite,normal,Possible,17.4788,3.8,1371,343,,,,,,0.1168,-0.7770,,,,,,0.4305
+2026-08-09T15:58:14.811Z,planeUpdate,23.231,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:15.614Z,gesture,24.034,2,1.0209,existingPlaneInfinite,normal,Began,0.9031,2.7,1423,356,,,,,,0.3638,-2.4452,,,,,,0.2959
+2026-08-09T15:58:15.614Z,manipulation,24.034,2,1.0209,existingPlaneInfinite,normal,Began,0.9031,2.7,1423,356,,,3,0.9031,1.0688,0.3638,-2.4452,0.2959,0.0000,ambiguous,,,0.2959
+2026-08-09T15:58:15.696Z,gesture,24.116,2,1.0209,existingPlaneInfinite,normal,Changed,0.7618,2.7,1428,357,,,3,,,0.4110,-2.2817,,,,,,0.2864
+2026-08-09T15:58:15.696Z,manipulation,24.116,2,1.0209,existingPlaneInfinite,normal,Changed,0.7618,2.7,1428,357,,,3,,1.0688,0.4110,-2.2817,,0.0000,ambiguous,,,0.2864
+2026-08-09T15:58:15.746Z,gesture,24.166,2,1.0209,existingPlaneInfinite,normal,Changed,0.7618,2.7,1431,358,,,3,,,0.2760,-2.1493,,,,,,0.2906
+2026-08-09T15:58:15.747Z,manipulation,24.167,2,1.0209,existingPlaneInfinite,normal,Changed,0.7618,2.7,1431,358,,,3,,1.0688,0.2760,-2.1493,,0.0000,ambiguous,,,0.2906
+2026-08-09T15:58:15.795Z,gesture,24.215,2,1.0209,existingPlaneInfinite,normal,Changed,0.6106,2.6,1434,359,,,3,,,0.3496,-2.1696,,,,,,0.2811
+2026-08-09T15:58:15.795Z,manipulation,24.215,2,1.0209,existingPlaneInfinite,normal,Changed,0.6106,2.6,1434,359,,,3,0.7618,1.0688,0.3496,-2.1696,0.2864,0.0000,ambiguous,,,0.2811
+2026-08-09T15:58:15.878Z,gesture,24.298,2,1.0209,existingPlaneInfinite,normal,Changed,0.7618,2.7,1439,360,,,3,,,0.2922,-2.1549,,,,,,0.2988
+2026-08-09T15:58:15.878Z,manipulation,24.298,2,1.0209,existingPlaneInfinite,normal,Changed,0.7618,2.7,1439,360,,,3,0.7618,1.0688,0.2922,-2.1549,0.2864,0.0000,ambiguous,,,0.2988
+2026-08-09T15:58:15.910Z,planeUpdate,24.330,2,1.0209,none,normal,,,,0,0,,,3,,,,,,,,,,
+2026-08-09T15:58:15.928Z,gesture,24.348,2,1.0209,existingPlaneInfinite,normal,Changed,0.7140,2.7,1442,361,,,3,,,0.2616,-2.3771,,,,,,0.3111
+2026-08-09T15:58:15.928Z,manipulation,24.348,2,1.0209,existingPlaneInfinite,normal,Changed,0.7140,2.7,1442,361,,,3,0.7618,1.0688,0.2616,-2.3771,0.2864,0.0000,ambiguous,,,0.3111
+2026-08-09T15:58:16.011Z,gesture,24.431,2,1.0209,existingPlaneInfinite,normal,Changed,0.6593,2.7,1447,362,,,3,,,0.1894,-2.3209,,,,,,0.3300
+2026-08-09T15:58:16.011Z,manipulation,24.431,2,1.0209,existingPlaneInfinite,normal,Changed,0.6593,2.7,1447,362,,,3,0.7618,1.0688,0.1894,-2.3209,0.2864,0.0000,ambiguous,,,0.3300
+2026-08-09T15:58:16.096Z,gesture,24.516,2,1.0209,existingPlaneInfinite,normal,Changed,0.7140,3.0,1452,363,,,3,,,0.1779,-2.8866,,,,,,0.3915
+2026-08-09T15:58:16.096Z,manipulation,24.516,2,1.0209,existingPlaneInfinite,normal,Changed,0.7140,3.0,1452,363,,,3,0.7618,1.0688,0.1779,-2.8866,0.2864,0.0000,ambiguous,,,0.3915
+2026-08-09T15:58:16.131Z,gesture,24.551,2,1.0209,existingPlaneInfinite,normal,Changed,0.7976,3.1,1454,364,,,3,,,0.1681,-2.0999,,,,,,0.4289
+2026-08-09T15:58:16.131Z,manipulation,24.551,2,1.0209,existingPlaneInfinite,normal,Changed,0.7976,3.1,1454,364,,,3,0.7618,1.0688,0.1681,-2.0999,0.2864,0.0000,ambiguous,,,0.4289
+2026-08-09T15:58:16.328Z,gesture,24.748,2,1.0209,existingPlaneInfinite,normal,Ended,7.4244,3.6,1466,367,,,3,,,0.1274,-2.3491,,,,,,0.4546
+2026-08-09T15:58:16.328Z,manipulation,24.748,2,1.0209,existingPlaneInfinite,normal,Ended,7.4244,3.6,1466,367,,,3,,1.0688,0.1274,-2.3491,,0.0000,ambiguous,,,0.4546
+2026-08-09T15:58:16.328Z,gesture,24.748,2,1.0209,existingPlaneInfinite,normal,Possible,7.4244,3.6,1466,367,,,,,,0.1274,-2.3491,,,,,,0.4546
+2026-08-09T15:58:16.911Z,planeUpdate,25.331,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:17.911Z,planeUpdate,26.331,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:18.912Z,planeUpdate,27.332,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:19.394Z,gesture,27.815,2,1.0209,existingPlaneInfinite,normal,Began,0.6509,3.2,1650,413,,,,,,1.6962,-0.2722,,,,,,0.6499
+2026-08-09T15:58:19.395Z,manipulation,27.815,2,1.0209,existingPlaneInfinite,normal,Began,0.6509,3.2,1650,413,,,4,0.6509,1.0688,1.6962,-0.2722,0.6499,0.0000,ambiguous,,,0.6499
+2026-08-09T15:58:19.479Z,gesture,27.899,2,1.0209,existingPlaneInfinite,normal,Changed,0.4897,3.1,1655,414,,,4,,,1.6463,-0.2338,,,,,,0.6859
+2026-08-09T15:58:19.479Z,manipulation,27.899,2,1.0209,existingPlaneInfinite,normal,Changed,0.4897,3.1,1655,414,,,4,,1.0688,1.6463,-0.2338,,0.0000,ambiguous,,,0.6859
+2026-08-09T15:58:19.529Z,gesture,27.949,2,1.0209,existingPlaneInfinite,normal,Changed,0.4897,3.0,1658,415,,,4,,,1.6261,-0.2915,,,,,,0.6810
+2026-08-09T15:58:19.529Z,manipulation,27.949,2,1.0209,existingPlaneInfinite,normal,Changed,0.4897,3.0,1658,415,,,4,,1.0688,1.6261,-0.2915,,0.0000,ambiguous,,,0.6810
+2026-08-09T15:58:19.613Z,gesture,28.033,2,1.0209,existingPlaneInfinite,normal,Changed,0.4897,2.8,1663,416,,,4,,,1.8032,-0.3370,,,,,,0.6969
+2026-08-09T15:58:19.613Z,manipulation,28.033,2,1.0209,existingPlaneInfinite,normal,Changed,0.4897,2.8,1663,416,,,4,0.4897,1.0688,1.8032,-0.3370,0.6859,0.0000,ambiguous,,,0.6969
+2026-08-09T15:58:19.680Z,gesture,28.100,2,1.0209,existingPlaneInfinite,normal,Changed,0.4897,2.7,1667,417,,,4,,,1.9480,-0.3837,,,,,,0.7205
+2026-08-09T15:58:19.680Z,manipulation,28.100,2,1.0209,existingPlaneInfinite,normal,Changed,0.4897,2.7,1667,417,,,4,0.4897,1.0688,1.9480,-0.3837,0.6859,0.0000,ambiguous,,,0.7205
+2026-08-09T15:58:19.729Z,gesture,28.149,2,1.0209,existingPlaneInfinite,normal,Changed,0.4009,2.7,1670,418,,,4,,,1.8492,-0.3856,,,,,,0.7383
+2026-08-09T15:58:19.729Z,manipulation,28.150,2,1.0209,existingPlaneInfinite,normal,Changed,0.4009,2.7,1670,418,,,4,0.4897,0.8749,1.8492,-0.3856,0.7383,0.0000,scale,,,0.7383
+2026-08-09T15:58:19.795Z,gesture,28.215,2,1.0209,existingPlaneInfinite,normal,Changed,0.4009,2.6,1674,419,,,4,,,1.9439,-0.3579,,,scale ⏸,,,0.7561
+2026-08-09T15:58:19.796Z,manipulation,28.216,2,1.0209,existingPlaneInfinite,normal,Changed,0.4009,2.6,1674,419,,,4,0.4897,0.8749,1.9439,-0.3579,0.7383,0.0000,scale,,,0.7561
+2026-08-09T15:58:19.895Z,gesture,28.315,2,1.0209,existingPlaneInfinite,normal,Changed,0.3853,2.6,1680,420,,,4,,,2.0666,-0.3954,,,scale ✓,,,0.7501
+2026-08-09T15:58:19.895Z,manipulation,28.315,2,1.0209,existingPlaneInfinite,normal,Changed,0.3853,2.6,1680,420,,,4,0.4897,0.8749,2.0666,-0.3954,0.7383,0.0000,scale,,,0.7501
+2026-08-09T15:58:19.931Z,gesture,28.351,2,1.0209,existingPlaneInfinite,normal,Changed,0.3692,2.7,1682,421,,,4,,,1.9160,-0.4051,,,scale ✓,,,0.7642
+2026-08-09T15:58:19.931Z,manipulation,28.351,2,1.0209,existingPlaneInfinite,normal,Changed,0.3692,2.7,1682,421,,,4,0.4897,0.8749,1.9160,-0.4051,0.7383,0.0000,scale,,,0.7642
+2026-08-09T15:58:19.995Z,planeUpdate,28.415,2,1.0209,none,normal,,,,0,0,,,4,,,,,,,,,,
+2026-08-09T15:58:19.996Z,gesture,28.416,2,1.0209,existingPlaneInfinite,normal,Changed,0.3853,2.7,1686,422,,,4,,,1.9617,-0.3991,,,scale ✓,,,0.7748
+2026-08-09T15:58:19.996Z,manipulation,28.416,2,1.0209,existingPlaneInfinite,normal,Changed,0.3853,2.7,1686,422,,,4,0.4897,0.8749,1.9617,-0.3991,0.7383,0.0000,scale,,,0.7748
+2026-08-09T15:58:20.079Z,gesture,28.499,2,1.0209,existingPlaneInfinite,normal,Changed,0.3853,3.0,1691,423,,,4,,,1.8873,-0.3551,,,scale ✓,,,0.7504
+2026-08-09T15:58:20.080Z,manipulation,28.500,2,1.0209,existingPlaneInfinite,normal,Changed,0.3853,3.0,1691,423,,,4,0.4897,0.8749,1.8873,-0.3551,0.7383,0.0000,scale,,,0.7504
+2026-08-09T15:58:20.131Z,gesture,28.551,2,1.0209,existingPlaneInfinite,normal,Changed,0.3604,3.3,1694,424,,,4,,,1.7541,-0.3469,,,scale ✓,,,0.7464
+2026-08-09T15:58:20.131Z,manipulation,28.551,2,1.0209,existingPlaneInfinite,normal,Changed,0.3604,3.3,1694,424,,,4,0.4897,0.8749,1.7541,-0.3469,0.7383,0.0000,scale,,,0.7464
+2026-08-09T15:58:20.197Z,gesture,28.617,2,1.0209,existingPlaneInfinite,normal,Changed,0.2999,3.9,1699,425,,,4,,,1.6136,-0.3182,,,scale ✓,,,0.7047
+2026-08-09T15:58:20.197Z,manipulation,28.617,2,1.0209,existingPlaneInfinite,normal,Changed,0.2999,3.9,1699,425,,,4,0.4897,0.8749,1.6136,-0.3182,0.7383,0.0000,scale,,,0.7047
+2026-08-09T15:58:20.280Z,gesture,28.700,2,1.0209,existingPlaneInfinite,normal,Changed,0.2830,4.3,1703,426,,,4,,,1.4571,-0.3374,,,scale ✓,,,0.6912
+2026-08-09T15:58:20.280Z,manipulation,28.700,2,1.0209,existingPlaneInfinite,normal,Changed,0.2830,4.3,1703,426,,,4,0.4897,0.8749,1.4571,-0.3374,0.7383,0.0000,scale,,,0.6912
+2026-08-09T15:58:20.346Z,gesture,28.766,2,1.0209,existingPlaneInfinite,normal,Changed,0.2252,4.5,1707,427,,,4,,,1.5197,-0.2813,,,scale ✓,,,0.7141
+2026-08-09T15:58:20.346Z,manipulation,28.766,2,1.0209,existingPlaneInfinite,normal,Changed,0.2252,4.5,1707,427,,,4,0.4897,0.8749,1.5197,-0.2813,0.7383,0.0000,scale,,,0.7141
+2026-08-09T15:58:20.412Z,gesture,28.832,2,1.0209,existingPlaneInfinite,normal,Changed,0.2156,4.3,1711,428,,,4,,,1.5781,-0.3643,,,scale ✓,,,0.7494
+2026-08-09T15:58:20.413Z,manipulation,28.833,2,1.0209,existingPlaneInfinite,normal,Changed,0.2156,4.3,1711,428,,,4,0.4897,0.8749,1.5781,-0.3643,0.7383,0.0000,scale,,,0.7494
+2026-08-09T15:58:20.480Z,gesture,28.900,2,1.0209,existingPlaneInfinite,normal,Changed,0.2156,4.1,1715,429,,,4,,,1.6189,-0.3452,,,scale ✓,,,0.7311
+2026-08-09T15:58:20.480Z,manipulation,28.900,2,1.0209,existingPlaneInfinite,normal,Changed,0.2156,4.1,1715,429,,,4,0.4897,0.8749,1.6189,-0.3452,0.7383,0.0000,scale,,,0.7311
+2026-08-09T15:58:20.529Z,gesture,28.949,2,1.0209,existingPlaneInfinite,normal,Changed,0.2156,4.6,1718,430,,,4,,,0.5167,-0.3217,,,scale ✓,,,0.7751
+2026-08-09T15:58:20.529Z,manipulation,28.949,2,1.0209,existingPlaneInfinite,normal,Changed,0.2156,4.6,1718,430,,,4,0.4897,0.8749,0.5167,-0.3217,0.7383,0.0000,scale,,,0.7751
+2026-08-09T15:58:20.596Z,gesture,29.016,2,1.0209,existingPlaneInfinite,normal,Changed,0.2541,5.8,1722,431,,,4,,,0.4543,-0.4625,,,scale ✓,,,0.8625
+2026-08-09T15:58:20.597Z,manipulation,29.017,2,1.0209,existingPlaneInfinite,normal,Changed,0.2541,5.8,1722,431,,,4,0.4897,0.8749,0.4543,-0.4625,0.7383,0.0000,scale,,,0.8625
+2026-08-09T15:58:20.695Z,gesture,29.115,2,1.0209,existingPlaneInfinite,normal,Changed,0.8896,7.7,1728,432,,,4,,,0.3943,-0.7510,,,scale ✓,,,0.9192
+2026-08-09T15:58:20.695Z,manipulation,29.115,2,1.0209,existingPlaneInfinite,normal,Changed,0.8896,7.7,1728,432,,,4,0.4897,0.8749,0.3943,-0.7510,0.7383,0.0000,scale,,,0.9192
+2026-08-09T15:58:20.751Z,gesture,29.171,2,1.0209,existingPlaneInfinite,normal,Changed,1.9044,9.0,1731,433,,,4,,,0.3534,-0.7307,,,scale ✓,,,0.8966
+2026-08-09T15:58:20.751Z,manipulation,29.171,2,1.0209,existingPlaneInfinite,normal,Changed,1.9044,9.0,1731,433,,,4,0.4897,0.8749,0.3534,-0.7307,0.7383,0.0000,scale,,,0.8966
+2026-08-09T15:58:20.931Z,gesture,29.351,2,1.0209,existingPlaneInfinite,normal,Ended,3.5617,9.0,1742,436,,,4,,,0.3434,-0.7624,,,scale ✓,,,0.9338
+2026-08-09T15:58:20.931Z,manipulation,29.351,2,1.0209,existingPlaneInfinite,normal,Ended,3.5617,9.0,1742,436,,,4,,0.8749,0.3434,-0.7624,,0.0000,scale,,,0.9338
+2026-08-09T15:58:20.931Z,gesture,29.351,2,1.0209,existingPlaneInfinite,normal,Possible,3.5617,9.0,1742,436,,,,,,0.3434,-0.7624,,,,,,0.9338
+2026-08-09T15:58:21.011Z,planeUpdate,29.431,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:21.413Z,gesture,29.833,2,1.0209,existingPlaneInfinite,normal,Began,0.2651,3.3,1771,443,,,,,,1.4853,-0.4193,,,,,,0.7137
+2026-08-09T15:58:21.413Z,manipulation,29.833,2,1.0209,existingPlaneInfinite,normal,Began,0.2651,3.3,1771,443,,,5,0.2651,0.8749,1.4853,-0.4193,0.7137,0.0000,ambiguous,,,0.7137
+2026-08-09T15:58:21.479Z,gesture,29.899,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,3.3,1775,444,,,5,,,1.2110,-0.4630,,,,,,0.6829
+2026-08-09T15:58:21.479Z,manipulation,29.899,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,3.3,1775,444,,,5,,0.8749,1.2110,-0.4630,,0.0000,ambiguous,,,0.6829
+2026-08-09T15:58:21.546Z,gesture,29.966,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,3.2,1779,445,,,5,,,1.5405,-0.5359,,,,,,0.6730
+2026-08-09T15:58:21.546Z,manipulation,29.966,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,3.2,1779,445,,,5,,0.8749,1.5405,-0.5359,,0.0000,ambiguous,,,0.6730
+2026-08-09T15:58:21.612Z,gesture,30.032,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,3.1,1783,446,,,5,,,1.6613,-0.5167,,,,,,0.6285
+2026-08-09T15:58:21.613Z,manipulation,30.033,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,3.1,1783,446,,,5,0.2565,0.8749,1.6613,-0.5167,0.6730,0.0000,ambiguous,,,0.6285
+2026-08-09T15:58:21.695Z,gesture,30.115,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,3.0,1788,447,,,5,,,1.6073,-0.5470,,,,,,0.6681
+2026-08-09T15:58:21.695Z,manipulation,30.115,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,3.0,1788,447,,,5,0.2565,0.8749,1.6073,-0.5470,0.6730,0.0000,ambiguous,,,0.6681
+2026-08-09T15:58:21.729Z,gesture,30.149,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,2.8,1790,448,,,5,,,1.6825,-0.5573,,,,,,0.6879
+2026-08-09T15:58:21.729Z,manipulation,30.149,2,1.0209,existingPlaneInfinite,normal,Changed,0.2565,2.8,1790,448,,,5,0.2565,0.8749,1.6825,-0.5573,0.6730,0.0000,ambiguous,,,0.6879
+2026-08-09T15:58:21.797Z,gesture,30.217,2,1.0209,existingPlaneInfinite,normal,Changed,0.2679,2.7,1794,449,,,5,,,1.7645,-0.5381,,,,,,0.6606
+2026-08-09T15:58:21.797Z,manipulation,30.217,2,1.0209,existingPlaneInfinite,normal,Changed,0.2679,2.7,1794,449,,,5,0.2565,0.8749,1.7645,-0.5381,0.6730,0.0000,ambiguous,,,0.6606
+2026-08-09T15:58:21.880Z,gesture,30.300,2,1.0209,existingPlaneInfinite,normal,Changed,0.2679,2.7,1799,450,,,5,,,1.6446,-0.5790,,,,,,0.6301
+2026-08-09T15:58:21.880Z,manipulation,30.300,2,1.0209,existingPlaneInfinite,normal,Changed,0.2679,2.7,1799,450,,,5,0.2565,0.8749,1.6446,-0.5790,0.6730,0.0000,ambiguous,,,0.6301
+2026-08-09T15:58:21.948Z,gesture,30.368,2,1.0209,existingPlaneInfinite,normal,Changed,0.2679,2.6,1803,451,,,5,,,1.3761,-0.6074,,,,,,0.6238
+2026-08-09T15:58:21.948Z,manipulation,30.368,2,1.0209,existingPlaneInfinite,normal,Changed,0.2679,2.6,1803,451,,,5,0.2565,0.8749,1.3761,-0.6074,0.6730,0.0000,ambiguous,,,0.6238
+2026-08-09T15:58:21.996Z,gesture,30.416,2,1.0209,existingPlaneInfinite,normal,Changed,0.2703,2.6,1806,452,,,5,,,1.9534,-0.6784,,,,,,0.6407
+2026-08-09T15:58:21.996Z,manipulation,30.416,2,1.0209,existingPlaneInfinite,normal,Changed,0.2703,2.6,1806,452,,,5,0.2565,0.8749,1.9534,-0.6784,0.6730,0.0000,ambiguous,,,0.6407
+2026-08-09T15:58:22.082Z,gesture,30.502,2,1.0209,existingPlaneInfinite,normal,Changed,0.2869,2.6,1811,453,,,5,,,1.4656,-0.6652,,,,,,0.6564
+2026-08-09T15:58:22.082Z,manipulation,30.502,2,1.0209,existingPlaneInfinite,normal,Changed,0.2869,2.6,1811,453,,,5,0.2565,0.8749,1.4656,-0.6652,0.6730,0.0000,ambiguous,,,0.6564
+2026-08-09T15:58:22.111Z,planeUpdate,30.531,2,1.0209,none,normal,,,,0,0,,,5,,,,,,,,,,
+2026-08-09T15:58:22.130Z,gesture,30.550,2,1.0209,existingPlaneInfinite,normal,Changed,0.2703,2.6,1814,454,,,5,,,1.9014,-0.5944,,,,,,0.6469
+2026-08-09T15:58:22.130Z,manipulation,30.550,2,1.0209,existingPlaneInfinite,normal,Changed,0.2703,2.6,1814,454,,,5,0.2565,0.8749,1.9014,-0.5944,0.6730,0.0000,ambiguous,,,0.6469
+2026-08-09T15:58:22.212Z,gesture,30.632,2,1.0209,existingPlaneInfinite,normal,Changed,0.2721,2.6,1819,455,,,5,,,2.1217,-0.5782,,,,,,0.6626
+2026-08-09T15:58:22.212Z,manipulation,30.632,2,1.0209,existingPlaneInfinite,normal,Changed,0.2721,2.6,1819,455,,,5,0.2565,0.8749,2.1217,-0.5782,0.6730,0.0000,ambiguous,,,0.6626
+2026-08-09T15:58:22.295Z,gesture,30.715,2,1.0209,existingPlaneInfinite,normal,Changed,0.2721,2.6,1824,456,,,5,,,1.9015,-0.6186,,,,,,0.6482
+2026-08-09T15:58:22.295Z,manipulation,30.715,2,1.0209,existingPlaneInfinite,normal,Changed,0.2721,2.6,1824,456,,,5,0.2565,0.8749,1.9015,-0.6186,0.6730,0.0000,ambiguous,,,0.6482
+2026-08-09T15:58:22.329Z,gesture,30.749,2,1.0209,existingPlaneInfinite,normal,Changed,0.2721,2.7,1826,457,,,5,,,2.0806,-0.5862,,,,,,0.6613
+2026-08-09T15:58:22.329Z,manipulation,30.749,2,1.0209,existingPlaneInfinite,normal,Changed,0.2721,2.7,1826,457,,,5,0.2565,0.8749,2.0806,-0.5862,0.6730,0.0000,ambiguous,,,0.6613
+2026-08-09T15:58:22.413Z,gesture,30.834,2,1.0209,existingPlaneInfinite,normal,Changed,0.2721,2.7,1831,458,,,5,,,1.9075,-0.6761,,,,,,0.6555
+2026-08-09T15:58:22.414Z,manipulation,30.834,2,1.0209,existingPlaneInfinite,normal,Changed,0.2721,2.7,1831,458,,,5,0.2565,0.8749,1.9075,-0.6761,0.6730,0.0000,ambiguous,,,0.6555
+2026-08-09T15:58:22.482Z,gesture,30.902,2,1.0209,existingPlaneInfinite,normal,Changed,0.3428,2.8,1835,459,,,5,,,1.9442,-0.6288,,,,,,0.6772
+2026-08-09T15:58:22.482Z,manipulation,30.902,2,1.0209,existingPlaneInfinite,normal,Changed,0.3428,2.8,1835,459,,,5,0.2721,1.1023,1.9442,-0.6288,0.6613,0.0000,scale,,,0.6772
+2026-08-09T15:58:22.531Z,gesture,30.951,2,1.0209,existingPlaneInfinite,normal,Changed,0.3634,2.9,1838,460,,,5,,,1.9990,-0.5620,,,scale ⏸,,,0.7019
+2026-08-09T15:58:22.531Z,manipulation,30.951,2,1.0209,existingPlaneInfinite,normal,Changed,0.3634,2.9,1838,460,,,5,0.2721,1.1023,1.9990,-0.5620,0.6613,0.0000,scale,,,0.7019
+2026-08-09T15:58:22.613Z,gesture,31.033,2,1.0209,existingPlaneInfinite,normal,Changed,0.4360,3.1,1843,461,,,5,,,1.3721,-0.4232,,,scale ✓,,,0.7171
+2026-08-09T15:58:22.613Z,manipulation,31.033,2,1.0209,existingPlaneInfinite,normal,Changed,0.4360,3.1,1843,461,,,5,0.2721,1.1023,1.3721,-0.4232,0.6613,0.0000,scale,,,0.7171
+2026-08-09T15:58:22.697Z,gesture,31.117,2,1.0209,existingPlaneInfinite,normal,Changed,0.4538,5.2,1848,462,,,5,,,0.4139,-0.3291,,,scale ✓,,,0.7461
+2026-08-09T15:58:22.697Z,manipulation,31.117,2,1.0209,existingPlaneInfinite,normal,Changed,0.4538,5.2,1848,462,,,5,0.2721,1.1023,0.4139,-0.3291,0.6613,0.0000,scale,,,0.7461
+2026-08-09T15:58:22.747Z,gesture,31.167,2,1.0209,existingPlaneInfinite,normal,Changed,0.4558,8.8,1851,463,,,5,,,0.3447,-0.6962,,,scale ✓,,,0.8796
+2026-08-09T15:58:22.748Z,manipulation,31.168,2,1.0209,existingPlaneInfinite,normal,Changed,0.4558,8.8,1851,463,,,5,0.2721,1.1023,0.3447,-0.6962,0.6613,0.0000,scale,,,0.8796
+2026-08-09T15:58:22.946Z,gesture,31.366,2,1.0209,existingPlaneInfinite,normal,Ended,4.6836,8.5,1863,466,,,5,,,0.3138,-0.6860,,,scale ✓,,,0.9949
+2026-08-09T15:58:22.946Z,manipulation,31.366,2,1.0209,existingPlaneInfinite,normal,Ended,4.6836,8.5,1863,466,,,5,,1.1023,0.3138,-0.6860,,0.0000,scale,,,0.9949
+2026-08-09T15:58:22.947Z,gesture,31.367,2,1.0209,existingPlaneInfinite,normal,Possible,4.6836,8.5,1863,466,,,,,,0.3138,-0.6860,,,,,,0.9949
+2026-08-09T15:58:23.179Z,planeUpdate,31.599,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:23.550Z,gesture,31.970,2,1.0209,existingPlaneInfinite,normal,Began,0.6027,3.1,1899,475,,,,,,1.3166,-0.5312,,,,,,0.6781
+2026-08-09T15:58:23.550Z,manipulation,31.970,2,1.0209,existingPlaneInfinite,normal,Began,0.6027,3.1,1899,475,,,6,0.6027,1.1023,1.3166,-0.5312,0.6781,0.0000,ambiguous,,,0.6781
+2026-08-09T15:58:23.614Z,gesture,32.034,2,1.0209,existingPlaneInfinite,normal,Changed,0.2914,2.9,1903,476,,,6,,,1.6486,-0.5925,,,,,,0.7068
+2026-08-09T15:58:23.614Z,manipulation,32.034,2,1.0209,existingPlaneInfinite,normal,Changed,0.2914,2.9,1903,476,,,6,,1.1023,1.6486,-0.5925,,0.0000,ambiguous,,,0.7068
+2026-08-09T15:58:23.695Z,gesture,32.115,2,1.0209,existingPlaneInfinite,normal,Changed,0.3050,2.9,1908,477,,,6,,,1.6259,-0.6266,,,,,,0.6835
+2026-08-09T15:58:23.695Z,manipulation,32.115,2,1.0209,existingPlaneInfinite,normal,Changed,0.3050,2.9,1908,477,,,6,,1.1023,1.6259,-0.6266,,0.0000,ambiguous,,,0.6835
+2026-08-09T15:58:23.732Z,gesture,32.152,2,1.0209,existingPlaneInfinite,normal,Changed,0.2914,2.9,1910,478,,,6,,,1.5380,-0.6302,,,,,,0.6676
+2026-08-09T15:58:23.733Z,manipulation,32.153,2,1.0209,existingPlaneInfinite,normal,Changed,0.2914,2.9,1910,478,,,6,0.2914,1.1023,1.5380,-0.6302,0.6835,0.0000,ambiguous,,,0.6676
+2026-08-09T15:58:23.813Z,gesture,32.233,2,1.0209,existingPlaneInfinite,normal,Changed,0.3050,2.8,1915,479,,,6,,,1.7501,-0.6723,,,,,,0.6610
+2026-08-09T15:58:23.813Z,manipulation,32.233,2,1.0209,existingPlaneInfinite,normal,Changed,0.3050,2.8,1915,479,,,6,0.2914,1.1023,1.7501,-0.6723,0.6835,0.0000,ambiguous,,,0.6610
+2026-08-09T15:58:23.880Z,gesture,32.300,2,1.0209,existingPlaneInfinite,normal,Changed,0.3050,2.8,1919,480,,,6,,,1.7483,-0.6327,,,,,,0.6586
+2026-08-09T15:58:23.881Z,manipulation,32.301,2,1.0209,existingPlaneInfinite,normal,Changed,0.3050,2.8,1919,480,,,6,0.2914,1.1023,1.7483,-0.6327,0.6835,0.0000,ambiguous,,,0.6586
+2026-08-09T15:58:23.949Z,gesture,32.369,2,1.0209,existingPlaneInfinite,normal,Changed,0.3109,2.8,1923,481,,,6,,,1.5435,-0.5973,,,,,,0.6700
+2026-08-09T15:58:23.949Z,manipulation,32.369,2,1.0209,existingPlaneInfinite,normal,Changed,0.3109,2.8,1923,481,,,6,0.2914,1.1023,1.5435,-0.5973,0.6835,0.0000,ambiguous,,,0.6700
+2026-08-09T15:58:23.995Z,gesture,32.415,2,1.0209,existingPlaneInfinite,normal,Changed,0.3196,2.8,1926,482,,,6,,,1.4956,-0.6138,,,,,,0.6540
+2026-08-09T15:58:23.995Z,manipulation,32.415,2,1.0209,existingPlaneInfinite,normal,Changed,0.3196,2.8,1926,482,,,6,0.2914,1.1023,1.4956,-0.6138,0.6835,0.0000,ambiguous,,,0.6540
+2026-08-09T15:58:24.079Z,gesture,32.499,2,1.0209,existingPlaneInfinite,normal,Changed,0.3624,2.8,1931,483,,,6,,,1.6625,-0.6624,,,,,,0.6197
+2026-08-09T15:58:24.080Z,manipulation,32.500,2,1.0209,existingPlaneInfinite,normal,Changed,0.3624,2.8,1931,483,,,6,0.3196,1.2499,1.6625,-0.6624,0.6540,0.0000,scale,,,0.6197
+2026-08-09T15:58:24.130Z,gesture,32.550,2,1.0209,existingPlaneInfinite,normal,Changed,0.3516,2.8,1934,484,,,6,,,1.6473,-0.6347,,,scale,,,0.6400
+2026-08-09T15:58:24.131Z,manipulation,32.551,2,1.0209,existingPlaneInfinite,normal,Changed,0.3516,2.8,1934,484,,,6,0.3196,1.2125,1.6473,-0.6347,0.6540,0.0000,scale,,,0.6400
+2026-08-09T15:58:24.199Z,gesture,32.619,2,1.0209,existingPlaneInfinite,normal,Changed,0.3516,2.8,1938,485,,,6,,,1.7289,-0.6449,,,scale ⏸,,,0.6604
+2026-08-09T15:58:24.199Z,manipulation,32.619,2,1.0209,existingPlaneInfinite,normal,Changed,0.3516,2.8,1938,485,,,6,0.3196,1.2125,1.7289,-0.6449,0.6540,0.0000,scale,,,0.6604
+2026-08-09T15:58:24.279Z,gesture,32.699,2,1.0209,existingPlaneInfinite,normal,Changed,0.3584,2.8,1943,486,,,6,,,1.6854,-0.6459,,,scale ✓,,,0.6485
+2026-08-09T15:58:24.280Z,manipulation,32.700,2,1.0209,existingPlaneInfinite,normal,Changed,0.3584,2.8,1943,486,,,6,0.3196,1.2125,1.6854,-0.6459,0.6540,0.0000,scale,,,0.6485
+2026-08-09T15:58:24.295Z,planeUpdate,32.715,2,1.0209,none,normal,,,,0,0,,,6,,,,,,,,,,
+2026-08-09T15:58:24.346Z,gesture,32.766,2,1.0209,existingPlaneInfinite,normal,Changed,0.3584,2.8,1947,487,,,6,,,1.9674,-0.6310,,,scale ✓,,,0.6491
+2026-08-09T15:58:24.346Z,manipulation,32.766,2,1.0209,existingPlaneInfinite,normal,Changed,0.3584,2.8,1947,487,,,6,0.3196,1.2125,1.9674,-0.6310,0.6540,0.0000,scale,,,0.6491
+2026-08-09T15:58:24.413Z,gesture,32.833,2,1.0209,existingPlaneInfinite,normal,Changed,0.3516,2.8,1951,488,,,6,,,1.8764,-0.6869,,,scale ✓,,,0.6609
+2026-08-09T15:58:24.413Z,manipulation,32.833,2,1.0209,existingPlaneInfinite,normal,Changed,0.3516,2.8,1951,488,,,6,0.3196,1.2125,1.8764,-0.6869,0.6540,0.0000,scale,,,0.6609
+2026-08-09T15:58:24.480Z,gesture,32.900,2,1.0209,existingPlaneInfinite,normal,Changed,0.3485,2.8,1955,489,,,6,,,1.8953,-0.6554,,,scale ✓,,,0.6509
+2026-08-09T15:58:24.480Z,manipulation,32.900,2,1.0209,existingPlaneInfinite,normal,Changed,0.3485,2.8,1955,489,,,6,0.3196,1.2125,1.8953,-0.6554,0.6540,0.0000,scale,,,0.6509
+2026-08-09T15:58:24.529Z,gesture,32.949,2,1.0209,existingPlaneInfinite,normal,Changed,0.3485,2.8,1958,490,,,6,,,2.0750,-0.6172,,,scale ✓,,,0.6590
+2026-08-09T15:58:24.530Z,manipulation,32.950,2,1.0209,existingPlaneInfinite,normal,Changed,0.3485,2.8,1958,490,,,6,0.3196,1.2125,2.0750,-0.6172,0.6540,0.0000,scale,,,0.6590
+2026-08-09T15:58:24.597Z,gesture,33.017,2,1.0209,existingPlaneInfinite,normal,Changed,0.3485,2.7,1962,491,,,6,,,2.0706,-0.6295,,,scale ✓,,,0.6622
+2026-08-09T15:58:24.597Z,manipulation,33.017,2,1.0209,existingPlaneInfinite,normal,Changed,0.3485,2.7,1962,491,,,6,0.3196,1.2125,2.0706,-0.6295,0.6540,0.0000,scale,,,0.6622
+2026-08-09T15:58:24.697Z,gesture,33.117,2,1.0209,existingPlaneInfinite,normal,Changed,0.4175,2.8,1968,492,,,6,,,1.9124,-0.6374,,,scale ✓,,,0.6560
+2026-08-09T15:58:24.698Z,manipulation,33.118,2,1.0209,existingPlaneInfinite,normal,Changed,0.4175,2.8,1968,492,,,6,0.3196,1.2125,1.9124,-0.6374,0.6540,0.0000,scale,,,0.6560
+2026-08-09T15:58:24.732Z,gesture,33.152,2,1.0209,existingPlaneInfinite,normal,Changed,0.4175,2.8,1970,493,,,6,,,1.9467,-0.6824,,,scale ✓,,,0.6694
+2026-08-09T15:58:24.732Z,manipulation,33.152,2,1.0209,existingPlaneInfinite,normal,Changed,0.4175,2.8,1970,493,,,6,0.3196,1.2125,1.9467,-0.6824,0.6540,0.0000,scale,,,0.6694
+2026-08-09T15:58:24.813Z,gesture,33.233,2,1.0209,existingPlaneInfinite,normal,Changed,0.4275,2.8,1975,494,,,6,,,1.4977,-0.7624,,,scale ✓,,,0.6829
+2026-08-09T15:58:24.813Z,manipulation,33.233,2,1.0209,existingPlaneInfinite,normal,Changed,0.4275,2.8,1975,494,,,6,0.3196,1.2125,1.4977,-0.7624,0.6540,0.0000,scale,,,0.6829
+2026-08-09T15:58:24.881Z,gesture,33.301,2,1.0209,existingPlaneInfinite,normal,Changed,0.4275,3.1,1979,495,,,6,,,0.5543,-0.7245,,,scale ✓,,,0.6943
+2026-08-09T15:58:24.881Z,manipulation,33.301,2,1.0209,existingPlaneInfinite,normal,Changed,0.4275,3.1,1979,495,,,6,0.3196,1.2125,0.5543,-0.7245,0.6540,0.0000,scale,,,0.6943
+2026-08-09T15:58:24.948Z,gesture,33.368,2,1.0209,existingPlaneInfinite,normal,Changed,0.4813,3.8,1983,496,,,6,,,0.4197,-0.6576,,,scale ✓,,,0.7473
+2026-08-09T15:58:24.948Z,manipulation,33.368,2,1.0209,existingPlaneInfinite,normal,Changed,0.4813,3.8,1983,496,,,6,0.3196,1.2125,0.4197,-0.6576,0.6540,0.0000,scale,,,0.7473
+2026-08-09T15:58:24.996Z,gesture,33.416,2,1.0209,existingPlaneInfinite,normal,Changed,1.3208,4.3,1986,497,,,6,,,0.4038,-0.7819,,,scale ✓,,,0.7959
+2026-08-09T15:58:24.997Z,manipulation,33.417,2,1.0209,existingPlaneInfinite,normal,Changed,1.3208,4.3,1986,497,,,6,0.3196,1.2125,0.4038,-0.7819,0.6540,0.0000,scale,,,0.7959
+2026-08-09T15:58:25.081Z,gesture,33.501,2,1.0209,existingPlaneInfinite,normal,Changed,2.0634,4.6,1991,498,,,6,,,0.3777,-0.8032,,,scale ✓,,,0.7802
+2026-08-09T15:58:25.081Z,manipulation,33.501,2,1.0209,existingPlaneInfinite,normal,Changed,2.0634,4.6,1991,498,,,6,0.3196,1.2125,0.3777,-0.8032,0.6540,0.0000,scale,,,0.7802
+2026-08-09T15:58:25.131Z,gesture,33.551,2,1.0209,existingPlaneInfinite,normal,Changed,2.1141,4.8,1994,499,,,6,,,0.3761,-0.8221,,,scale ✓,,,0.7885
+2026-08-09T15:58:25.131Z,manipulation,33.551,2,1.0209,existingPlaneInfinite,normal,Changed,2.1141,4.8,1994,499,,,6,0.3196,1.2125,0.3761,-0.8221,0.6540,0.0000,scale,,,0.7885
+2026-08-09T15:58:25.200Z,gesture,33.620,2,1.0209,existingPlaneInfinite,normal,Changed,2.3485,4.9,1998,500,,,6,,,0.3678,-0.7502,,,scale ✓,,,0.8094
+2026-08-09T15:58:25.200Z,manipulation,33.620,2,1.0209,existingPlaneInfinite,normal,Changed,2.3485,4.9,1998,500,,,6,0.3196,1.2125,0.3678,-0.7502,0.6540,0.0000,scale,,,0.8094
+2026-08-09T15:58:25.296Z,planeUpdate,33.716,2,1.0209,none,normal,,,,0,0,,,6,,,,,,,,,,
+2026-08-09T15:58:25.413Z,gesture,33.833,2,1.0209,existingPlaneInfinite,normal,Ended,2.6937,4.1,2011,503,,,6,,,0.4331,-0.5971,,,scale ✓,,,0.7851
+2026-08-09T15:58:25.413Z,manipulation,33.833,2,1.0209,existingPlaneInfinite,normal,Ended,2.6937,4.1,2011,503,,,6,,1.2125,0.4331,-0.5971,,0.0000,scale,,,0.7851
+2026-08-09T15:58:25.414Z,gesture,33.834,2,1.0209,existingPlaneInfinite,normal,Possible,2.6937,4.1,2011,503,,,,,,0.4331,-0.5971,,,,,,0.7851
+2026-08-09T15:58:25.746Z,gesture,34.166,2,1.0209,existingPlaneInfinite,normal,Began,0.6074,3.6,2031,508,,,,,,2.1265,-0.5371,,,,,,0.5663
+2026-08-09T15:58:25.747Z,manipulation,34.167,2,1.0209,existingPlaneInfinite,normal,Began,0.6074,3.6,2031,508,,,7,0.6074,1.2125,2.1265,-0.5371,0.5663,0.0000,ambiguous,,,0.5663
+2026-08-09T15:58:25.813Z,gesture,34.233,2,1.0209,existingPlaneInfinite,normal,Changed,0.2958,3.2,2035,509,,,7,,,1.6212,-0.6541,,,,,,0.6306
+2026-08-09T15:58:25.813Z,manipulation,34.234,2,1.0209,existingPlaneInfinite,normal,Changed,0.2958,3.2,2035,509,,,7,,1.2125,1.6212,-0.6541,,0.0000,ambiguous,,,0.6306
+2026-08-09T15:58:25.883Z,gesture,34.303,2,1.0209,existingPlaneInfinite,normal,Changed,0.4033,3.0,2039,510,,,7,,,2.0138,-0.6121,,,,,,0.6384
+2026-08-09T15:58:25.883Z,manipulation,34.303,2,1.0209,existingPlaneInfinite,normal,Changed,0.4033,3.0,2039,510,,,7,,1.2125,2.0138,-0.6121,,0.0000,ambiguous,,,0.6384
+2026-08-09T15:58:25.933Z,gesture,34.353,2,1.0209,existingPlaneInfinite,normal,Changed,0.4033,3.1,2042,511,,,7,,,1.9666,-0.6474,,,,,,0.6305
+2026-08-09T15:58:25.933Z,manipulation,34.353,2,1.0209,existingPlaneInfinite,normal,Changed,0.4033,3.1,2042,511,,,7,0.4033,1.2125,1.9666,-0.6474,0.6306,0.0000,ambiguous,,,0.6305
+2026-08-09T15:58:26.014Z,gesture,34.434,2,1.0209,existingPlaneInfinite,normal,Changed,0.4768,3.0,2047,512,,,7,,,2.2192,-0.6034,,,,,,0.6269
+2026-08-09T15:58:26.014Z,manipulation,34.434,2,1.0209,existingPlaneInfinite,normal,Changed,0.4768,3.0,2047,512,,,7,0.4033,1.2125,2.2192,-0.6034,0.6306,0.0000,ambiguous,,,0.6269
+2026-08-09T15:58:26.096Z,gesture,34.516,2,1.0209,existingPlaneInfinite,normal,Changed,0.4263,3.1,2052,513,,,7,,,2.0127,-0.6141,,,,,,0.6186
+2026-08-09T15:58:26.097Z,manipulation,34.517,2,1.0209,existingPlaneInfinite,normal,Changed,0.4263,3.1,2052,513,,,7,0.4033,1.2125,2.0127,-0.6141,0.6306,0.0000,ambiguous,,,0.6186
+2026-08-09T15:58:26.132Z,gesture,34.552,2,1.0209,existingPlaneInfinite,normal,Changed,0.4263,3.0,2054,514,,,7,,,1.8791,-0.6113,,,,,,0.6140
+2026-08-09T15:58:26.132Z,manipulation,34.552,2,1.0209,existingPlaneInfinite,normal,Changed,0.4263,3.0,2054,514,,,7,0.4033,1.2125,1.8791,-0.6113,0.6306,0.0000,ambiguous,,,0.6140
+2026-08-09T15:58:26.214Z,gesture,34.634,2,1.0209,existingPlaneInfinite,normal,Changed,0.4263,3.1,2059,515,,,7,,,1.7604,-0.6283,,,,,,0.6186
+2026-08-09T15:58:26.214Z,manipulation,34.634,2,1.0209,existingPlaneInfinite,normal,Changed,0.4263,3.1,2059,515,,,7,0.4033,1.2125,1.7604,-0.6283,0.6306,0.0000,ambiguous,,,0.6186
+2026-08-09T15:58:26.279Z,gesture,34.699,2,1.0209,existingPlaneInfinite,normal,Changed,0.4263,3.1,2063,516,,,7,,,2.0468,-0.5938,,,,,,0.6305
+2026-08-09T15:58:26.280Z,manipulation,34.700,2,1.0209,existingPlaneInfinite,normal,Changed,0.4263,3.1,2063,516,,,7,0.4033,1.2125,2.0468,-0.5938,0.6306,0.0000,ambiguous,,,0.6305
+2026-08-09T15:58:26.347Z,gesture,34.767,2,1.0209,existingPlaneInfinite,normal,Changed,0.4064,3.1,2067,517,,,7,,,1.8197,-0.5318,,,,,,0.6462
+2026-08-09T15:58:26.347Z,manipulation,34.767,2,1.0209,existingPlaneInfinite,normal,Changed,0.4064,3.1,2067,517,,,7,0.4033,1.2125,1.8197,-0.5318,0.6306,0.0000,ambiguous,,,0.6462
+2026-08-09T15:58:26.396Z,planeUpdate,34.816,2,1.0209,none,normal,,,,0,0,,,7,,,,,,,,,,
+2026-08-09T15:58:26.413Z,gesture,34.833,2,1.0209,existingPlaneInfinite,normal,Changed,0.3994,3.1,2071,518,,,7,,,1.7651,-0.5499,,,,,,0.6462
+2026-08-09T15:58:26.413Z,manipulation,34.833,2,1.0209,existingPlaneInfinite,normal,Changed,0.3994,3.1,2071,518,,,7,0.4033,1.2125,1.7651,-0.5499,0.6306,0.0000,ambiguous,,,0.6462
+2026-08-09T15:58:26.482Z,gesture,34.902,2,1.0209,existingPlaneInfinite,normal,Changed,0.3994,3.1,2075,519,,,7,,,1.7669,-0.5641,,,,,,0.6541
+2026-08-09T15:58:26.482Z,manipulation,34.902,2,1.0209,existingPlaneInfinite,normal,Changed,0.3994,3.1,2075,519,,,7,0.4033,1.2125,1.7669,-0.5641,0.6306,0.0000,ambiguous,,,0.6541
+2026-08-09T15:58:26.531Z,gesture,34.951,2,1.0209,existingPlaneInfinite,normal,Changed,0.3994,3.7,2078,520,,,7,,,0.4393,-0.5811,,,,,,0.6818
+2026-08-09T15:58:26.531Z,manipulation,34.951,2,1.0209,existingPlaneInfinite,normal,Changed,0.3994,3.7,2078,520,,,7,0.4033,1.2125,0.4393,-0.5811,0.6306,0.0000,ambiguous,,,0.6818
+2026-08-09T15:58:26.614Z,gesture,35.034,2,1.0209,existingPlaneInfinite,normal,Changed,0.3994,5.4,2083,521,,,7,,,0.3378,-0.6214,,,,,,0.7557
+2026-08-09T15:58:26.614Z,manipulation,35.034,2,1.0209,existingPlaneInfinite,normal,Changed,0.3994,5.4,2083,521,,,7,0.4033,1.2125,0.3378,-0.6214,0.6306,0.0000,ambiguous,,,0.7557
+2026-08-09T15:58:26.680Z,gesture,35.100,2,1.0209,existingPlaneInfinite,normal,Changed,2.1962,6.8,2087,522,,,7,,,0.2879,-0.6384,,,,,,0.7492
+2026-08-09T15:58:26.681Z,manipulation,35.101,2,1.0209,existingPlaneInfinite,normal,Changed,2.1962,6.8,2087,522,,,7,0.3994,4.0000,0.2879,-0.6384,0.7492,0.0000,scale,,,0.7492
+2026-08-09T15:58:26.733Z,gesture,35.153,2,1.0209,existingPlaneInfinite,normal,Changed,3.4212,6.7,2090,523,,,7,,,0.2892,-0.6904,,,scale,,,0.7722
+2026-08-09T15:58:26.733Z,manipulation,35.153,2,1.0209,existingPlaneInfinite,normal,Changed,3.4212,6.7,2090,523,,,7,0.3994,4.0000,0.2892,-0.6904,0.7492,0.0000,scale,,,0.7722
+2026-08-09T15:58:26.947Z,gesture,35.367,2,1.0209,existingPlaneInfinite,normal,Ended,4.2485,6.6,2103,526,,,7,,,0.2990,-0.5727,,,scale,,,0.7818
+2026-08-09T15:58:26.947Z,manipulation,35.367,2,1.0209,existingPlaneInfinite,normal,Ended,4.2485,6.6,2103,526,,,7,,4.0000,0.2990,-0.5727,,0.0000,scale,,,0.7818
+2026-08-09T15:58:26.947Z,gesture,35.367,2,1.0209,existingPlaneInfinite,normal,Possible,4.2485,6.6,2103,526,,,,,,0.2990,-0.5727,,,,,,0.7818
+2026-08-09T15:58:27.481Z,planeUpdate,35.901,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:28.496Z,planeUpdate,36.916,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:28.533Z,gesture,36.953,2,1.0209,existingPlaneInfinite,normal,Began,0.5645,7.5,2198,550,,,,,,1.1867,-0.4179,,,,,,0.3980
+2026-08-09T15:58:28.533Z,manipulation,36.953,2,1.0209,existingPlaneInfinite,normal,Began,0.5645,7.5,2198,550,,,8,0.5645,4.0000,1.1867,-0.4179,0.3980,0.0000,ambiguous,,,0.3980
+2026-08-09T15:58:28.614Z,gesture,37.034,2,1.0209,existingPlaneInfinite,normal,Changed,0.6205,7.1,2203,551,,,8,,,1.5136,-0.4288,,,,,,0.3902
+2026-08-09T15:58:28.614Z,manipulation,37.034,2,1.0209,existingPlaneInfinite,normal,Changed,0.6205,7.1,2203,551,,,8,,4.0000,1.5136,-0.4288,,0.0000,ambiguous,,,0.3902
+2026-08-09T15:58:28.663Z,gesture,37.083,2,1.0209,existingPlaneInfinite,normal,Changed,0.6445,7.1,2206,552,,,8,,,1.1792,-0.4104,,,,,,0.3793
+2026-08-09T15:58:28.664Z,manipulation,37.084,2,1.0209,existingPlaneInfinite,normal,Changed,0.6445,7.1,2206,552,,,8,,4.0000,1.1792,-0.4104,,0.0000,ambiguous,,,0.3793
+2026-08-09T15:58:28.748Z,gesture,37.168,2,1.0209,existingPlaneInfinite,normal,Changed,0.6445,6.6,2211,553,,,8,,,1.0415,-0.6266,,,,,,0.3768
+2026-08-09T15:58:28.748Z,manipulation,37.168,2,1.0209,existingPlaneInfinite,normal,Changed,0.6445,6.6,2211,553,,,8,0.6445,4.0000,1.0415,-0.6266,0.3793,0.0000,ambiguous,,,0.3768
+2026-08-09T15:58:28.800Z,gesture,37.220,2,1.0209,existingPlaneInfinite,normal,Changed,0.8932,6.7,2214,554,,,8,,,0.9968,-0.4854,,,,,,0.3910
+2026-08-09T15:58:28.800Z,manipulation,37.220,2,1.0209,existingPlaneInfinite,normal,Changed,0.8932,6.7,2214,554,,,8,0.8932,4.0000,0.9968,-0.4854,0.3910,0.0000,scale,,,0.3910
+2026-08-09T15:58:28.881Z,gesture,37.301,2,1.0209,existingPlaneInfinite,normal,Changed,0.8932,6.8,2219,555,,,8,,,0.4115,-0.3429,,,scale ⏸,,,0.3708
+2026-08-09T15:58:28.881Z,manipulation,37.301,2,1.0209,existingPlaneInfinite,normal,Changed,0.8932,6.8,2219,555,,,8,0.8932,4.0000,0.4115,-0.3429,0.3910,0.0000,scale,,,0.3708
+2026-08-09T15:58:28.948Z,gesture,37.368,2,1.0209,existingPlaneInfinite,normal,Changed,1.0674,7.3,2223,556,,,8,,,0.2452,-0.6157,,,scale ✓,,,0.4147
+2026-08-09T15:58:28.948Z,manipulation,37.368,2,1.0209,existingPlaneInfinite,normal,Changed,1.0674,7.3,2223,556,,,8,0.8932,4.0000,0.2452,-0.6157,0.3910,0.0000,scale,,,0.4147
+2026-08-09T15:58:28.997Z,gesture,37.417,2,1.0209,existingPlaneInfinite,normal,Changed,2.1356,9.3,2226,557,,,8,,,0.1988,-0.4199,,,scale ✓,,,0.5018
+2026-08-09T15:58:28.998Z,manipulation,37.418,2,1.0209,existingPlaneInfinite,normal,Changed,2.1356,9.3,2226,557,,,8,0.8932,4.0000,0.1988,-0.4199,0.3910,0.0000,scale,,,0.5018
+2026-08-09T15:58:29.198Z,gesture,37.618,2,1.0209,existingPlaneInfinite,normal,Ended,8.0508,12.0,2238,560,,,8,,,0.1570,-0.4078,,,scale ✓,,,0.4690
+2026-08-09T15:58:29.198Z,manipulation,37.618,2,1.0209,existingPlaneInfinite,normal,Ended,8.0508,12.0,2238,560,,,8,,4.0000,0.1570,-0.4078,,0.0000,scale,,,0.4690
+2026-08-09T15:58:29.198Z,gesture,37.618,2,1.0209,existingPlaneInfinite,normal,Possible,8.0508,12.0,2238,560,,,,,,0.1570,-0.4078,,,,,,0.4690
+2026-08-09T15:58:29.496Z,planeUpdate,37.916,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:30.496Z,planeUpdate,38.916,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:30.533Z,gesture,38.953,2,1.0209,existingPlaneInfinite,normal,Began,0.8738,6.7,2318,580,,,,,,1.1679,-0.3725,,,,,,0.3338
+2026-08-09T15:58:30.533Z,manipulation,38.953,2,1.0209,existingPlaneInfinite,normal,Began,0.8738,6.7,2318,580,,,9,0.8738,4.0000,1.1679,-0.3725,0.3338,0.0000,ambiguous,,,0.3338
+2026-08-09T15:58:30.615Z,gesture,39.035,2,1.0209,existingPlaneInfinite,normal,Changed,0.7310,7.0,2323,581,,,9,,,1.1718,-0.3042,,,,,,0.3351
+2026-08-09T15:58:30.615Z,manipulation,39.035,2,1.0209,existingPlaneInfinite,normal,Changed,0.7310,7.0,2323,581,,,9,,4.0000,1.1718,-0.3042,,0.0000,ambiguous,,,0.3351
+2026-08-09T15:58:30.680Z,gesture,39.100,2,1.0209,existingPlaneInfinite,normal,Changed,0.8096,6.9,2327,582,,,9,,,1.1398,-0.3573,,,,,,0.3327
+2026-08-09T15:58:30.681Z,manipulation,39.101,2,1.0209,existingPlaneInfinite,normal,Changed,0.8096,6.9,2327,582,,,9,,4.0000,1.1398,-0.3573,,0.0000,ambiguous,,,0.3327
+2026-08-09T15:58:30.731Z,gesture,39.151,2,1.0209,existingPlaneInfinite,normal,Changed,0.8096,6.3,2330,583,,,9,,,0.2784,2.5661,,,,,,0.4306
+2026-08-09T15:58:30.732Z,manipulation,39.152,2,1.0209,existingPlaneInfinite,normal,Changed,0.8096,6.3,2330,583,,,9,0.8096,4.0000,0.2784,2.5661,0.3351,0.0000,ambiguous,,,0.4306
+2026-08-09T15:58:30.815Z,gesture,39.235,2,1.0209,existingPlaneInfinite,normal,Changed,0.8096,11.0,2335,584,,,9,,,0.9505,-3.0758,,,,,,0.8608
+2026-08-09T15:58:30.815Z,manipulation,39.235,2,1.0209,existingPlaneInfinite,normal,Changed,0.8096,11.0,2335,584,,,9,0.8096,4.0000,0.9505,-3.0758,0.8608,0.0000,yaw,,,0.8608
+2026-08-09T15:58:30.881Z,gesture,39.301,2,1.0209,existingPlaneInfinite,normal,Changed,0.8096,19.6,2339,585,,,9,,,2.4526,-3.0565,,,yaw,,,1.3182
+2026-08-09T15:58:30.882Z,manipulation,39.302,2,1.0209,existingPlaneInfinite,normal,Changed,0.8096,19.6,2339,585,,,9,0.8096,4.0000,2.4526,-3.0565,0.8608,0.4575,yaw,,,1.3182
+2026-08-09T15:58:30.934Z,gesture,39.354,2,1.0209,existingPlaneInfinite,normal,Changed,1.2458,20.5,2342,586,,,9,,,2.4310,-3.0006,,,yaw,,,1.4432
+2026-08-09T15:58:30.934Z,manipulation,39.354,2,1.0209,existingPlaneInfinite,normal,Changed,1.2458,20.5,2342,586,,,9,0.8096,4.0000,2.4310,-3.0006,0.8608,0.5824,yaw,,,1.4432
+2026-08-09T15:58:30.997Z,gesture,39.417,2,1.0209,existingPlaneInfinite,normal,Changed,1.6830,19.0,2346,587,,,9,,,2.4343,-2.9662,,,yaw,,,1.4592
+2026-08-09T15:58:30.997Z,manipulation,39.417,2,1.0209,existingPlaneInfinite,normal,Changed,1.6830,19.0,2346,587,,,9,0.8096,4.0000,2.4343,-2.9662,0.8608,0.5984,yaw,,,1.4592
+2026-08-09T15:58:31.081Z,gesture,39.501,2,1.0209,existingPlaneInfinite,normal,Changed,1.6757,18.3,2351,588,,,9,,,2.4400,-2.9525,,,yaw,,,1.4878
+2026-08-09T15:58:31.082Z,manipulation,39.502,2,1.0209,existingPlaneInfinite,normal,Changed,1.6757,18.3,2351,588,,,9,0.8096,4.0000,2.4400,-2.9525,0.8608,0.6270,yaw,,,1.4878
+2026-08-09T15:58:31.131Z,gesture,39.551,2,1.0209,existingPlaneInfinite,normal,Changed,1.6757,18.1,2354,589,,,9,,,2.4165,-2.9603,,,yaw,,,1.4564
+2026-08-09T15:58:31.131Z,manipulation,39.552,2,1.0209,existingPlaneInfinite,normal,Changed,1.6757,18.1,2354,589,,,9,0.8096,4.0000,2.4165,-2.9603,0.8608,0.5957,yaw,,,1.4564
+2026-08-09T15:58:31.215Z,gesture,39.635,2,1.0209,existingPlaneInfinite,normal,Changed,1.6757,17.8,2359,590,,,9,,,2.3525,-2.9691,,,yaw,,,1.4473
+2026-08-09T15:58:31.215Z,manipulation,39.635,2,1.0209,existingPlaneInfinite,normal,Changed,1.6757,17.8,2359,590,,,9,0.8096,4.0000,2.3525,-2.9691,0.8608,0.5865,yaw,,,1.4473
+2026-08-09T15:58:31.281Z,gesture,39.701,2,1.0209,existingPlaneInfinite,normal,Changed,1.6202,17.8,2363,591,,,9,,,2.3488,-2.9700,,,yaw,,,1.4302
+2026-08-09T15:58:31.281Z,manipulation,39.702,2,1.0209,existingPlaneInfinite,normal,Changed,1.6202,17.8,2363,591,,,9,0.8096,4.0000,2.3488,-2.9700,0.8608,0.5694,yaw,,,1.4302
+2026-08-09T15:58:31.331Z,gesture,39.752,2,1.0209,existingPlaneInfinite,normal,Changed,1.5698,17.4,2366,592,,,9,,,2.3567,-2.9833,,,yaw,,,1.4244
+2026-08-09T15:58:31.332Z,manipulation,39.752,2,1.0209,existingPlaneInfinite,normal,Changed,1.5698,17.4,2366,592,,,9,0.8096,4.0000,2.3567,-2.9833,0.8608,0.5637,yaw,,,1.4244
+2026-08-09T15:58:31.414Z,gesture,39.834,2,1.0209,existingPlaneInfinite,normal,Changed,1.5332,17.1,2371,593,,,9,,,2.3577,-2.9855,,,yaw ✓,,,1.4263
+2026-08-09T15:58:31.415Z,manipulation,39.835,2,1.0209,existingPlaneInfinite,normal,Changed,1.5332,17.1,2371,593,,,9,0.8096,4.0000,2.3577,-2.9855,0.8608,0.5637,yaw,,,1.4263
+2026-08-09T15:58:31.482Z,gesture,39.902,2,1.0209,existingPlaneInfinite,normal,Changed,1.4974,16.6,2375,594,,,9,,,2.3523,-2.9923,,,yaw ✓,,,1.3926
+2026-08-09T15:58:31.482Z,manipulation,39.902,2,1.0209,existingPlaneInfinite,normal,Changed,1.4974,16.6,2375,594,,,9,0.8096,4.0000,2.3523,-2.9923,0.8608,0.5637,yaw,,,1.3926
+2026-08-09T15:58:31.497Z,planeUpdate,39.917,2,1.0209,none,normal,,,,0,0,,,9,,,,,,,,,,
+2026-08-09T15:58:31.533Z,gesture,39.953,2,1.0209,existingPlaneInfinite,normal,Changed,1.4689,15.8,2378,595,,,9,,,2.3356,-3.0119,,,yaw ✓,,,1.3566
+2026-08-09T15:58:31.533Z,manipulation,39.953,2,1.0209,existingPlaneInfinite,normal,Changed,1.4689,15.8,2378,595,,,9,0.8096,4.0000,2.3356,-3.0119,0.8608,0.5637,yaw,,,1.3566
+2026-08-09T15:58:31.615Z,gesture,40.035,2,1.0209,existingPlaneInfinite,normal,Changed,1.4629,14.1,2383,596,,,9,,,2.2637,-3.0486,,,yaw ✓,,,1.2461
+2026-08-09T15:58:31.615Z,manipulation,40.036,2,1.0209,existingPlaneInfinite,normal,Changed,1.4629,14.1,2383,596,,,9,0.8096,4.0000,2.2637,-3.0486,0.8608,0.5637,yaw,,,1.2461
+2026-08-09T15:58:31.682Z,gesture,40.102,2,1.0209,existingPlaneInfinite,normal,Changed,1.4110,11.6,2387,597,,,9,,,1.7567,-3.1415,,,yaw ✓,,,1.0851
+2026-08-09T15:58:31.682Z,manipulation,40.102,2,1.0209,existingPlaneInfinite,normal,Changed,1.4110,11.6,2387,597,,,9,0.8096,4.0000,1.7567,-3.1415,0.8608,0.5637,yaw,,,1.0851
+2026-08-09T15:58:31.731Z,gesture,40.151,2,1.0209,existingPlaneInfinite,normal,Changed,1.0749,11.0,2390,598,,,9,,,0.7171,3.1229,,,yaw ✓,,,0.8333
+2026-08-09T15:58:31.732Z,manipulation,40.152,2,1.0209,existingPlaneInfinite,normal,Changed,1.0749,11.0,2390,598,,,9,0.8096,4.0000,0.7171,3.1229,0.8608,0.5637,yaw,,,0.8333
+2026-08-09T15:58:31.815Z,gesture,40.235,2,1.0209,existingPlaneInfinite,normal,Changed,1.0749,9.9,2395,599,,,9,,,0.2887,3.1162,,,yaw ✓,,,0.7015
+2026-08-09T15:58:31.815Z,manipulation,40.235,2,1.0209,existingPlaneInfinite,normal,Changed,1.0749,9.9,2395,599,,,9,0.8096,4.0000,0.2887,3.1162,0.8608,0.5637,yaw,,,0.7015
+2026-08-09T15:58:31.882Z,gesture,40.302,2,1.0209,existingPlaneInfinite,normal,Changed,1.0749,10.9,2399,600,,,9,,,0.1068,3.0556,,,yaw ✓,,,0.7109
+2026-08-09T15:58:31.882Z,manipulation,40.302,2,1.0209,existingPlaneInfinite,normal,Changed,1.0749,10.9,2399,600,,,9,0.8096,4.0000,0.1068,3.0556,0.8608,0.5637,yaw,,,0.7109
+2026-08-09T15:58:31.949Z,gesture,40.369,2,1.0209,existingPlaneInfinite,normal,Changed,1.9472,10.9,2403,601,,,9,,,0.0448,2.7039,,,yaw ✓,,,0.4341
+2026-08-09T15:58:31.950Z,manipulation,40.370,2,1.0209,existingPlaneInfinite,normal,Changed,1.9472,10.9,2403,601,,,9,0.8096,4.0000,0.0448,2.7039,0.8608,0.5637,yaw,,,0.4341
+2026-08-09T15:58:32.134Z,gesture,40.554,2,1.0209,existingPlaneInfinite,normal,Ended,7.9132,10.2,2414,604,,,9,,,0.1107,0.2040,,,yaw ✓,,,0.4696
+2026-08-09T15:58:32.134Z,manipulation,40.554,2,1.0209,existingPlaneInfinite,normal,Ended,7.9132,10.2,2414,604,,,9,,4.0000,0.1107,0.2040,,0.5637,yaw,,,0.4696
+2026-08-09T15:58:32.134Z,gesture,40.554,2,1.0209,existingPlaneInfinite,normal,Possible,7.9132,10.2,2414,604,,,,,,0.1107,0.2040,,,,,,0.4696
+2026-08-09T15:58:32.497Z,planeUpdate,40.917,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:32.598Z,gesture,41.018,2,1.0209,existingPlaneInfinite,normal,Began,0.3592,4.6,2442,611,,,,,,0.4391,3.0250,,,,,,0.8414
+2026-08-09T15:58:32.598Z,manipulation,41.018,2,1.0209,existingPlaneInfinite,normal,Began,0.3592,4.6,2442,611,,,10,0.3592,4.0000,0.4391,3.0250,0.8414,0.5637,ambiguous,,,0.8414
+2026-08-09T15:58:32.681Z,gesture,41.101,2,1.0209,existingPlaneInfinite,normal,Changed,0.1969,4.3,2447,612,,,10,,,0.4599,2.9339,,,,,,0.8034
+2026-08-09T15:58:32.682Z,manipulation,41.102,2,1.0209,existingPlaneInfinite,normal,Changed,0.1969,4.3,2447,612,,,10,,4.0000,0.4599,2.9339,,0.5637,ambiguous,,,0.8034
+2026-08-09T15:58:32.734Z,gesture,41.154,2,1.0209,existingPlaneInfinite,normal,Changed,0.1969,5.2,2450,613,,,10,,,0.6768,2.8974,,,,,,0.6314
+2026-08-09T15:58:32.734Z,manipulation,41.155,2,1.0209,existingPlaneInfinite,normal,Changed,0.1969,5.2,2450,613,,,10,,4.0000,0.6768,2.8974,,0.5637,ambiguous,,,0.6314
+2026-08-09T15:58:32.796Z,gesture,41.217,2,1.0209,existingPlaneInfinite,normal,Changed,0.1969,6.7,2454,614,,,10,,,1.3617,2.6635,,,,,,0.3777
+2026-08-09T15:58:32.797Z,manipulation,41.217,2,1.0209,existingPlaneInfinite,normal,Changed,0.1969,6.7,2454,614,,,10,0.1969,4.0000,1.3617,2.6635,0.6314,0.5637,ambiguous,,,0.3777
+2026-08-09T15:58:32.881Z,gesture,41.301,2,1.0209,existingPlaneInfinite,normal,Changed,0.3911,8.6,2459,615,,,10,,,1.4538,-0.1236,,,,,,0.4407
+2026-08-09T15:58:32.882Z,manipulation,41.302,2,1.0209,existingPlaneInfinite,normal,Changed,0.3911,8.6,2459,615,,,10,0.3911,4.0000,1.4538,-0.1236,0.4407,0.5637,scale,,,0.4407
+2026-08-09T15:58:32.933Z,gesture,41.353,2,1.0209,existingPlaneInfinite,normal,Changed,0.3911,10.5,2462,616,,,10,,,0.5438,-0.2367,,,scale ⏸,,,0.6050
+2026-08-09T15:58:32.934Z,manipulation,41.354,2,1.0209,existingPlaneInfinite,normal,Changed,0.3911,10.5,2462,616,,,10,0.3911,4.0000,0.5438,-0.2367,0.4407,0.5637,scale,,,0.6050
+2026-08-09T15:58:33.014Z,gesture,41.434,2,1.0209,existingPlaneInfinite,normal,Changed,0.4603,11.2,2467,617,,,10,,,0.3874,-0.2379,,,scale ✓,,,0.6358
+2026-08-09T15:58:33.015Z,manipulation,41.435,2,1.0209,existingPlaneInfinite,normal,Changed,0.4603,11.2,2467,617,,,10,0.3911,4.0000,0.3874,-0.2379,0.4407,0.5637,scale,,,0.6358
+2026-08-09T15:58:33.082Z,gesture,41.502,2,1.0209,existingPlaneInfinite,normal,Changed,0.8951,11.3,2471,618,,,10,,,0.3745,-0.3012,,,scale ✓,,,0.6676
+2026-08-09T15:58:33.082Z,manipulation,41.502,2,1.0209,existingPlaneInfinite,normal,Changed,0.8951,11.3,2471,618,,,10,0.3911,4.0000,0.3745,-0.3012,0.4407,0.5637,scale,,,0.6676
+2026-08-09T15:58:33.132Z,gesture,41.552,2,1.0209,existingPlaneInfinite,normal,Changed,1.1487,11.4,2474,619,,,10,,,0.4690,-0.2887,,,scale ✓,,,0.7172
+2026-08-09T15:58:33.132Z,manipulation,41.552,2,1.0209,existingPlaneInfinite,normal,Changed,1.1487,11.4,2474,619,,,10,0.3911,4.0000,0.4690,-0.2887,0.4407,0.5637,scale,,,0.7172
+2026-08-09T15:58:33.200Z,gesture,41.620,2,1.0209,existingPlaneInfinite,normal,Changed,1.1487,11.0,2478,620,,,10,,,0.5030,-0.3217,,,scale ✓,,,0.6800
+2026-08-09T15:58:33.200Z,manipulation,41.620,2,1.0209,existingPlaneInfinite,normal,Changed,1.1487,11.0,2478,620,,,10,0.3911,4.0000,0.5030,-0.3217,0.4407,0.5637,scale,,,0.6800
+2026-08-09T15:58:33.281Z,gesture,41.701,2,1.0209,existingPlaneInfinite,normal,Changed,1.1487,11.0,2483,621,,,10,,,0.5233,-0.3410,,,scale ✓,,,0.6402
+2026-08-09T15:58:33.281Z,manipulation,41.701,2,1.0209,existingPlaneInfinite,normal,Changed,1.1487,11.0,2483,621,,,10,0.3911,4.0000,0.5233,-0.3410,0.4407,0.5637,scale,,,0.6402
+2026-08-09T15:58:33.332Z,gesture,41.752,2,1.0209,existingPlaneInfinite,normal,Changed,0.8663,11.7,2486,622,,,10,,,0.4420,-0.3524,,,scale ✓,,,0.6371
+2026-08-09T15:58:33.332Z,manipulation,41.752,2,1.0209,existingPlaneInfinite,normal,Changed,0.8663,11.7,2486,622,,,10,0.3911,4.0000,0.4420,-0.3524,0.4407,0.5637,scale,,,0.6371
+2026-08-09T15:58:33.397Z,gesture,41.817,2,1.0209,existingPlaneInfinite,normal,Changed,0.8663,11.6,2490,623,,,10,,,0.3722,-0.5068,,,scale ✓,,,0.6011
+2026-08-09T15:58:33.397Z,manipulation,41.817,2,1.0209,existingPlaneInfinite,normal,Changed,0.8663,11.6,2490,623,,,10,0.3911,4.0000,0.3722,-0.5068,0.4407,0.5637,scale,,,0.6011
+2026-08-09T15:58:33.480Z,gesture,41.900,2,1.0209,existingPlaneInfinite,normal,Changed,0.8663,9.1,2495,624,,,10,,,0.3081,-0.3328,,,scale ✓,,,0.5056
+2026-08-09T15:58:33.480Z,manipulation,41.900,2,1.0209,existingPlaneInfinite,normal,Changed,0.8663,9.1,2495,624,,,10,0.3911,4.0000,0.3081,-0.3328,0.4407,0.5637,scale,,,0.5056
+2026-08-09T15:58:33.548Z,gesture,41.968,2,1.0209,existingPlaneInfinite,normal,Changed,0.6504,5.7,2499,625,,,10,,,0.1457,2.9555,,,scale ✓,,,0.5908
+2026-08-09T15:58:33.549Z,manipulation,41.969,2,1.0209,existingPlaneInfinite,normal,Changed,0.6504,5.7,2499,625,,,10,0.3911,4.0000,0.1457,2.9555,0.4407,0.5637,scale,,,0.5908
+2026-08-09T15:58:33.580Z,planeUpdate,42.000,2,1.0209,none,normal,,,,0,0,,,10,,,,,,,,,,
+2026-08-09T15:58:33.600Z,gesture,42.021,2,1.0209,existingPlaneInfinite,normal,Changed,0.6504,5.7,2502,626,,,10,,,0.3572,2.9996,,,scale ✓,,,0.7138
+2026-08-09T15:58:33.601Z,manipulation,42.021,2,1.0209,existingPlaneInfinite,normal,Changed,0.6504,5.7,2502,626,,,10,0.3911,4.0000,0.3572,2.9996,0.4407,0.5637,scale,,,0.7138
+2026-08-09T15:58:33.682Z,gesture,42.102,2,1.0209,existingPlaneInfinite,normal,Changed,0.2204,5.0,2507,627,,,10,,,0.4093,2.8967,,,scale ✓,,,0.8562
+2026-08-09T15:58:33.682Z,manipulation,42.102,2,1.0209,existingPlaneInfinite,normal,Changed,0.2204,5.0,2507,627,,,10,0.3911,4.0000,0.4093,2.8967,0.4407,0.5637,scale,,,0.8562
+2026-08-09T15:58:33.734Z,gesture,42.154,2,1.0209,existingPlaneInfinite,normal,Changed,0.1672,5.1,2510,628,,,10,,,0.4298,-3.1243,,,scale ✓,,,1.0193
+2026-08-09T15:58:33.734Z,manipulation,42.154,2,1.0209,existingPlaneInfinite,normal,Changed,0.1672,5.1,2510,628,,,10,0.3911,4.0000,0.4298,-3.1243,0.4407,0.5637,scale,,,1.0193
+2026-08-09T15:58:33.814Z,gesture,42.234,2,1.0209,existingPlaneInfinite,normal,Changed,0.1672,4.9,2515,629,,,10,,,0.7600,-3.0340,,,scale ✓,,,1.3747
+2026-08-09T15:58:33.815Z,manipulation,42.235,2,1.0209,existingPlaneInfinite,normal,Changed,0.1672,4.9,2515,629,,,10,0.3911,4.0000,0.7600,-3.0340,0.4407,0.5637,scale,,,1.3747
+2026-08-09T15:58:33.882Z,gesture,42.302,2,1.0209,existingPlaneInfinite,normal,Changed,0.1672,4.5,2519,630,,,10,,,0.7486,-2.9627,,,scale ✓,,,1.4882
+2026-08-09T15:58:33.882Z,manipulation,42.302,2,1.0209,existingPlaneInfinite,normal,Changed,0.1672,4.5,2519,630,,,10,0.3911,4.0000,0.7486,-2.9627,0.4407,0.5637,scale,,,1.4882
+2026-08-09T15:58:33.934Z,gesture,42.354,2,1.0209,existingPlaneInfinite,normal,Changed,0.4116,4.1,2522,631,,,10,,,2.3613,-2.9334,,,scale ✓,,,1.5211
+2026-08-09T15:58:33.934Z,manipulation,42.354,2,1.0209,existingPlaneInfinite,normal,Changed,0.4116,4.1,2522,631,,,10,0.3911,4.0000,2.3613,-2.9334,0.4407,0.5637,scale,,,1.5211
+2026-08-09T15:58:33.998Z,gesture,42.418,2,1.0209,existingPlaneInfinite,normal,Changed,0.4929,4.0,2526,632,,,10,,,2.2878,-2.9061,,,scale ✓,,,1.5221
+2026-08-09T15:58:33.998Z,manipulation,42.418,2,1.0209,existingPlaneInfinite,normal,Changed,0.4929,4.0,2526,632,,,10,0.3911,4.0000,2.2878,-2.9061,0.4407,0.5637,scale,,,1.5221
+2026-08-09T15:58:34.081Z,gesture,42.501,2,1.0209,existingPlaneInfinite,normal,Changed,0.4933,12.4,2531,633,,,10,,,2.3931,-2.8133,,,scale ✓,,,1.6444
+2026-08-09T15:58:34.081Z,manipulation,42.501,2,1.0209,existingPlaneInfinite,normal,Changed,0.4933,12.4,2531,633,,,10,0.3911,4.0000,2.3931,-2.8133,0.4407,0.5637,scale,,,1.6444
+2026-08-09T15:58:34.132Z,gesture,42.552,2,1.0209,existingPlaneInfinite,normal,Changed,0.5181,19.8,2534,634,,,10,,,2.4502,-2.7791,,,scale ✓,,,1.7504
+2026-08-09T15:58:34.132Z,manipulation,42.552,2,1.0209,existingPlaneInfinite,normal,Changed,0.5181,19.8,2534,634,,,10,0.3911,4.0000,2.4502,-2.7791,0.4407,0.5637,scale,,,1.7504
+2026-08-09T15:58:34.197Z,gesture,42.617,2,1.0209,existingPlaneInfinite,normal,Changed,1.7964,17.7,2538,635,,,10,,,2.5698,-2.7420,,,scale ✓,,,1.8401
+2026-08-09T15:58:34.197Z,manipulation,42.617,2,1.0209,existingPlaneInfinite,normal,Changed,1.7964,17.7,2538,635,,,10,0.3911,4.0000,2.5698,-2.7420,0.4407,0.5637,scale,,,1.8401
+2026-08-09T15:58:34.280Z,gesture,42.700,2,1.0209,existingPlaneInfinite,normal,Changed,1.8304,14.9,2543,636,,,10,,,2.6100,-2.7108,,,scale ✓,,,1.8934
+2026-08-09T15:58:34.280Z,manipulation,42.700,2,1.0209,existingPlaneInfinite,normal,Changed,1.8304,14.9,2543,636,,,10,0.3911,4.0000,2.6100,-2.7108,0.4407,0.5637,scale,,,1.8934
+2026-08-09T15:58:34.349Z,gesture,42.769,2,1.0209,existingPlaneInfinite,normal,Changed,1.8568,13.3,2547,637,,,10,,,2.6602,-2.7089,,,scale ✓,,,1.9829
+2026-08-09T15:58:34.349Z,manipulation,42.769,2,1.0209,existingPlaneInfinite,normal,Changed,1.8568,13.3,2547,637,,,10,0.3911,4.0000,2.6602,-2.7089,0.4407,0.5637,scale,,,1.9829
+2026-08-09T15:58:34.397Z,gesture,42.817,2,1.0209,existingPlaneInfinite,normal,Changed,1.8568,12.5,2550,638,,,10,,,2.6655,-2.7455,,,scale ✓,,,1.9427
+2026-08-09T15:58:34.397Z,manipulation,42.817,2,1.0209,existingPlaneInfinite,normal,Changed,1.8568,12.5,2550,638,,,10,0.3911,4.0000,2.6655,-2.7455,0.4407,0.5637,scale,,,1.9427
+2026-08-09T15:58:34.482Z,gesture,42.902,2,1.0209,existingPlaneInfinite,normal,Changed,1.8415,12.1,2555,639,,,10,,,2.6323,-2.7629,,,scale ✓,,,1.8717
+2026-08-09T15:58:34.482Z,manipulation,42.902,2,1.0209,existingPlaneInfinite,normal,Changed,1.8415,12.1,2555,639,,,10,0.3911,4.0000,2.6323,-2.7629,0.4407,0.5637,scale,,,1.8717
+2026-08-09T15:58:34.532Z,gesture,42.952,2,1.0209,existingPlaneInfinite,normal,Changed,1.8304,11.6,2558,640,,,10,,,2.6201,-2.7869,,,scale ✓,,,1.7987
+2026-08-09T15:58:34.533Z,manipulation,42.953,2,1.0209,existingPlaneInfinite,normal,Changed,1.8304,11.6,2558,640,,,10,0.3911,4.0000,2.6201,-2.7869,0.4407,0.5637,scale,,,1.7987
+2026-08-09T15:58:34.597Z,planeUpdate,43.017,2,1.0209,none,normal,,,,0,0,,,10,,,,,,,,,,
+2026-08-09T15:58:34.598Z,gesture,43.018,2,1.0209,existingPlaneInfinite,normal,Changed,1.6934,11.9,2562,641,,,10,,,2.5840,-2.8112,,,scale ✓,,,1.7619
+2026-08-09T15:58:34.598Z,manipulation,43.018,2,1.0209,existingPlaneInfinite,normal,Changed,1.6934,11.9,2562,641,,,10,0.3911,4.0000,2.5840,-2.8112,0.4407,0.5637,scale,,,1.7619
+2026-08-09T15:58:34.681Z,gesture,43.101,2,1.0209,existingPlaneInfinite,normal,Changed,1.5978,11.6,2567,642,,,10,,,2.5932,-2.7665,,,scale ✓,,,1.7637
+2026-08-09T15:58:34.681Z,manipulation,43.101,2,1.0209,existingPlaneInfinite,normal,Changed,1.5978,11.6,2567,642,,,10,0.3911,4.0000,2.5932,-2.7665,0.4407,0.5637,scale,,,1.7637
+2026-08-09T15:58:34.732Z,gesture,43.152,2,1.0209,existingPlaneInfinite,normal,Changed,1.5191,11.2,2570,643,,,10,,,2.5790,-2.7997,,,scale ✓,,,1.7500
+2026-08-09T15:58:34.732Z,manipulation,43.152,2,1.0209,existingPlaneInfinite,normal,Changed,1.5191,11.2,2570,643,,,10,0.3911,4.0000,2.5790,-2.7997,0.4407,0.5637,scale,,,1.7500
+2026-08-09T15:58:34.798Z,gesture,43.218,2,1.0209,existingPlaneInfinite,normal,Changed,1.5191,11.4,2574,644,,,10,,,2.5187,-2.8368,,,scale ✓,,,1.6578
+2026-08-09T15:58:34.799Z,manipulation,43.219,2,1.0209,existingPlaneInfinite,normal,Changed,1.5191,11.4,2574,644,,,10,0.3911,4.0000,2.5187,-2.8368,0.4407,0.5637,scale,,,1.6578
+2026-08-09T15:58:34.882Z,gesture,43.302,2,1.0209,existingPlaneInfinite,normal,Changed,1.4832,11.7,2579,645,,,10,,,2.3462,-2.9473,,,scale ✓,,,1.4589
+2026-08-09T15:58:34.882Z,manipulation,43.302,2,1.0209,existingPlaneInfinite,normal,Changed,1.4832,11.7,2579,645,,,10,0.3911,4.0000,2.3462,-2.9473,0.4407,0.5637,scale,,,1.4589
+2026-08-09T15:58:34.932Z,gesture,43.352,2,1.0209,existingPlaneInfinite,normal,Changed,1.4832,8.1,2582,646,,,10,,,0.8757,3.0761,,,scale ✓,,,0.7952
+2026-08-09T15:58:34.932Z,manipulation,43.352,2,1.0209,existingPlaneInfinite,normal,Changed,1.4832,8.1,2582,646,,,10,0.3911,4.0000,0.8757,3.0761,0.4407,0.5637,scale,,,0.7952
+2026-08-09T15:58:34.997Z,gesture,43.417,2,1.0209,existingPlaneInfinite,normal,Changed,1.4832,7.9,2586,647,,,10,,,0.1827,2.9975,,,scale ✓,,,0.5819
+2026-08-09T15:58:34.997Z,manipulation,43.417,2,1.0209,existingPlaneInfinite,normal,Changed,1.4832,7.9,2586,647,,,10,0.3911,4.0000,0.1827,2.9975,0.4407,0.5637,scale,,,0.5819
+2026-08-09T15:58:35.082Z,gesture,43.502,2,1.0209,existingPlaneInfinite,normal,Changed,1.5291,8.9,2591,648,,,10,,,0.0807,2.6760,,,scale ✓,,,0.5384
+2026-08-09T15:58:35.082Z,manipulation,43.502,2,1.0209,existingPlaneInfinite,normal,Changed,1.5291,8.9,2591,648,,,10,0.3911,4.0000,0.0807,2.6760,0.4407,0.5637,scale,,,0.5384
+2026-08-09T15:58:35.134Z,gesture,43.554,2,1.0209,existingPlaneInfinite,normal,Changed,2.4104,10.0,2594,649,,,10,,,-0.0229,1.1053,,,scale ✓,,,0.4005
+2026-08-09T15:58:35.135Z,manipulation,43.555,2,1.0209,existingPlaneInfinite,normal,Changed,2.4104,10.0,2594,649,,,10,0.3911,4.0000,-0.0229,1.1053,0.4407,0.5637,scale,,,0.4005
+2026-08-09T15:58:35.397Z,gesture,43.817,2,1.0209,existingPlaneInfinite,normal,Ended,2.9697,8.7,2610,653,,,10,,,0.7814,-0.0646,,,scale ✓,,,0.5891
+2026-08-09T15:58:35.397Z,manipulation,43.817,2,1.0209,existingPlaneInfinite,normal,Ended,2.9697,8.7,2610,653,,,10,,4.0000,0.7814,-0.0646,,0.5637,scale,,,0.5891
+2026-08-09T15:58:35.397Z,gesture,43.817,2,1.0209,existingPlaneInfinite,normal,Possible,2.9697,8.7,2610,653,,,,,,0.7814,-0.0646,,,,,,0.5891
+2026-08-09T15:58:35.599Z,gesture,44.019,2,1.0209,existingPlaneInfinite,normal,Began,0.7565,9.4,2622,656,,,,,,0.1454,0.0336,,,,,,0.4712
+2026-08-09T15:58:35.599Z,manipulation,44.019,2,1.0209,existingPlaneInfinite,normal,Began,0.7565,9.4,2622,656,,,11,0.7565,4.0000,0.1454,0.0336,0.4712,0.5637,ambiguous,,,0.4712
+2026-08-09T15:58:35.681Z,planeUpdate,44.101,2,1.0209,none,normal,,,,0,0,,,11,,,,,,,,,,
+2026-08-09T15:58:35.799Z,gesture,44.219,2,1.0209,existingPlaneInfinite,normal,Ended,3.8210,12.9,2634,659,,,11,,,0.0685,0.0431,,,,,,0.4722
+2026-08-09T15:58:35.799Z,manipulation,44.219,2,1.0209,existingPlaneInfinite,normal,Ended,3.8210,12.9,2634,659,,,11,,4.0000,0.0685,0.0431,,0.5637,ambiguous,,,0.4722
+2026-08-09T15:58:35.799Z,gesture,44.219,2,1.0209,existingPlaneInfinite,normal,Possible,3.8210,12.9,2634,659,,,,,,0.0685,0.0431,,,,,,0.4722
+2026-08-09T15:58:36.549Z,gesture,44.969,2,1.0209,existingPlaneInfinite,normal,Began,1.3817,13.1,2679,670,,,,,,0.0637,-0.0483,,,,,,0.3883
+2026-08-09T15:58:36.549Z,manipulation,44.969,2,1.0209,existingPlaneInfinite,normal,Began,1.3817,13.1,2679,670,,,12,1.3817,4.0000,0.0637,-0.0483,0.3883,0.5637,ambiguous,,,0.3883
+2026-08-09T15:58:36.599Z,gesture,45.019,2,1.0209,existingPlaneInfinite,normal,Changed,1.9625,15.8,2682,671,,,12,,,0.1820,-0.0415,,,,,,0.5352
+2026-08-09T15:58:36.599Z,manipulation,45.019,2,1.0209,existingPlaneInfinite,normal,Changed,1.9625,15.8,2682,671,,,12,,4.0000,0.1820,-0.0415,,0.5637,ambiguous,,,0.5352
+2026-08-09T15:58:36.680Z,gesture,45.101,2,1.0209,existingPlaneInfinite,normal,Changed,1.9625,15.7,2687,672,,,12,,,0.2137,-0.1677,,,,,,0.6019
+2026-08-09T15:58:36.681Z,manipulation,45.101,2,1.0209,existingPlaneInfinite,normal,Changed,1.9625,15.7,2687,672,,,12,,4.0000,0.2137,-0.1677,,0.5637,ambiguous,,,0.6019
+2026-08-09T15:58:36.698Z,planeUpdate,45.118,2,1.0209,none,normal,,,,0,0,,,12,,,,,,,,,,
+2026-08-09T15:58:36.735Z,gesture,45.155,2,1.0209,existingPlaneInfinite,normal,Changed,1.9625,16.3,2690,673,,,12,,,0.2183,-0.2176,,,,,,0.6163
+2026-08-09T15:58:36.735Z,manipulation,45.155,2,1.0209,existingPlaneInfinite,normal,Changed,1.9625,16.3,2690,673,,,12,1.9625,4.0000,0.2183,-0.2176,0.6019,0.5637,ambiguous,,,0.6163
+2026-08-09T15:58:36.932Z,gesture,45.352,2,1.0209,existingPlaneInfinite,normal,Changed,1.9625,11.7,2702,676,,,12,,,2.7386,-3.1289,,,,,,0.9362
+2026-08-09T15:58:36.933Z,manipulation,45.353,2,1.0209,existingPlaneInfinite,normal,Changed,1.9625,11.7,2702,676,,,12,1.9625,4.0000,2.7386,-3.1289,0.6019,0.5637,ambiguous,,,0.9362
+2026-08-09T15:58:37.016Z,gesture,45.436,2,1.0209,existingPlaneInfinite,normal,Changed,1.9162,13.0,2707,677,,,12,,,2.7751,3.1015,,,,,,1.3788
+2026-08-09T15:58:37.016Z,manipulation,45.436,2,1.0209,existingPlaneInfinite,normal,Changed,1.9162,13.0,2707,677,,,12,1.9625,4.0000,2.7751,3.1015,1.3788,0.5637,yaw,,,1.3788
+2026-08-09T15:58:37.081Z,gesture,45.501,2,1.0209,existingPlaneInfinite,normal,Changed,1.3802,12.1,2711,678,,,12,,,2.6345,-3.0838,,,yaw,,,1.6338
+2026-08-09T15:58:37.082Z,manipulation,45.502,2,1.0209,existingPlaneInfinite,normal,Changed,1.3802,12.1,2711,678,,,12,1.9625,4.0000,2.6345,-3.0838,1.3788,0.8187,yaw,,,1.6338
+2026-08-09T15:58:37.148Z,gesture,45.568,2,1.0209,existingPlaneInfinite,normal,Changed,1.3802,10.9,2715,679,,,12,,,2.5033,-2.9901,,,yaw,,,1.5822
+2026-08-09T15:58:37.148Z,manipulation,45.568,2,1.0209,existingPlaneInfinite,normal,Changed,1.3802,10.9,2715,679,,,12,1.9625,4.0000,2.5033,-2.9901,1.3788,0.7671,yaw,,,1.5822
+2026-08-09T15:58:37.198Z,gesture,45.618,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,11.1,2718,680,,,12,,,2.5511,-2.9904,,,yaw,,,1.5425
+2026-08-09T15:58:37.199Z,manipulation,45.619,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,11.1,2718,680,,,12,1.9625,4.0000,2.5511,-2.9904,1.3788,0.7274,yaw,,,1.5425
+2026-08-09T15:58:37.281Z,gesture,45.701,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,10.3,2723,681,,,12,,,2.5924,-3.0387,,,yaw,,,1.3751
+2026-08-09T15:58:37.282Z,manipulation,45.702,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,10.3,2723,681,,,12,1.9625,4.0000,2.5924,-3.0387,1.3788,0.5600,yaw,,,1.3751
+2026-08-09T15:58:37.333Z,gesture,45.753,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,8.2,2726,682,,,12,,,2.0887,-3.1199,,,yaw,,,0.8836
+2026-08-09T15:58:37.333Z,manipulation,45.753,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,8.2,2726,682,,,12,1.9625,4.0000,2.0887,-3.1199,1.3788,0.0685,yaw,,,0.8836
+2026-08-09T15:58:37.398Z,gesture,45.818,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,8.0,2730,683,,,12,,,0.1795,2.9731,,,yaw,,,0.6779
+2026-08-09T15:58:37.398Z,manipulation,45.818,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,8.0,2730,683,,,12,1.9625,4.0000,0.1795,2.9731,1.3788,-0.1372,yaw,,,0.6779
+2026-08-09T15:58:37.482Z,gesture,45.902,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,9.1,2735,684,,,12,,,0.1586,3.0424,,,yaw,,,0.6089
+2026-08-09T15:58:37.483Z,manipulation,45.903,2,1.0209,existingPlaneInfinite,normal,Changed,1.2382,9.1,2735,684,,,12,1.9625,4.0000,0.1586,3.0424,1.3788,-0.2062,yaw,,,0.6089
+2026-08-09T15:58:37.535Z,gesture,45.955,2,1.0209,existingPlaneInfinite,normal,Changed,1.7970,10.9,2738,685,,,12,,,0.1539,2.8316,,,yaw,,,0.5712
+2026-08-09T15:58:37.535Z,manipulation,45.955,2,1.0209,existingPlaneInfinite,normal,Changed,1.7970,10.9,2738,685,,,12,1.9625,4.0000,0.1539,2.8316,1.3788,-0.2440,yaw,,,0.5712
+2026-08-09T15:58:37.733Z,gesture,46.153,2,1.0209,existingPlaneInfinite,normal,Ended,5.0346,13.7,2750,688,,,12,,,0.2351,0.0337,,,yaw,,,0.5857
+2026-08-09T15:58:37.733Z,manipulation,46.153,2,1.0209,existingPlaneInfinite,normal,Ended,5.0346,13.7,2750,688,,,12,,4.0000,0.2351,0.0337,,-0.2440,yaw,,,0.5857
+2026-08-09T15:58:37.733Z,gesture,46.153,2,1.0209,existingPlaneInfinite,normal,Possible,5.0346,13.7,2750,688,,,,,,0.2351,0.0337,,,,,,0.5857
+2026-08-09T15:58:37.784Z,planeUpdate,46.204,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:38.364Z,gesture,46.784,2,1.0209,existingPlaneInfinite,normal,Began,1.3373,14.0,2787,697,,,,,,2.7115,-2.9761,,,,,,1.7348
+2026-08-09T15:58:38.364Z,manipulation,46.784,2,1.0209,existingPlaneInfinite,normal,Began,1.3373,14.0,2787,697,,,13,1.3373,4.0000,2.7115,-2.9761,1.7348,-0.2440,ambiguous,,,1.7348
+2026-08-09T15:58:38.415Z,gesture,46.835,2,1.0209,existingPlaneInfinite,normal,Changed,1.3797,13.7,2790,698,,,13,,,2.7013,-2.9846,,,,,,1.7513
+2026-08-09T15:58:38.415Z,manipulation,46.835,2,1.0209,existingPlaneInfinite,normal,Changed,1.3797,13.7,2790,698,,,13,,4.0000,2.7013,-2.9846,,-0.2440,ambiguous,,,1.7513
+2026-08-09T15:58:38.498Z,gesture,46.918,2,1.0209,existingPlaneInfinite,normal,Changed,1.3797,13.8,2795,699,,,13,,,2.6947,-2.9828,,,,,,1.7256
+2026-08-09T15:58:38.499Z,manipulation,46.919,2,1.0209,existingPlaneInfinite,normal,Changed,1.3797,13.8,2795,699,,,13,,4.0000,2.6947,-2.9828,,-0.2440,ambiguous,,,1.7256
+2026-08-09T15:58:38.549Z,gesture,46.969,2,1.0209,existingPlaneInfinite,normal,Changed,1.3092,14.5,2798,700,,,13,,,2.6577,-3.0575,,,,,,1.3821
+2026-08-09T15:58:38.550Z,manipulation,46.970,2,1.0209,existingPlaneInfinite,normal,Changed,1.3092,14.5,2798,700,,,13,1.3797,4.0000,2.6577,-3.0575,1.7256,-0.2440,ambiguous,,,1.3821
+2026-08-09T15:58:38.615Z,gesture,47.035,2,1.0209,existingPlaneInfinite,normal,Changed,1.3092,9.1,2802,701,,,13,,,1.5749,-3.1098,,,,,,0.7839
+2026-08-09T15:58:38.615Z,manipulation,47.035,2,1.0209,existingPlaneInfinite,normal,Changed,1.3092,9.1,2802,701,,,13,1.3092,4.0000,1.5749,-3.1098,0.7839,-0.2440,yaw,,,0.7839
+2026-08-09T15:58:38.682Z,gesture,47.102,2,1.0209,existingPlaneInfinite,normal,Changed,1.3092,11.1,2806,702,,,13,,,0.1124,3.0738,,,yaw,,,0.4656
+2026-08-09T15:58:38.682Z,manipulation,47.102,2,1.0209,existingPlaneInfinite,normal,Changed,1.3092,11.1,2806,702,,,13,1.3092,4.0000,0.1124,3.0738,0.7839,-0.5623,yaw,,,0.4656
+2026-08-09T15:58:38.765Z,gesture,47.185,2,1.0209,existingPlaneInfinite,normal,Changed,1.3092,15.8,2811,703,,,13,,,0.1411,-0.1815,,,yaw,,,0.5569
+2026-08-09T15:58:38.765Z,manipulation,47.185,2,1.0209,existingPlaneInfinite,normal,Changed,1.3092,15.8,2811,703,,,13,1.3092,4.0000,0.1411,-0.1815,0.7839,-0.4710,yaw,,,0.5569
+2026-08-09T15:58:38.814Z,planeUpdate,47.234,2,1.0209,none,normal,,,,0,0,,,13,,,,,,,,,,
+2026-08-09T15:58:38.965Z,gesture,47.385,2,1.0209,existingPlaneInfinite,normal,Ended,4.9518,18.0,2823,706,,,13,,,0.1390,-0.1246,,,yaw,,,0.5359
+2026-08-09T15:58:38.965Z,manipulation,47.385,2,1.0209,existingPlaneInfinite,normal,Ended,4.9518,18.0,2823,706,,,13,,4.0000,0.1390,-0.1246,,-0.4710,yaw,,,0.5359
+2026-08-09T15:58:38.965Z,gesture,47.385,2,1.0209,existingPlaneInfinite,normal,Possible,4.9518,18.0,2823,706,,,,,,0.1390,-0.1246,,,,,,0.5359
+2026-08-09T15:58:39.915Z,planeUpdate,48.335,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:40.033Z,gesture,48.453,2,1.0209,existingPlaneInfinite,normal,Began,1.2652,15.8,2887,722,,,,,,2.6623,-2.9177,,,,,,1.7023
+2026-08-09T15:58:40.033Z,manipulation,48.453,2,1.0209,existingPlaneInfinite,normal,Began,1.2652,15.8,2887,722,,,14,1.2652,4.0000,2.6623,-2.9177,1.7023,-0.4710,ambiguous,,,1.7023
+2026-08-09T15:58:40.083Z,gesture,48.503,2,1.0209,existingPlaneInfinite,normal,Changed,1.6440,14.9,2890,723,,,14,,,2.6449,-2.9122,,,,,,1.7121
+2026-08-09T15:58:40.083Z,manipulation,48.503,2,1.0209,existingPlaneInfinite,normal,Changed,1.6440,14.9,2890,723,,,14,,4.0000,2.6449,-2.9122,,-0.4710,ambiguous,,,1.7121
+2026-08-09T15:58:40.165Z,gesture,48.585,2,1.0209,existingPlaneInfinite,normal,Changed,1.6440,14.6,2895,724,,,14,,,2.6366,-2.9069,,,,,,1.6988
+2026-08-09T15:58:40.165Z,manipulation,48.586,2,1.0209,existingPlaneInfinite,normal,Changed,1.6440,14.6,2895,724,,,14,,4.0000,2.6366,-2.9069,,-0.4710,ambiguous,,,1.6988
+2026-08-09T15:58:40.232Z,gesture,48.652,2,1.0209,existingPlaneInfinite,normal,Changed,1.5841,14.7,2899,725,,,14,,,2.6315,-2.9471,,,,,,1.6578
+2026-08-09T15:58:40.232Z,manipulation,48.652,2,1.0209,existingPlaneInfinite,normal,Changed,1.5841,14.7,2899,725,,,14,1.6440,4.0000,2.6315,-2.9471,1.6988,-0.4710,ambiguous,,,1.6578
+2026-08-09T15:58:40.300Z,gesture,48.720,2,1.0209,existingPlaneInfinite,normal,Changed,1.5841,14.0,2903,726,,,14,,,2.6246,-3.0224,,,,,,1.5611
+2026-08-09T15:58:40.300Z,manipulation,48.720,2,1.0209,existingPlaneInfinite,normal,Changed,1.5841,14.0,2903,726,,,14,1.6440,4.0000,2.6246,-3.0224,1.6988,-0.4710,ambiguous,,,1.5611
+2026-08-09T15:58:40.364Z,gesture,48.785,2,1.0209,existingPlaneInfinite,normal,Changed,1.4457,13.0,2907,727,,,14,,,2.4985,-3.0756,,,,,,1.3221
+2026-08-09T15:58:40.365Z,manipulation,48.785,2,1.0209,existingPlaneInfinite,normal,Changed,1.4457,13.0,2907,727,,,14,1.6440,4.0000,2.4985,-3.0756,1.6988,-0.4710,ambiguous,,,1.3221
+2026-08-09T15:58:40.417Z,gesture,48.837,2,1.0209,existingPlaneInfinite,normal,Changed,1.1668,10.1,2910,728,,,14,,,0.5825,-3.1167,,,,,,0.8417
+2026-08-09T15:58:40.417Z,manipulation,48.837,2,1.0209,existingPlaneInfinite,normal,Changed,1.1668,10.1,2910,728,,,14,1.4457,4.0000,0.5825,-3.1167,1.3221,-0.4710,yaw,,,0.8417
+2026-08-09T15:58:40.481Z,gesture,48.901,2,1.0209,existingPlaneInfinite,normal,Changed,1.1668,10.5,2914,729,,,14,,,0.0900,2.8205,,,yaw,,,0.4858
+2026-08-09T15:58:40.481Z,manipulation,48.902,2,1.0209,existingPlaneInfinite,normal,Changed,1.1668,10.5,2914,729,,,14,1.4457,4.0000,0.0900,2.8205,1.3221,-0.8269,yaw,,,0.4858
+2026-08-09T15:58:40.566Z,gesture,48.986,2,1.0209,existingPlaneInfinite,normal,Changed,1.1668,13.2,2919,730,,,14,,,0.1091,-0.0767,,,yaw,,,0.3838
+2026-08-09T15:58:40.566Z,manipulation,48.986,2,1.0209,existingPlaneInfinite,normal,Changed,1.1668,13.2,2919,730,,,14,1.4457,4.0000,0.1091,-0.0767,1.3221,-0.9288,yaw,,,0.3838
+2026-08-09T15:58:40.765Z,gesture,49.185,2,1.0209,existingPlaneInfinite,normal,Ended,5.0099,9.3,2931,733,,,14,,,0.8425,-1.5957,,,yaw,,,0.2401
+2026-08-09T15:58:40.765Z,manipulation,49.185,2,1.0209,existingPlaneInfinite,normal,Ended,5.0099,9.3,2931,733,,,14,,4.0000,0.8425,-1.5957,,-0.9288,yaw,,,0.2401
+2026-08-09T15:58:40.765Z,gesture,49.185,2,1.0209,existingPlaneInfinite,normal,Possible,5.0099,9.3,2931,733,,,,,,0.8425,-1.5957,,,,,,0.2401
+2026-08-09T15:58:40.998Z,planeUpdate,49.418,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:41.083Z,gesture,49.503,2,1.0209,existingPlaneInfinite,normal,Began,1.3464,9.4,2951,738,,,,,,0.4602,-0.3859,,,,,,0.2544
+2026-08-09T15:58:41.083Z,manipulation,49.503,2,1.0209,existingPlaneInfinite,normal,Began,1.3464,9.4,2951,738,,,15,1.3464,4.0000,0.4602,-0.3859,0.2544,-0.9288,ambiguous,,,0.2544
+2026-08-09T15:58:41.283Z,gesture,49.703,2,1.0209,existingPlaneInfinite,normal,Ended,6.7191,18.8,2962,741,,,15,,,0.1297,-0.3643,,,,,,0.4931
+2026-08-09T15:58:41.283Z,manipulation,49.703,2,1.0209,existingPlaneInfinite,normal,Ended,6.7191,18.8,2962,741,,,15,,4.0000,0.1297,-0.3643,,-0.9288,ambiguous,,,0.4931
+2026-08-09T15:58:41.283Z,gesture,49.703,2,1.0209,existingPlaneInfinite,normal,Possible,6.7191,18.8,2962,741,,,,,,0.1297,-0.3643,,,,,,0.4931
+2026-08-09T15:58:42.015Z,planeUpdate,50.435,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:43.015Z,planeUpdate,51.435,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:43.482Z,gesture,51.902,2,1.0209,existingPlaneInfinite,normal,Began,0.5231,15.4,3094,774,,,,,,2.7414,2.9753,,,,,,0.6928
+2026-08-09T15:58:43.483Z,manipulation,51.903,2,1.0209,existingPlaneInfinite,normal,Began,0.5231,15.4,3094,774,,,16,0.5231,4.0000,2.7414,2.9753,0.6928,-0.9288,ambiguous,,,0.6928
+2026-08-09T15:58:43.567Z,gesture,51.987,2,1.0209,existingPlaneInfinite,normal,Changed,0.1987,15.9,3099,775,,,16,,,2.7973,2.8918,,,,,,0.6001
+2026-08-09T15:58:43.567Z,manipulation,51.987,2,1.0209,existingPlaneInfinite,normal,Changed,0.1987,15.9,3099,775,,,16,,4.0000,2.7973,2.8918,,-0.9288,ambiguous,,,0.6001
+2026-08-09T15:58:43.617Z,gesture,52.037,2,1.0209,existingPlaneInfinite,normal,Changed,0.2549,15.5,3102,776,,,16,,,2.6403,2.8783,,,,,,0.6267
+2026-08-09T15:58:43.617Z,manipulation,52.037,2,1.0209,existingPlaneInfinite,normal,Changed,0.2549,15.5,3102,776,,,16,,4.0000,2.6403,2.8783,,-0.9288,ambiguous,,,0.6267
+2026-08-09T15:58:43.683Z,gesture,52.103,2,1.0209,existingPlaneInfinite,normal,Changed,0.2477,16.1,3107,777,,,16,,,2.6869,2.8571,,,,,,0.6064
+2026-08-09T15:58:43.683Z,manipulation,52.103,2,1.0209,existingPlaneInfinite,normal,Changed,0.2477,16.1,3107,777,,,16,0.2477,4.0000,2.6869,2.8571,0.6064,-0.9288,ambiguous,,,0.6064
+2026-08-09T15:58:43.767Z,gesture,52.187,2,1.0209,existingPlaneInfinite,normal,Changed,0.2477,16.8,3111,778,,,16,,,1.6146,2.8762,,,,,,0.6338
+2026-08-09T15:58:43.767Z,manipulation,52.187,2,1.0209,existingPlaneInfinite,normal,Changed,0.2477,16.8,3111,778,,,16,0.2477,4.0000,1.6146,2.8762,0.6064,-0.9288,ambiguous,,,0.6338
+2026-08-09T15:58:43.817Z,gesture,52.237,2,1.0209,existingPlaneInfinite,normal,Changed,0.2477,18.3,3114,779,,,16,,,1.8063,2.9056,,,,,,0.6680
+2026-08-09T15:58:43.817Z,manipulation,52.237,2,1.0209,existingPlaneInfinite,normal,Changed,0.2477,18.3,3114,779,,,16,0.2477,4.0000,1.8063,2.9056,0.6064,-0.9288,ambiguous,,,0.6680
+2026-08-09T15:58:43.883Z,gesture,52.303,2,1.0209,existingPlaneInfinite,normal,Changed,0.2549,19.4,3118,780,,,16,,,1.7991,2.9447,,,,,,0.6901
+2026-08-09T15:58:43.884Z,manipulation,52.304,2,1.0209,existingPlaneInfinite,normal,Changed,0.2549,19.4,3118,780,,,16,0.2477,4.0000,1.7991,2.9447,0.6064,-0.9288,ambiguous,,,0.6901
+2026-08-09T15:58:43.965Z,gesture,52.385,2,1.0209,existingPlaneInfinite,normal,Changed,0.3845,21.7,3123,781,,,16,,,1.7361,2.9617,,,,,,0.6873
+2026-08-09T15:58:43.966Z,manipulation,52.386,2,1.0209,existingPlaneInfinite,normal,Changed,0.3845,21.7,3123,781,,,16,0.2549,4.0000,1.7361,2.9617,0.6873,-0.9288,scale,,,0.6873
+2026-08-09T15:58:44.017Z,gesture,52.437,2,1.0209,existingPlaneInfinite,normal,Changed,0.5353,24.5,3126,782,,,16,,,1.7943,2.9974,,,scale,,,0.7093
+2026-08-09T15:58:44.017Z,manipulation,52.437,2,1.0209,existingPlaneInfinite,normal,Changed,0.5353,24.5,3126,782,,,16,0.2549,4.0000,1.7943,2.9974,0.6873,-0.9288,scale,,,0.7093
+2026-08-09T15:58:44.099Z,gesture,52.519,2,1.0209,existingPlaneInfinite,normal,Changed,0.7514,26.6,3131,783,,,16,,,1.8677,3.0494,,,scale,,,0.7088
+2026-08-09T15:58:44.099Z,manipulation,52.519,2,1.0209,existingPlaneInfinite,normal,Changed,0.7514,26.6,3131,783,,,16,0.2549,4.0000,1.8677,3.0494,0.6873,-0.9288,scale,,,0.7088
+2026-08-09T15:58:44.115Z,planeUpdate,52.535,2,1.0209,none,normal,,,,0,0,,,16,,,,,,,,,,
+2026-08-09T15:58:44.166Z,gesture,52.586,2,1.0209,existingPlaneInfinite,normal,Changed,1.0212,26.3,3135,784,,,16,,,1.8415,3.0613,,,scale,,,0.7079
+2026-08-09T15:58:44.166Z,manipulation,52.586,2,1.0209,existingPlaneInfinite,normal,Changed,1.0212,26.3,3135,784,,,16,0.2549,4.0000,1.8415,3.0613,0.6873,-0.9288,scale,,,0.7079
+2026-08-09T15:58:44.216Z,gesture,52.636,2,1.0209,existingPlaneInfinite,normal,Changed,1.3500,25.8,3138,785,,,16,,,1.8397,3.0581,,,scale,,,0.6913
+2026-08-09T15:58:44.216Z,manipulation,52.636,2,1.0209,existingPlaneInfinite,normal,Changed,1.3500,25.8,3138,785,,,16,0.2549,4.0000,1.8397,3.0581,0.6873,-0.9288,scale,,,0.6913
+2026-08-09T15:58:44.284Z,gesture,52.704,2,1.0209,existingPlaneInfinite,normal,Changed,1.5619,25.8,3142,786,,,16,,,1.7882,3.0568,,,scale,,,0.6897
+2026-08-09T15:58:44.284Z,manipulation,52.704,2,1.0209,existingPlaneInfinite,normal,Changed,1.5619,25.8,3142,786,,,16,0.2549,4.0000,1.7882,3.0568,0.6873,-0.9288,scale,,,0.6897
+2026-08-09T15:58:44.367Z,gesture,52.787,2,1.0209,existingPlaneInfinite,normal,Changed,1.5792,25.7,3147,787,,,16,,,1.6541,3.0414,,,scale,,,0.6659
+2026-08-09T15:58:44.367Z,manipulation,52.787,2,1.0209,existingPlaneInfinite,normal,Changed,1.5792,25.7,3147,787,,,16,0.2549,4.0000,1.6541,3.0414,0.6873,-0.9288,scale,,,0.6659
+2026-08-09T15:58:44.417Z,gesture,52.837,2,1.0209,existingPlaneInfinite,normal,Changed,1.5792,17.7,3150,788,,,16,,,2.3665,2.9458,,,scale ⏸,,,0.5705
+2026-08-09T15:58:44.417Z,manipulation,52.837,2,1.0209,existingPlaneInfinite,normal,Changed,1.5792,17.7,3150,788,,,16,0.2549,4.0000,2.3665,2.9458,0.6873,-0.9288,scale,,,0.5705
+2026-08-09T15:58:44.616Z,gesture,53.036,2,1.0209,existingPlaneInfinite,normal,Cancelled,,13.4,3162,791,,,16,,,0.1408,,,,scale ✓,,,0.6922
+2026-08-09T15:58:44.616Z,gesture,53.036,2,1.0209,existingPlaneInfinite,normal,Possible,,13.4,3162,791,,,,,,0.1408,,,,,,,0.6922
+2026-08-09T15:58:45.199Z,planeUpdate,53.619,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:45.220Z,gesture,53.640,2,1.0209,existingPlaneInfinite,normal,Began,0.7339,20.3,3198,800,,,,,,-0.1081,2.8958,,,,,,0.3620
+2026-08-09T15:58:45.220Z,manipulation,53.640,2,1.0209,existingPlaneInfinite,normal,Began,0.7339,20.3,3198,800,,,17,0.7339,4.0000,-0.1081,2.8958,0.3620,-0.9288,ambiguous,,,0.3620
+2026-08-09T15:58:45.417Z,gesture,53.837,2,1.0209,existingPlaneInfinite,normal,Ended,3.8629,32.6,3210,803,,,17,,,-0.3652,2.4526,,,,,,0.0343
+2026-08-09T15:58:45.418Z,manipulation,53.838,2,1.0209,existingPlaneInfinite,normal,Ended,3.8629,32.6,3210,803,,,17,,4.0000,-0.3652,2.4526,,-0.9288,ambiguous,,,0.0343
+2026-08-09T15:58:45.418Z,gesture,53.838,2,1.0209,existingPlaneInfinite,normal,Possible,3.8629,32.6,3210,803,,,,,,-0.3652,2.4526,,,,,,0.0343
+2026-08-09T15:58:46.083Z,gesture,54.503,2,1.0209,existingPlaneInfinite,normal,Began,1.1297,26.3,3250,813,,,,,,1.8519,-3.0148,,,,,,1.0470
+2026-08-09T15:58:46.083Z,manipulation,54.503,2,1.0209,existingPlaneInfinite,normal,Began,1.1297,26.3,3250,813,,,18,1.1297,4.0000,1.8519,-3.0148,1.0470,-0.9288,ambiguous,,,1.0470
+2026-08-09T15:58:46.167Z,gesture,54.587,2,1.0209,existingPlaneInfinite,normal,Changed,1.0953,25.2,3255,814,,,18,,,1.8218,-3.0039,,,,,,1.0213
+2026-08-09T15:58:46.167Z,manipulation,54.587,2,1.0209,existingPlaneInfinite,normal,Changed,1.0953,25.2,3255,814,,,18,,4.0000,1.8218,-3.0039,,-0.9288,ambiguous,,,1.0213
+2026-08-09T15:58:46.199Z,planeUpdate,54.619,2,1.0209,none,normal,,,,0,0,,,18,,,,,,,,,,
+2026-08-09T15:58:46.220Z,gesture,54.640,2,1.0209,existingPlaneInfinite,normal,Changed,1.1062,25.7,3258,815,,,18,,,1.8736,-3.0454,,,,,,0.8690
+2026-08-09T15:58:46.220Z,manipulation,54.640,2,1.0209,existingPlaneInfinite,normal,Changed,1.1062,25.7,3258,815,,,18,,4.0000,1.8736,-3.0454,,-0.9288,ambiguous,,,0.8690
+2026-08-09T15:58:46.283Z,gesture,54.703,2,1.0209,existingPlaneInfinite,normal,Changed,1.0953,28.2,3262,816,,,18,,,2.0158,3.0828,,,,,,0.7429
+2026-08-09T15:58:46.283Z,manipulation,54.703,2,1.0209,existingPlaneInfinite,normal,Changed,1.0953,28.2,3262,816,,,18,1.0953,4.0000,2.0158,3.0828,0.8690,-0.9288,ambiguous,,,0.7429
+2026-08-09T15:58:46.366Z,gesture,54.786,2,1.0209,existingPlaneInfinite,normal,Changed,1.0953,26.5,3267,817,,,18,,,1.8501,2.9362,,,,,,0.5959
+2026-08-09T15:58:46.366Z,manipulation,54.786,2,1.0209,existingPlaneInfinite,normal,Changed,1.0953,26.5,3267,817,,,18,1.0953,4.0000,1.8501,2.9362,0.8690,-0.9288,ambiguous,,,0.5959
+2026-08-09T15:58:46.417Z,gesture,54.837,2,1.0209,existingPlaneInfinite,normal,Changed,1.0516,24.6,3270,818,,,18,,,0.3086,2.8014,,,,,,0.3059
+2026-08-09T15:58:46.418Z,manipulation,54.838,2,1.0209,existingPlaneInfinite,normal,Changed,1.0516,24.6,3270,818,,,18,1.0953,4.0000,0.3086,2.8014,0.5959,-0.9288,yaw,,,0.3059
+2026-08-09T15:58:46.567Z,gesture,54.987,2,1.0209,existingPlaneInfinite,normal,Changed,1.0516,22.5,3279,820,,,18,,,-0.3754,2.3358,,,yaw,,,0.1121
+2026-08-09T15:58:46.567Z,manipulation,54.987,2,1.0209,existingPlaneInfinite,normal,Changed,1.0516,22.5,3279,820,,,18,1.0953,4.0000,-0.3754,2.3358,0.5959,-1.1225,yaw,,,0.1121
+2026-08-09T15:58:46.618Z,gesture,55.038,2,1.0209,existingPlaneInfinite,normal,Changed,1.0516,27.0,3282,821,,,18,,,-0.5062,2.1490,,,yaw,,,
+2026-08-09T15:58:46.618Z,manipulation,55.038,2,1.0209,existingPlaneInfinite,normal,Changed,1.0516,27.0,3282,821,,,18,1.0953,4.0000,-0.5062,2.1490,0.5959,-1.1225,yaw,,,
+2026-08-09T15:58:46.816Z,gesture,55.236,2,1.0209,existingPlaneInfinite,normal,Ended,6.1555,33.0,3294,824,,,18,,,-0.4688,1.6922,,,yaw,,,-0.0247
+2026-08-09T15:58:46.817Z,manipulation,55.237,2,1.0209,existingPlaneInfinite,normal,Ended,6.1555,33.0,3294,824,,,18,,4.0000,-0.4688,1.6922,,-1.1225,yaw,,,-0.0247
+2026-08-09T15:58:46.817Z,gesture,55.237,2,1.0209,existingPlaneInfinite,normal,Possible,6.1555,33.0,3294,824,,,,,,-0.4688,1.6922,,,,,,-0.0247
+2026-08-09T15:58:47.199Z,planeUpdate,55.619,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:47.616Z,gesture,56.036,2,1.0209,existingPlaneInfinite,normal,Began,0.9507,23.4,3342,836,,,,,,1.9281,2.9363,,,,,,0.6842
+2026-08-09T15:58:47.617Z,manipulation,56.037,2,1.0209,existingPlaneInfinite,normal,Began,0.9507,23.4,3342,836,,,19,0.9507,4.0000,1.9281,2.9363,0.6842,-1.1225,ambiguous,,,0.6842
+2026-08-09T15:58:47.684Z,gesture,56.104,2,1.0209,existingPlaneInfinite,normal,Changed,0.9410,23.8,3346,837,,,19,,,1.9701,2.9364,,,,,,0.6695
+2026-08-09T15:58:47.684Z,manipulation,56.104,2,1.0209,existingPlaneInfinite,normal,Changed,0.9410,23.8,3346,837,,,19,,4.0000,1.9701,2.9364,,-1.1225,ambiguous,,,0.6695
+2026-08-09T15:58:47.767Z,gesture,56.187,2,1.0209,existingPlaneInfinite,normal,Changed,0.9410,24.4,3351,838,,,19,,,1.9602,2.9355,,,,,,0.6604
+2026-08-09T15:58:47.767Z,manipulation,56.187,2,1.0209,existingPlaneInfinite,normal,Changed,0.9410,24.4,3351,838,,,19,,4.0000,1.9602,2.9355,,-1.1225,ambiguous,,,0.6604
+2026-08-09T15:58:47.818Z,gesture,56.238,2,1.0209,existingPlaneInfinite,normal,Changed,0.8928,24.4,3354,839,,,19,,,1.9744,2.9011,,,,,,0.6498
+2026-08-09T15:58:47.818Z,manipulation,56.238,2,1.0209,existingPlaneInfinite,normal,Changed,0.8928,24.4,3354,839,,,19,0.9410,4.0000,1.9744,2.9011,0.6604,-1.1225,ambiguous,,,0.6498
+2026-08-09T15:58:47.884Z,gesture,56.304,2,1.0209,existingPlaneInfinite,normal,Changed,0.8928,24.2,3358,840,,,19,,,1.9405,2.9087,,,,,,0.6276
+2026-08-09T15:58:47.884Z,manipulation,56.304,2,1.0209,existingPlaneInfinite,normal,Changed,0.8928,24.2,3358,840,,,19,0.9410,4.0000,1.9405,2.9087,0.6604,-1.1225,ambiguous,,,0.6276
+2026-08-09T15:58:47.966Z,gesture,56.386,2,1.0209,existingPlaneInfinite,normal,Changed,0.8767,23.3,3363,841,,,19,,,1.7255,2.8108,,,,,,0.5297
+2026-08-09T15:58:47.967Z,manipulation,56.387,2,1.0209,existingPlaneInfinite,normal,Changed,0.8767,23.3,3363,841,,,19,0.9410,4.0000,1.7255,2.8108,0.6604,-1.1225,ambiguous,,,0.5297
+2026-08-09T15:58:48.018Z,gesture,56.438,2,1.0209,existingPlaneInfinite,normal,Changed,0.8129,22.8,3366,842,,,19,,,0.9637,2.7820,,,,,,0.3723
+2026-08-09T15:58:48.018Z,manipulation,56.438,2,1.0209,existingPlaneInfinite,normal,Changed,0.8129,22.8,3366,842,,,19,0.9410,4.0000,0.9637,2.7820,0.6604,-1.1225,ambiguous,,,0.3723
+2026-08-09T15:58:48.083Z,gesture,56.503,2,1.0209,existingPlaneInfinite,normal,Changed,0.8129,20.6,3370,843,,,19,,,-0.0526,2.6994,,,,,,0.1806
+2026-08-09T15:58:48.083Z,manipulation,56.503,2,1.0209,existingPlaneInfinite,normal,Changed,0.8129,20.6,3370,843,,,19,0.8129,4.0000,-0.0526,2.6994,0.3723,-1.1225,yaw,,,0.1806
+2026-08-09T15:58:48.199Z,planeUpdate,56.620,2,1.0209,none,normal,,,,0,0,,,19,,,,,,,,,,
+2026-08-09T15:58:48.218Z,gesture,56.638,2,1.0209,existingPlaneInfinite,normal,Changed,0.8129,17.3,3378,845,,,19,,,-0.5185,2.3042,,,yaw,,,
+2026-08-09T15:58:48.218Z,manipulation,56.638,2,1.0209,existingPlaneInfinite,normal,Changed,0.8129,17.3,3378,845,,,19,0.8129,4.0000,-0.5185,2.3042,0.3723,-1.1225,yaw,,,
+2026-08-09T15:58:48.283Z,gesture,56.703,2,1.0209,existingPlaneInfinite,normal,Changed,0.9065,22.0,3382,846,,,19,,,-0.5091,0.1005,,,yaw,,,
+2026-08-09T15:58:48.283Z,manipulation,56.703,2,1.0209,existingPlaneInfinite,normal,Changed,0.9065,22.0,3382,846,,,19,0.8129,4.0000,-0.5091,0.1005,0.3723,-1.1225,yaw,,,
+2026-08-09T15:58:48.483Z,gesture,56.903,2,1.0209,existingPlaneInfinite,normal,Cancelled,,16.3,3394,849,,,19,,,-0.3048,,,,yaw,,,
+2026-08-09T15:58:48.484Z,gesture,56.904,2,1.0209,existingPlaneInfinite,normal,Possible,,16.3,3394,849,,,,,,-0.3048,,,,,,,
+2026-08-09T15:58:48.818Z,gesture,57.238,2,1.0209,existingPlaneInfinite,normal,Began,1.1105,11.9,3414,854,,,,,,2.3765,2.9078,,,,,,
+2026-08-09T15:58:48.818Z,manipulation,57.238,2,1.0209,existingPlaneInfinite,normal,Began,1.1105,11.9,3414,854,,,20,1.1105,4.0000,2.3765,2.9078,,-1.1225,ambiguous,,,
+2026-08-09T15:58:48.884Z,gesture,57.304,2,1.0209,existingPlaneInfinite,normal,Changed,0.7173,14.9,3418,855,,,20,,,1.9854,2.9021,,,,,,0.6302
+2026-08-09T15:58:48.884Z,manipulation,57.304,2,1.0209,existingPlaneInfinite,normal,Changed,0.7173,14.9,3418,855,,,20,,4.0000,1.9854,2.9021,,-1.1225,ambiguous,,,0.6302
+2026-08-09T15:58:48.968Z,gesture,57.388,2,1.0209,existingPlaneInfinite,normal,Changed,0.8462,20.8,3423,856,,,20,,,1.8529,2.9001,,,,,,0.6431
+2026-08-09T15:58:48.968Z,manipulation,57.388,2,1.0209,existingPlaneInfinite,normal,Changed,0.8462,20.8,3423,856,,,20,,4.0000,1.8529,2.9001,,-1.1225,ambiguous,,,0.6431
+2026-08-09T15:58:49.017Z,gesture,57.437,2,1.0209,existingPlaneInfinite,normal,Changed,0.8462,22.1,3426,857,,,20,,,1.8972,2.9376,,,,,,0.6429
+2026-08-09T15:58:49.017Z,manipulation,57.437,2,1.0209,existingPlaneInfinite,normal,Changed,0.8462,22.1,3426,857,,,20,0.8462,4.0000,1.8972,2.9376,0.6429,-1.1225,ambiguous,,,0.6429
+2026-08-09T15:58:49.083Z,gesture,57.503,2,1.0209,existingPlaneInfinite,normal,Changed,0.9475,22.4,3430,858,,,20,,,1.9091,2.8854,,,,,,0.6298
+2026-08-09T15:58:49.083Z,manipulation,57.503,2,1.0209,existingPlaneInfinite,normal,Changed,0.9475,22.4,3430,858,,,20,0.8462,4.0000,1.9091,2.8854,0.6429,-1.1225,ambiguous,,,0.6298
+2026-08-09T15:58:49.167Z,gesture,57.587,2,1.0209,existingPlaneInfinite,normal,Changed,0.9475,22.5,3435,859,,,20,,,1.8865,2.8620,,,,,,0.6285
+2026-08-09T15:58:49.167Z,manipulation,57.587,2,1.0209,existingPlaneInfinite,normal,Changed,0.9475,22.5,3435,859,,,20,0.8462,4.0000,1.8865,2.8620,0.6429,-1.1225,ambiguous,,,0.6285
+2026-08-09T15:58:49.203Z,planeUpdate,57.623,2,1.0209,none,normal,,,,0,0,,,20,,,,,,,,,,
+2026-08-09T15:58:49.234Z,gesture,57.654,2,1.0209,existingPlaneInfinite,normal,Changed,0.9796,22.0,3439,860,,,20,,,1.8909,2.8565,,,,,,0.6207
+2026-08-09T15:58:49.235Z,manipulation,57.655,2,1.0209,existingPlaneInfinite,normal,Changed,0.9796,22.0,3439,860,,,20,0.8462,4.0000,1.8909,2.8565,0.6429,-1.1225,ambiguous,,,0.6207
+2026-08-09T15:58:49.285Z,gesture,57.705,2,1.0209,existingPlaneInfinite,normal,Changed,0.9796,22.2,3442,861,,,20,,,1.8897,2.8536,,,,,,0.6184
+2026-08-09T15:58:49.285Z,manipulation,57.705,2,1.0209,existingPlaneInfinite,normal,Changed,0.9796,22.2,3442,861,,,20,0.8462,4.0000,1.8897,2.8536,0.6429,-1.1225,ambiguous,,,0.6184
+2026-08-09T15:58:49.367Z,gesture,57.787,2,1.0209,existingPlaneInfinite,normal,Changed,0.9796,22.1,3447,862,,,20,,,1.8824,2.8455,,,,,,0.6148
+2026-08-09T15:58:49.368Z,manipulation,57.788,2,1.0209,existingPlaneInfinite,normal,Changed,0.9796,22.1,3447,862,,,20,0.8462,4.0000,1.8824,2.8455,0.6429,-1.1225,ambiguous,,,0.6148
+2026-08-09T15:58:49.418Z,gesture,57.838,2,1.0209,existingPlaneInfinite,normal,Changed,0.9673,22.1,3450,863,,,20,,,1.8838,2.8421,,,,,,0.6074
+2026-08-09T15:58:49.418Z,manipulation,57.838,2,1.0209,existingPlaneInfinite,normal,Changed,0.9673,22.1,3450,863,,,20,0.8462,4.0000,1.8838,2.8421,0.6429,-1.1225,ambiguous,,,0.6074
+2026-08-09T15:58:49.484Z,gesture,57.904,2,1.0209,existingPlaneInfinite,normal,Changed,0.9381,21.9,3454,864,,,20,,,1.8989,2.8336,,,,,,0.5514
+2026-08-09T15:58:49.484Z,manipulation,57.904,2,1.0209,existingPlaneInfinite,normal,Changed,0.9381,21.9,3454,864,,,20,0.8462,4.0000,1.8989,2.8336,0.6429,-1.1225,ambiguous,,,0.5514
+2026-08-09T15:58:49.568Z,gesture,57.988,2,1.0209,existingPlaneInfinite,normal,Changed,0.9141,20.8,3459,865,,,20,,,0.7861,2.7224,,,,,,0.3743
+2026-08-09T15:58:49.568Z,manipulation,57.988,2,1.0209,existingPlaneInfinite,normal,Changed,0.9141,20.8,3459,865,,,20,0.8462,4.0000,0.7861,2.7224,0.6429,-1.1225,ambiguous,,,0.3743
+2026-08-09T15:58:49.618Z,gesture,58.038,2,1.0209,existingPlaneInfinite,normal,Changed,0.9141,16.2,3462,866,,,20,,,-0.3177,2.6136,,,,,,0.1901
+2026-08-09T15:58:49.618Z,manipulation,58.038,2,1.0209,existingPlaneInfinite,normal,Changed,0.9141,16.2,3462,866,,,20,0.9141,4.0000,-0.3177,2.6136,0.3743,-1.1225,yaw,,,0.1901
+2026-08-09T15:58:49.683Z,gesture,58.103,2,1.0209,existingPlaneInfinite,normal,Changed,0.9141,19.4,3466,867,,,20,,,-0.3660,2.8364,,,yaw,,,0.0344
+2026-08-09T15:58:49.684Z,manipulation,58.104,2,1.0209,existingPlaneInfinite,normal,Changed,0.9141,19.4,3466,867,,,20,0.9141,4.0000,-0.3660,2.8364,0.3743,-1.2782,yaw,,,0.0344
+2026-08-09T15:58:49.766Z,gesture,58.186,2,1.0209,existingPlaneInfinite,normal,Changed,2.5726,20.6,3471,868,,,20,,,-0.2550,-0.5136,,,yaw,,,0.0373
+2026-08-09T15:58:49.767Z,manipulation,58.187,2,1.0209,existingPlaneInfinite,normal,Changed,2.5726,20.6,3471,868,,,20,0.9141,4.0000,-0.2550,-0.5136,0.3743,-1.2753,yaw,,,0.0373
+2026-08-09T15:58:49.817Z,gesture,58.237,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,20.8,3474,869,,,20,,,-0.1967,-0.4910,,,yaw,,,0.1029
+2026-08-09T15:58:49.818Z,manipulation,58.238,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,20.8,3474,869,,,20,0.9141,4.0000,-0.1967,-0.4910,0.3743,-1.2097,yaw,,,0.1029
+2026-08-09T15:58:49.884Z,gesture,58.304,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,20.4,3478,870,,,20,,,-0.1861,-0.5885,,,yaw,,,0.1129
+2026-08-09T15:58:49.885Z,manipulation,58.305,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,20.4,3478,870,,,20,0.9141,4.0000,-0.1861,-0.5885,0.3743,-1.1997,yaw,,,0.1129
+2026-08-09T15:58:49.966Z,gesture,58.386,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,20.5,3483,871,,,20,,,-0.1796,-0.4878,,,yaw,,,0.1297
+2026-08-09T15:58:49.966Z,manipulation,58.386,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,20.5,3483,871,,,20,0.9141,4.0000,-0.1796,-0.4878,0.3743,-1.1828,yaw,,,0.1297
+2026-08-09T15:58:50.034Z,gesture,58.454,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,17.3,3487,872,,,20,,,-0.1572,-0.5034,,,yaw,,,0.1682
+2026-08-09T15:58:50.035Z,manipulation,58.455,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,17.3,3487,872,,,20,0.9141,4.0000,-0.1572,-0.5034,0.3743,-1.1444,yaw,,,0.1682
+2026-08-09T15:58:50.084Z,gesture,58.504,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,8.7,3490,873,,,20,,,-0.0695,-0.1110,,,yaw,,,
+2026-08-09T15:58:50.085Z,manipulation,58.505,2,1.0209,existingPlaneInfinite,normal,Changed,2.8062,8.7,3490,873,,,20,0.9141,4.0000,-0.0695,-0.1110,0.3743,-1.1444,yaw,,,
+2026-08-09T15:58:50.284Z,gesture,58.704,2,1.0209,existingPlaneInfinite,normal,Cancelled,,4.1,3502,876,,,20,,,,,,,yaw,,,
+2026-08-09T15:58:50.284Z,gesture,58.704,2,1.0209,existingPlaneInfinite,normal,Possible,,4.1,3502,876,,,,,,,,,,,,,
+2026-08-09T15:58:50.301Z,planeUpdate,58.721,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:50.818Z,gesture,59.238,2,1.0209,existingPlaneInfinite,normal,Began,1.1338,25.4,3534,884,,,,,,1.8959,2.8832,,,,,,0.6111
+2026-08-09T15:58:50.818Z,manipulation,59.238,2,1.0209,existingPlaneInfinite,normal,Began,1.1338,25.4,3534,884,,,21,1.1338,4.0000,1.8959,2.8832,0.6111,-1.1444,ambiguous,,,0.6111
+2026-08-09T15:58:50.900Z,gesture,59.320,2,1.0209,existingPlaneInfinite,normal,Changed,1.0984,25.5,3539,885,,,21,,,1.8969,2.8786,,,,,,0.5992
+2026-08-09T15:58:50.901Z,manipulation,59.321,2,1.0209,existingPlaneInfinite,normal,Changed,1.0984,25.5,3539,885,,,21,,4.0000,1.8969,2.8786,,-1.1444,ambiguous,,,0.5992
+2026-08-09T15:58:50.967Z,gesture,59.387,2,1.0209,existingPlaneInfinite,normal,Changed,1.0984,25.1,3543,886,,,21,,,1.9044,2.8491,,,,,,0.5923
+2026-08-09T15:58:50.967Z,manipulation,59.387,2,1.0209,existingPlaneInfinite,normal,Changed,1.0984,25.1,3543,886,,,21,,4.0000,1.9044,2.8491,,-1.1444,ambiguous,,,0.5923
+2026-08-09T15:58:51.018Z,gesture,59.438,2,1.0209,existingPlaneInfinite,normal,Changed,0.9908,23.1,3546,887,,,21,,,1.6427,2.7863,,,,,,0.4964
+2026-08-09T15:58:51.018Z,manipulation,59.438,2,1.0209,existingPlaneInfinite,normal,Changed,0.9908,23.1,3546,887,,,21,1.0984,4.0000,1.6427,2.7863,0.5923,-1.1444,ambiguous,,,0.4964
+2026-08-09T15:58:51.168Z,gesture,59.588,2,1.0209,existingPlaneInfinite,normal,Changed,1.0984,21.2,3555,889,,,21,,,-0.3095,2.7294,,,,,,0.2021
+2026-08-09T15:58:51.168Z,manipulation,59.588,2,1.0209,existingPlaneInfinite,normal,Changed,1.0984,21.2,3555,889,,,21,1.0984,4.0000,-0.3095,2.7294,0.5923,-1.1444,ambiguous,,,0.2021
+2026-08-09T15:58:51.218Z,gesture,59.638,2,1.0209,existingPlaneInfinite,normal,Changed,1.0984,23.6,3558,890,,,21,,,-0.3471,-2.8507,,,,,,0.0883
+2026-08-09T15:58:51.218Z,manipulation,59.638,2,1.0209,existingPlaneInfinite,normal,Changed,1.0984,23.6,3558,890,,,21,1.0984,4.0000,-0.3471,-2.8507,0.2021,-1.1444,yaw,,,0.0883
+2026-08-09T15:58:51.301Z,planeUpdate,59.721,2,1.0209,none,normal,,,,0,0,,,21,,,,,,,,,,
+2026-08-09T15:58:51.418Z,gesture,59.838,2,1.0209,existingPlaneInfinite,normal,Ended,3.6707,25.7,3570,893,,,21,,,-0.0744,-0.7505,,,yaw,,,0.1596
+2026-08-09T15:58:51.418Z,manipulation,59.838,2,1.0209,existingPlaneInfinite,normal,Ended,3.6707,25.7,3570,893,,,21,,4.0000,-0.0744,-0.7505,,-1.1444,yaw,,,0.1596
+2026-08-09T15:58:51.418Z,gesture,59.838,2,1.0209,existingPlaneInfinite,normal,Possible,3.6707,25.7,3570,893,,,,,,-0.0744,-0.7505,,,,,,0.1596
+2026-08-09T15:58:52.317Z,planeUpdate,60.737,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:53.417Z,planeUpdate,61.837,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:54.417Z,planeUpdate,62.837,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:55.417Z,planeUpdate,63.837,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:56.417Z,planeUpdate,64.837,2,1.0209,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:57.418Z,planeUpdate,65.838,2,1.0320,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:58.502Z,planeUpdate,66.922,2,1.6140,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:58:59.518Z,planeUpdate,67.938,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:00.602Z,planeUpdate,69.022,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:01.286Z,gesture,69.706,2,1.7703,existingPlaneInfinite,normal,Began,0.8169,13.0,4162,1041,,,,,,-0.1567,-2.9483,,,,,,-0.0491
+2026-08-09T15:59:01.286Z,manipulation,69.706,2,1.7703,existingPlaneInfinite,normal,Began,0.8169,13.0,4162,1041,,,22,0.8169,4.0000,-0.1567,-2.9483,-0.0491,-1.1444,ambiguous,,,-0.0491
+2026-08-09T15:59:01.368Z,gesture,69.788,2,1.7703,existingPlaneInfinite,normal,Changed,1.4599,13.0,4167,1042,,,22,,,-0.1319,-2.6886,,,,,,-0.0437
+2026-08-09T15:59:01.368Z,manipulation,69.788,2,1.7703,existingPlaneInfinite,normal,Changed,1.4599,13.0,4167,1042,,,22,,4.0000,-0.1319,-2.6886,,-1.1444,ambiguous,,,-0.0437
+2026-08-09T15:59:01.419Z,gesture,69.840,2,1.7703,existingPlaneInfinite,normal,Changed,1.4599,13.1,4170,1043,,,22,,,-0.1627,-2.5781,,,,,,-0.0473
+2026-08-09T15:59:01.420Z,manipulation,69.840,2,1.7703,existingPlaneInfinite,normal,Changed,1.4599,13.1,4170,1043,,,22,,4.0000,-0.1627,-2.5781,,-1.1444,ambiguous,,,-0.0473
+2026-08-09T15:59:01.486Z,gesture,69.906,2,1.7703,existingPlaneInfinite,normal,Changed,1.1097,13.1,4174,1044,,,22,,,-0.1250,-2.6418,,,,,,-0.0591
+2026-08-09T15:59:01.486Z,manipulation,69.906,2,1.7703,existingPlaneInfinite,normal,Changed,1.1097,13.1,4174,1044,,,22,1.4599,4.0000,-0.1250,-2.6418,-0.0473,-1.1444,ambiguous,,,-0.0591
+2026-08-09T15:59:01.619Z,planeUpdate,70.039,2,1.7703,none,normal,,,,0,0,,,22,,,,,,,,,,
+2026-08-09T15:59:01.638Z,gesture,70.058,2,1.7703,existingPlaneInfinite,normal,Changed,1.1097,11.1,4183,1046,,,22,,,-0.2360,2.2652,,,,,,0.1477
+2026-08-09T15:59:01.639Z,manipulation,70.059,2,1.7703,existingPlaneInfinite,normal,Changed,1.1097,11.1,4183,1046,,,22,1.1097,4.0000,-0.2360,2.2652,0.1477,-1.1444,scale,,,0.1477
+2026-08-09T15:59:01.689Z,gesture,70.109,2,1.7703,existingPlaneInfinite,normal,Changed,0.7585,12.0,4186,1047,,,22,,,0.0600,2.8195,,,scale,,,0.1596
+2026-08-09T15:59:01.689Z,manipulation,70.109,2,1.7703,existingPlaneInfinite,normal,Changed,0.7585,12.0,4186,1047,,,22,1.1097,2.7341,0.0600,2.8195,0.1477,-1.1444,scale,,,0.1596
+2026-08-09T15:59:01.768Z,gesture,70.188,2,1.7703,existingPlaneInfinite,normal,Changed,0.5815,17.2,4191,1048,,,22,,,2.2141,2.8026,,,scale,,,0.3831
+2026-08-09T15:59:01.768Z,manipulation,70.188,2,1.7703,existingPlaneInfinite,normal,Changed,0.5815,17.2,4191,1048,,,22,1.1097,2.0959,2.2141,2.8026,0.1477,-1.1444,scale,,,0.3831
+2026-08-09T15:59:01.819Z,gesture,70.239,2,1.7703,existingPlaneInfinite,normal,Changed,0.5815,18.3,4194,1049,,,22,,,2.3463,2.7907,,,scale,,,0.4161
+2026-08-09T15:59:01.819Z,manipulation,70.239,2,1.7703,existingPlaneInfinite,normal,Changed,0.5815,18.3,4194,1049,,,22,1.1097,2.0959,2.3463,2.7907,0.1477,-1.1444,scale,,,0.4161
+2026-08-09T15:59:01.886Z,gesture,70.306,2,1.7703,existingPlaneInfinite,normal,Changed,0.5815,18.4,4198,1050,,,22,,,2.3949,2.7554,,,scale,,,0.4169
+2026-08-09T15:59:01.887Z,manipulation,70.307,2,1.7703,existingPlaneInfinite,normal,Changed,0.5815,18.4,4198,1050,,,22,1.1097,2.0959,2.3949,2.7554,0.1477,-1.1444,scale,,,0.4169
+2026-08-09T15:59:01.969Z,gesture,70.389,2,1.7703,existingPlaneInfinite,normal,Changed,0.6618,18.1,4203,1051,,,22,,,2.4250,2.7261,,,scale,,,0.4160
+2026-08-09T15:59:01.969Z,manipulation,70.389,2,1.7703,existingPlaneInfinite,normal,Changed,0.6618,18.1,4203,1051,,,22,1.1097,2.3853,2.4250,2.7261,0.1477,-1.1444,scale,,,0.4160
+2026-08-09T15:59:02.020Z,gesture,70.440,2,1.7703,existingPlaneInfinite,normal,Changed,0.6657,17.3,4206,1052,,,22,,,2.3693,2.7106,,,scale,,,0.4093
+2026-08-09T15:59:02.020Z,manipulation,70.440,2,1.7703,existingPlaneInfinite,normal,Changed,0.6657,17.3,4206,1052,,,22,1.1097,2.3996,2.3693,2.7106,0.1477,-1.1444,scale,,,0.4093
+2026-08-09T15:59:02.085Z,gesture,70.505,2,1.7703,existingPlaneInfinite,normal,Changed,0.6755,17.2,4210,1053,,,22,,,2.4058,2.7089,,,scale,,,0.4088
+2026-08-09T15:59:02.086Z,manipulation,70.506,2,1.7703,existingPlaneInfinite,normal,Changed,0.6755,17.2,4210,1053,,,22,1.1097,2.4347,2.4058,2.7089,0.1477,-1.1444,scale,,,0.4088
+2026-08-09T15:59:02.169Z,gesture,70.589,2,1.7703,existingPlaneInfinite,normal,Changed,0.7044,17.2,4215,1054,,,22,,,2.3760,2.7379,,,scale,,,0.4037
+2026-08-09T15:59:02.169Z,manipulation,70.589,2,1.7703,existingPlaneInfinite,normal,Changed,0.7044,17.2,4215,1054,,,22,1.1097,2.5389,2.3760,2.7379,0.1477,-1.1444,scale,,,0.4037
+2026-08-09T15:59:02.237Z,gesture,70.657,2,1.7703,existingPlaneInfinite,normal,Changed,0.7044,17.2,4219,1055,,,22,,,2.3928,2.7538,,,scale,,,0.3962
+2026-08-09T15:59:02.237Z,manipulation,70.657,2,1.7703,existingPlaneInfinite,normal,Changed,0.7044,17.2,4219,1055,,,22,1.1097,2.5389,2.3928,2.7538,0.1477,-1.1444,scale,,,0.3962
+2026-08-09T15:59:02.289Z,gesture,70.709,2,1.7703,existingPlaneInfinite,normal,Changed,0.6752,17.3,4222,1056,,,22,,,2.4157,2.7365,,,scale,,,0.3981
+2026-08-09T15:59:02.289Z,manipulation,70.709,2,1.7703,existingPlaneInfinite,normal,Changed,0.6752,17.3,4222,1056,,,22,1.1097,2.4338,2.4157,2.7365,0.1477,-1.1444,scale,,,0.3981
+2026-08-09T15:59:02.368Z,gesture,70.788,2,1.7703,existingPlaneInfinite,normal,Changed,0.6752,16.7,4227,1057,,,22,,,2.3922,2.7239,,,scale,,,0.4044
+2026-08-09T15:59:02.368Z,manipulation,70.788,2,1.7703,existingPlaneInfinite,normal,Changed,0.6752,16.7,4227,1057,,,22,1.1097,2.4338,2.3922,2.7239,0.1477,-1.1444,scale,,,0.4044
+2026-08-09T15:59:02.420Z,gesture,70.840,2,1.7703,existingPlaneInfinite,normal,Changed,0.6080,16.8,4230,1058,,,22,,,2.4265,2.6591,,,scale,,,0.3891
+2026-08-09T15:59:02.420Z,manipulation,70.840,2,1.7703,existingPlaneInfinite,normal,Changed,0.6080,16.8,4230,1058,,,22,1.1097,2.1916,2.4265,2.6591,0.1477,-1.1444,scale,,,0.3891
+2026-08-09T15:59:02.486Z,gesture,70.906,2,1.7703,existingPlaneInfinite,normal,Changed,0.5051,15.0,4234,1059,,,22,,,0.2641,2.7316,,,scale,,,0.3350
+2026-08-09T15:59:02.486Z,manipulation,70.907,2,1.7703,existingPlaneInfinite,normal,Changed,0.5051,15.0,4234,1059,,,22,1.1097,1.8206,0.2641,2.7316,0.1477,-1.1444,scale,,,0.3350
+2026-08-09T15:59:02.569Z,gesture,70.989,2,1.7703,existingPlaneInfinite,normal,Changed,0.5051,13.2,4239,1060,,,22,,,-0.2883,2.9160,,,scale,,,0.2696
+2026-08-09T15:59:02.570Z,manipulation,70.990,2,1.7703,existingPlaneInfinite,normal,Changed,0.5051,13.2,4239,1060,,,22,1.1097,1.8206,-0.2883,2.9160,0.1477,-1.1444,scale,,,0.2696
+2026-08-09T15:59:02.619Z,gesture,71.039,2,1.7703,existingPlaneInfinite,normal,Changed,0.5051,14.9,4242,1061,,,22,,,-0.4310,2.8379,,,scale,,,0.2028
+2026-08-09T15:59:02.619Z,manipulation,71.039,2,1.7703,existingPlaneInfinite,normal,Changed,0.5051,14.9,4242,1061,,,22,1.1097,1.8206,-0.4310,2.8379,0.1477,-1.1444,scale,,,0.2028
+2026-08-09T15:59:02.686Z,gesture,71.106,2,1.7703,existingPlaneInfinite,normal,Changed,1.0210,17.5,4246,1062,,,22,,,-0.3382,3.1179,,,scale,,,0.1691
+2026-08-09T15:59:02.686Z,manipulation,71.106,2,1.7703,existingPlaneInfinite,normal,Changed,1.0210,17.5,4246,1062,,,22,1.1097,3.6801,-0.3382,3.1179,0.1477,-1.1444,scale,,,0.1691
+2026-08-09T15:59:02.718Z,planeUpdate,71.138,2,1.7703,none,normal,,,,0,0,,,22,,,,,,,,,,
+2026-08-09T15:59:02.769Z,gesture,71.189,2,1.7703,existingPlaneInfinite,normal,Changed,2.3320,17.1,4251,1063,,,22,,,-0.2724,-2.9184,,,scale,,,0.1138
+2026-08-09T15:59:02.769Z,manipulation,71.189,2,1.7703,existingPlaneInfinite,normal,Changed,2.3320,17.1,4251,1063,,,22,1.1097,4.0000,-0.2724,-2.9184,0.1477,-1.1444,scale,,,0.1138
+2026-08-09T15:59:02.820Z,gesture,71.240,2,1.7703,existingPlaneInfinite,normal,Changed,3.1980,17.0,4254,1064,,,22,,,-0.2429,-2.6579,,,scale,,,0.0910
+2026-08-09T15:59:02.820Z,manipulation,71.240,2,1.7703,existingPlaneInfinite,normal,Changed,3.1980,17.0,4254,1064,,,22,1.1097,4.0000,-0.2429,-2.6579,0.1477,-1.1444,scale,,,0.0910
+2026-08-09T15:59:03.020Z,gesture,71.440,2,1.7703,existingPlaneInfinite,normal,Ended,5.9520,17.5,4266,1067,,,22,,,-0.1790,-1.7338,,,scale,,,0.1281
+2026-08-09T15:59:03.020Z,manipulation,71.440,2,1.7703,existingPlaneInfinite,normal,Ended,5.9520,17.5,4266,1067,,,22,,4.0000,-0.1790,-1.7338,,-1.1444,scale,,,0.1281
+2026-08-09T15:59:03.020Z,gesture,71.440,2,1.7703,existingPlaneInfinite,normal,Possible,5.9520,17.5,4266,1067,,,,,,-0.1790,-1.7338,,,,,,0.1281
+2026-08-09T15:59:03.769Z,gesture,72.189,2,1.7703,existingPlaneInfinite,normal,Began,0.5850,15.8,4311,1078,,,,,,2.4794,2.6983,,,,,,0.4491
+2026-08-09T15:59:03.769Z,manipulation,72.189,2,1.7703,existingPlaneInfinite,normal,Began,0.5850,15.8,4311,1078,,,23,0.5850,4.0000,2.4794,2.6983,0.4491,-1.1444,ambiguous,,,0.4491
+2026-08-09T15:59:03.819Z,planeUpdate,72.239,2,1.7703,none,normal,,,,0,0,,,23,,,,,,,,,,
+2026-08-09T15:59:03.820Z,gesture,72.240,2,1.7703,existingPlaneInfinite,normal,Changed,0.9242,15.9,4314,1079,,,23,,,2.4267,2.6887,,,,,,0.4959
+2026-08-09T15:59:03.820Z,manipulation,72.240,2,1.7703,existingPlaneInfinite,normal,Changed,0.9242,15.9,4314,1079,,,23,,4.0000,2.4267,2.6887,,-1.1444,ambiguous,,,0.4959
+2026-08-09T15:59:03.887Z,gesture,72.307,2,1.7703,existingPlaneInfinite,normal,Changed,1.0271,15.9,4318,1080,,,23,,,2.3608,2.6882,,,,,,0.5244
+2026-08-09T15:59:03.887Z,manipulation,72.307,2,1.7703,existingPlaneInfinite,normal,Changed,1.0271,15.9,4318,1080,,,23,,4.0000,2.3608,2.6882,,-1.1444,ambiguous,,,0.5244
+2026-08-09T15:59:03.969Z,gesture,72.389,2,1.7703,existingPlaneInfinite,normal,Changed,1.0271,15.5,4323,1081,,,23,,,2.3286,2.6645,,,,,,0.5328
+2026-08-09T15:59:03.969Z,manipulation,72.389,2,1.7703,existingPlaneInfinite,normal,Changed,1.0271,15.5,4323,1081,,,23,1.0271,4.0000,2.3286,2.6645,0.5244,-1.1444,ambiguous,,,0.5328
+2026-08-09T15:59:04.037Z,gesture,72.457,2,1.7703,existingPlaneInfinite,normal,Changed,1.0271,15.2,4327,1082,,,23,,,2.3993,2.6848,,,,,,0.4877
+2026-08-09T15:59:04.037Z,manipulation,72.457,2,1.7703,existingPlaneInfinite,normal,Changed,1.0271,15.2,4327,1082,,,23,1.0271,4.0000,2.3993,2.6848,0.5244,-1.1444,ambiguous,,,0.4877
+2026-08-09T15:59:04.088Z,gesture,72.509,2,1.7703,existingPlaneInfinite,normal,Changed,0.9242,13.6,4330,1083,,,23,,,2.6452,2.7060,,,,,,0.3302
+2026-08-09T15:59:04.089Z,manipulation,72.509,2,1.7703,existingPlaneInfinite,normal,Changed,0.9242,13.6,4330,1083,,,23,1.0271,4.0000,2.6452,2.7060,0.5244,-1.1444,ambiguous,,,0.3302
+2026-08-09T15:59:04.169Z,gesture,72.589,2,1.7703,existingPlaneInfinite,normal,Changed,0.9951,11.9,4335,1084,,,23,,,-0.6376,2.6854,,,,,,0.1790
+2026-08-09T15:59:04.169Z,manipulation,72.589,2,1.7703,existingPlaneInfinite,normal,Changed,0.9951,11.9,4335,1084,,,23,0.9951,4.0000,-0.6376,2.6854,0.3302,-1.1444,yaw,,,0.1790
+2026-08-09T15:59:04.220Z,gesture,72.640,2,1.7703,existingPlaneInfinite,normal,Changed,0.9951,19.1,4338,1085,,,23,,,-0.3044,-1.8317,,,yaw,,,0.0462
+2026-08-09T15:59:04.220Z,manipulation,72.640,2,1.7703,existingPlaneInfinite,normal,Changed,0.9951,19.1,4338,1085,,,23,0.9951,4.0000,-0.3044,-1.8317,0.3302,-1.2772,yaw,,,0.0462
+2026-08-09T15:59:04.303Z,gesture,72.723,2,1.7703,existingPlaneInfinite,normal,Changed,0.9951,21.6,4343,1086,,,23,,,-0.0864,-1.2869,,,yaw,,,0.1766
+2026-08-09T15:59:04.304Z,manipulation,72.724,2,1.7703,existingPlaneInfinite,normal,Changed,0.9951,21.6,4343,1086,,,23,0.9951,4.0000,-0.0864,-1.2869,0.3302,-1.1469,yaw,,,0.1766
+2026-08-09T15:59:04.356Z,gesture,72.776,2,1.7703,existingPlaneInfinite,normal,Changed,2.2142,22.3,4346,1087,,,23,,,-0.0261,-1.1202,,,yaw,,,0.2216
+2026-08-09T15:59:04.356Z,manipulation,72.776,2,1.7703,existingPlaneInfinite,normal,Changed,2.2142,22.3,4346,1087,,,23,0.9951,4.0000,-0.0261,-1.1202,0.3302,-1.1018,yaw,,,0.2216
+2026-08-09T15:59:04.419Z,gesture,72.839,2,1.7703,existingPlaneInfinite,normal,Changed,2.2779,22.7,4350,1088,,,23,,,-0.0631,-1.2617,,,yaw,,,0.1829
+2026-08-09T15:59:04.419Z,manipulation,72.840,2,1.7703,existingPlaneInfinite,normal,Changed,2.2779,22.7,4350,1088,,,23,0.9951,4.0000,-0.0631,-1.2617,0.3302,-1.1406,yaw,,,0.1829
+2026-08-09T15:59:04.487Z,gesture,72.907,2,1.7703,existingPlaneInfinite,normal,Changed,2.7545,23.4,4354,1089,,,23,,,-0.1518,-1.3083,,,yaw,,,0.1355
+2026-08-09T15:59:04.487Z,manipulation,72.907,2,1.7703,existingPlaneInfinite,normal,Changed,2.7545,23.4,4354,1089,,,23,0.9951,4.0000,-0.1518,-1.3083,0.3302,-1.1880,yaw,,,0.1355
+2026-08-09T15:59:04.569Z,gesture,72.989,2,1.7703,existingPlaneInfinite,normal,Changed,2.7545,22.8,4359,1090,,,23,,,-0.2356,-1.3301,,,yaw,,,0.0734
+2026-08-09T15:59:04.569Z,manipulation,72.989,2,1.7703,existingPlaneInfinite,normal,Changed,2.7545,22.8,4359,1090,,,23,0.9951,4.0000,-0.2356,-1.3301,0.3302,-1.2500,yaw,,,0.0734
+2026-08-09T15:59:04.619Z,gesture,73.039,2,1.7703,existingPlaneInfinite,normal,Changed,2.9954,22.9,4362,1091,,,23,,,-0.3405,-1.7381,,,yaw,,,0.0175
+2026-08-09T15:59:04.619Z,manipulation,73.039,2,1.7703,existingPlaneInfinite,normal,Changed,2.9954,22.9,4362,1091,,,23,0.9951,4.0000,-0.3405,-1.7381,0.3302,-1.3060,yaw,,,0.0175
+2026-08-09T15:59:04.837Z,gesture,73.257,2,1.7703,existingPlaneInfinite,normal,Ended,3.8730,10.9,4375,1094,,,23,,,-1.2872,2.7740,,,yaw,,,0.1089
+2026-08-09T15:59:04.837Z,manipulation,73.257,2,1.7703,existingPlaneInfinite,normal,Ended,3.8730,10.9,4375,1094,,,23,,4.0000,-1.2872,2.7740,,-1.3060,yaw,,,0.1089
+2026-08-09T15:59:04.837Z,gesture,73.257,2,1.7703,existingPlaneInfinite,normal,Possible,3.8730,10.9,4375,1094,,,,,,-1.2872,2.7740,,,,,,0.1089
+2026-08-09T15:59:04.902Z,planeUpdate,73.322,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:05.169Z,gesture,73.589,2,1.7703,existingPlaneInfinite,normal,Began,0.7063,12.5,4395,1099,,,,,,-3.1174,2.6399,,,,,,0.4051
+2026-08-09T15:59:05.170Z,manipulation,73.590,2,1.7703,existingPlaneInfinite,normal,Began,0.7063,12.5,4395,1099,,,24,0.7063,4.0000,-3.1174,2.6399,0.4051,-1.3060,ambiguous,,,0.4051
+2026-08-09T15:59:05.237Z,gesture,73.657,2,1.7703,existingPlaneInfinite,normal,Changed,0.5455,12.5,4399,1100,,,24,,,-3.0836,2.6687,,,,,,0.3695
+2026-08-09T15:59:05.237Z,manipulation,73.657,2,1.7703,existingPlaneInfinite,normal,Changed,0.5455,12.5,4399,1100,,,24,,4.0000,-3.0836,2.6687,,-1.3060,ambiguous,,,0.3695
+2026-08-09T15:59:05.303Z,gesture,73.724,2,1.7703,existingPlaneInfinite,normal,Changed,0.5455,12.5,4403,1101,,,24,,,-2.7735,2.6998,,,,,,0.2219
+2026-08-09T15:59:05.304Z,manipulation,73.724,2,1.7703,existingPlaneInfinite,normal,Changed,0.5455,12.5,4403,1101,,,24,,4.0000,-2.7735,2.6998,,-1.3060,ambiguous,,,0.2219
+2026-08-09T15:59:05.369Z,gesture,73.789,2,1.7703,existingPlaneInfinite,normal,Changed,0.5455,11.1,4407,1102,,,24,,,-1.0906,2.7760,,,,,,0.0744
+2026-08-09T15:59:05.370Z,manipulation,73.790,2,1.7703,existingPlaneInfinite,normal,Changed,0.5455,11.1,4407,1102,,,24,0.5455,4.0000,-1.0906,2.7760,0.2219,-1.3060,ambiguous,,,0.0744
+2026-08-09T15:59:05.420Z,gesture,73.840,2,1.7703,existingPlaneInfinite,normal,Changed,0.8268,21.3,4410,1103,,,24,,,-0.4858,-2.8916,,,,,,-0.0281
+2026-08-09T15:59:05.420Z,manipulation,73.840,2,1.7703,existingPlaneInfinite,normal,Changed,0.8268,21.3,4410,1103,,,24,0.8268,4.0000,-0.4858,-2.8916,-0.0281,-1.3060,scale,,,-0.0281
+2026-08-09T15:59:05.486Z,gesture,73.906,2,1.7703,existingPlaneInfinite,normal,Changed,0.8268,27.3,4414,1104,,,24,,,-0.2027,-1.3311,,,scale,,,0.0917
+2026-08-09T15:59:05.486Z,manipulation,73.906,2,1.7703,existingPlaneInfinite,normal,Changed,0.8268,27.3,4414,1104,,,24,0.8268,4.0000,-0.2027,-1.3311,-0.0281,-1.3060,scale,,,0.0917
+2026-08-09T15:59:05.569Z,gesture,73.989,2,1.7703,existingPlaneInfinite,normal,Changed,2.5085,30.1,4419,1105,,,24,,,-0.0735,-0.9723,,,scale,,,0.1698
+2026-08-09T15:59:05.569Z,manipulation,73.989,2,1.7703,existingPlaneInfinite,normal,Changed,2.5085,30.1,4419,1105,,,24,0.8268,4.0000,-0.0735,-0.9723,-0.0281,-1.3060,scale,,,0.1698
+2026-08-09T15:59:05.621Z,gesture,74.041,2,1.7703,existingPlaneInfinite,normal,Changed,2.5820,31.3,4423,1106,,,24,,,-0.0780,-1.0788,,,scale,,,0.1638
+2026-08-09T15:59:05.621Z,manipulation,74.041,2,1.7703,existingPlaneInfinite,normal,Changed,2.5820,31.3,4423,1106,,,24,0.8268,4.0000,-0.0780,-1.0788,-0.0281,-1.3060,scale,,,0.1638
+2026-08-09T15:59:05.702Z,gesture,74.122,2,1.7703,existingPlaneInfinite,normal,Changed,2.6257,31.7,4426,1107,,,24,,,-0.0814,-1.1184,,,scale,,,0.1601
+2026-08-09T15:59:05.703Z,manipulation,74.123,2,1.7703,existingPlaneInfinite,normal,Changed,2.6257,31.7,4426,1107,,,24,0.8268,4.0000,-0.0814,-1.1184,-0.0281,-1.3060,scale,,,0.1601
+2026-08-09T15:59:05.769Z,gesture,74.189,2,1.7703,existingPlaneInfinite,normal,Changed,2.5929,31.7,4431,1108,,,24,,,-0.0678,-1.2573,,,scale,,,0.1772
+2026-08-09T15:59:05.769Z,manipulation,74.189,2,1.7703,existingPlaneInfinite,normal,Changed,2.5929,31.7,4431,1108,,,24,0.8268,4.0000,-0.0678,-1.2573,-0.0281,-1.3060,scale,,,0.1772
+2026-08-09T15:59:05.819Z,gesture,74.239,2,1.7703,existingPlaneInfinite,normal,Changed,2.5820,30.6,4434,1109,,,24,,,-0.0575,-1.2797,,,scale,,,0.1860
+2026-08-09T15:59:05.820Z,manipulation,74.240,2,1.7703,existingPlaneInfinite,normal,Changed,2.5820,30.6,4434,1109,,,24,0.8268,4.0000,-0.0575,-1.2797,-0.0281,-1.3060,scale,,,0.1860
+2026-08-09T15:59:05.887Z,gesture,74.307,2,1.7703,existingPlaneInfinite,normal,Changed,2.5929,29.4,4438,1110,,,24,,,-0.0692,-1.4003,,,scale,,,0.1810
+2026-08-09T15:59:05.887Z,manipulation,74.307,2,1.7703,existingPlaneInfinite,normal,Changed,2.5929,29.4,4438,1110,,,24,0.8268,4.0000,-0.0692,-1.4003,-0.0281,-1.3060,scale,,,0.1810
+2026-08-09T15:59:05.902Z,planeUpdate,74.322,2,1.7703,none,normal,,,,0,0,,,24,,,,,,,,,,
+2026-08-09T15:59:05.969Z,gesture,74.389,2,1.7703,existingPlaneInfinite,normal,Changed,2.6257,27.0,4443,1111,,,24,,,-0.1021,-1.6330,,,scale,,,0.1381
+2026-08-09T15:59:05.970Z,manipulation,74.390,2,1.7703,existingPlaneInfinite,normal,Changed,2.6257,27.0,4443,1111,,,24,0.8268,4.0000,-0.1021,-1.6330,-0.0281,-1.3060,scale,,,0.1381
+2026-08-09T15:59:06.170Z,gesture,74.590,2,1.7703,existingPlaneInfinite,normal,Ended,2.8783,25.0,4455,1114,,,24,,,-0.1300,-1.8148,,,scale ✓,,,0.1230
+2026-08-09T15:59:06.171Z,manipulation,74.591,2,1.7703,existingPlaneInfinite,normal,Ended,2.8783,25.0,4455,1114,,,24,,4.0000,-0.1300,-1.8148,,-1.3060,scale,,,0.1230
+2026-08-09T15:59:06.171Z,gesture,74.591,2,1.7703,existingPlaneInfinite,normal,Possible,2.8783,25.0,4455,1114,,,,,,-0.1300,-1.8148,,,,,,0.1230
+2026-08-09T15:59:06.989Z,planeUpdate,75.409,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:07.220Z,gesture,75.640,2,1.7703,existingPlaneInfinite,normal,Began,0.7074,14.5,4518,1130,,,,,,2.5948,2.6607,,,,,,0.5117
+2026-08-09T15:59:07.220Z,manipulation,75.640,2,1.7703,existingPlaneInfinite,normal,Began,0.7074,14.5,4518,1130,,,25,0.7074,4.0000,2.5948,2.6607,0.5117,-1.3060,ambiguous,,,0.5117
+2026-08-09T15:59:07.286Z,gesture,75.706,2,1.7703,existingPlaneInfinite,normal,Changed,0.8485,14.8,4522,1131,,,25,,,2.5014,2.6692,,,,,,0.5305
+2026-08-09T15:59:07.287Z,manipulation,75.707,2,1.7703,existingPlaneInfinite,normal,Changed,0.8485,14.8,4522,1131,,,25,,4.0000,2.5014,2.6692,,-1.3060,ambiguous,,,0.5305
+2026-08-09T15:59:07.370Z,gesture,75.790,2,1.7703,existingPlaneInfinite,normal,Changed,0.8729,15.1,4527,1132,,,25,,,2.4081,2.6584,,,,,,0.5549
+2026-08-09T15:59:07.371Z,manipulation,75.791,2,1.7703,existingPlaneInfinite,normal,Changed,0.8729,15.1,4527,1132,,,25,,4.0000,2.4081,2.6584,,-1.3060,ambiguous,,,0.5549
+2026-08-09T15:59:07.420Z,gesture,75.840,2,1.7703,existingPlaneInfinite,normal,Changed,0.8729,15.0,4530,1133,,,25,,,2.3064,2.6359,,,,,,0.5437
+2026-08-09T15:59:07.420Z,manipulation,75.840,2,1.7703,existingPlaneInfinite,normal,Changed,0.8729,15.0,4530,1133,,,25,0.8729,4.0000,2.3064,2.6359,0.5437,-1.3060,ambiguous,,,0.5437
+2026-08-09T15:59:07.487Z,gesture,75.907,2,1.7703,existingPlaneInfinite,normal,Changed,0.8766,15.0,4534,1134,,,25,,,2.2652,2.6219,,,,,,0.5247
+2026-08-09T15:59:07.487Z,manipulation,75.907,2,1.7703,existingPlaneInfinite,normal,Changed,0.8766,15.0,4534,1134,,,25,0.8729,4.0000,2.2652,2.6219,0.5437,-1.3060,ambiguous,,,0.5247
+2026-08-09T15:59:07.570Z,gesture,75.990,2,1.7703,existingPlaneInfinite,normal,Changed,0.8729,14.3,4539,1135,,,25,,,2.4446,2.6827,,,,,,0.3989
+2026-08-09T15:59:07.571Z,manipulation,75.991,2,1.7703,existingPlaneInfinite,normal,Changed,0.8729,14.3,4539,1135,,,25,0.8729,4.0000,2.4446,2.6827,0.5437,-1.3060,ambiguous,,,0.3989
+2026-08-09T15:59:07.620Z,gesture,76.040,2,1.7703,existingPlaneInfinite,normal,Changed,0.8729,6.8,4542,1136,,,25,,,-1.4988,2.8503,,,,,,
+2026-08-09T15:59:07.621Z,manipulation,76.041,2,1.7703,existingPlaneInfinite,normal,Changed,0.8729,6.8,4542,1136,,,25,0.8729,4.0000,-1.4988,2.8503,0.5437,-1.3060,ambiguous,,,
+2026-08-09T15:59:07.704Z,gesture,76.124,2,1.7703,existingPlaneInfinite,normal,Changed,0.8766,17.9,4547,1137,,,25,,,-0.3707,-2.5114,,,,,,0.0186
+2026-08-09T15:59:07.704Z,manipulation,76.124,2,1.7703,existingPlaneInfinite,normal,Changed,0.8766,17.9,4547,1137,,,25,0.8729,4.0000,-0.3707,-2.5114,0.3989,-1.3060,yaw,,,0.0186
+2026-08-09T15:59:07.770Z,gesture,76.190,2,1.7703,existingPlaneInfinite,normal,Changed,0.8766,22.4,4551,1138,,,25,,,-0.0786,-1.6796,,,yaw,,,0.1648
+2026-08-09T15:59:07.770Z,manipulation,76.190,2,1.7703,existingPlaneInfinite,normal,Changed,0.8766,22.4,4551,1138,,,25,0.8729,4.0000,-0.0786,-1.6796,0.3989,-1.1597,yaw,,,0.1648
+2026-08-09T15:59:07.821Z,gesture,76.241,2,1.7703,existingPlaneInfinite,normal,Changed,1.8965,23.6,4554,1139,,,25,,,0.0079,-1.4824,,,yaw,,,0.1990
+2026-08-09T15:59:07.821Z,manipulation,76.241,2,1.7703,existingPlaneInfinite,normal,Changed,1.8965,23.6,4554,1139,,,25,0.8729,4.0000,0.0079,-1.4824,0.3989,-1.1256,yaw,,,0.1990
+2026-08-09T15:59:07.886Z,gesture,76.306,2,1.7703,existingPlaneInfinite,normal,Changed,1.8965,27.4,4558,1140,,,25,,,0.0919,-1.3240,,,yaw ⏸,,,0.2320
+2026-08-09T15:59:07.886Z,manipulation,76.306,2,1.7703,existingPlaneInfinite,normal,Changed,1.8965,27.4,4558,1140,,,25,0.8729,4.0000,0.0919,-1.3240,0.3989,-1.1256,yaw,,,0.2320
+2026-08-09T15:59:07.970Z,gesture,76.390,2,1.7703,existingPlaneInfinite,normal,Changed,1.8965,29.2,4563,1141,,,25,,,0.1452,-1.2537,,,yaw ✓,,,0.2668
+2026-08-09T15:59:07.971Z,manipulation,76.391,2,1.7703,existingPlaneInfinite,normal,Changed,1.8965,29.2,4563,1141,,,25,0.8729,4.0000,0.1452,-1.2537,0.3989,-1.1256,yaw,,,0.2668
+2026-08-09T15:59:08.003Z,planeUpdate,76.423,2,1.7703,none,normal,,,,0,0,,,25,,,,,,,,,,
+2026-08-09T15:59:08.023Z,gesture,76.443,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,26.1,4566,1142,,,25,,,0.0546,-1.3493,,,yaw ✓,,,0.2438
+2026-08-09T15:59:08.023Z,manipulation,76.443,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,26.1,4566,1142,,,25,0.8729,4.0000,0.0546,-1.3493,0.3989,-1.1256,yaw,,,0.2438
+2026-08-09T15:59:08.090Z,gesture,76.510,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,24.3,4570,1143,,,25,,,-0.1804,-1.7301,,,yaw ✓,,,0.1296
+2026-08-09T15:59:08.090Z,manipulation,76.510,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,24.3,4570,1143,,,25,0.8729,4.0000,-0.1804,-1.7301,0.3989,-1.1256,yaw,,,0.1296
+2026-08-09T15:59:08.169Z,gesture,76.589,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,20.0,4575,1144,,,25,,,-0.5481,-2.6937,,,yaw ✓,,,-0.0136
+2026-08-09T15:59:08.170Z,manipulation,76.590,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,20.0,4575,1144,,,25,0.8729,4.0000,-0.5481,-2.6937,0.3989,-1.1256,yaw,,,-0.0136
+2026-08-09T15:59:08.239Z,gesture,76.659,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,10.5,4579,1145,,,25,,,-1.5152,-3.1139,,,yaw ✓,,,-0.0479
+2026-08-09T15:59:08.239Z,manipulation,76.659,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,10.5,4579,1145,,,25,0.8729,4.0000,-1.5152,-3.1139,0.3989,-1.1256,yaw,,,-0.0479
+2026-08-09T15:59:08.287Z,gesture,76.707,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,11.9,4582,1146,,,25,,,-2.7978,2.7891,,,yaw ✓,,,0.0751
+2026-08-09T15:59:08.288Z,manipulation,76.708,2,1.7703,existingPlaneInfinite,normal,Changed,1.8021,11.9,4582,1146,,,25,0.8729,4.0000,-2.7978,2.7891,0.3989,-1.1256,yaw,,,0.0751
+2026-08-09T15:59:08.370Z,gesture,76.790,2,1.7703,existingPlaneInfinite,normal,Changed,1.5745,13.3,4587,1147,,,25,,,2.9284,2.6197,,,yaw ✓,,,0.3477
+2026-08-09T15:59:08.371Z,manipulation,76.791,2,1.7703,existingPlaneInfinite,normal,Changed,1.5745,13.3,4587,1147,,,25,0.8729,4.0000,2.9284,2.6197,0.3989,-1.1256,yaw,,,0.3477
+2026-08-09T15:59:08.421Z,gesture,76.841,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,13.5,4590,1148,,,25,,,2.6084,2.4793,,,yaw ✓,,,0.6810
+2026-08-09T15:59:08.421Z,manipulation,76.841,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,13.5,4590,1148,,,25,0.8729,4.0000,2.6084,2.4793,0.3989,-1.1256,yaw,,,0.6810
+2026-08-09T15:59:08.486Z,gesture,76.906,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,12.9,4594,1149,,,25,,,2.3809,2.4287,,,yaw ✓,,,0.7685
+2026-08-09T15:59:08.487Z,manipulation,76.907,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,12.9,4594,1149,,,25,0.8729,4.0000,2.3809,2.4287,0.3989,-1.1256,yaw,,,0.7685
+2026-08-09T15:59:08.570Z,gesture,76.990,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,13.0,4599,1150,,,25,,,2.3877,2.4338,,,yaw ✓,,,0.7398
+2026-08-09T15:59:08.570Z,manipulation,76.990,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,13.0,4599,1150,,,25,0.8729,4.0000,2.3877,2.4338,0.3989,-1.1256,yaw,,,0.7398
+2026-08-09T15:59:08.639Z,gesture,77.059,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,14.0,4603,1151,,,25,,,2.4799,2.5568,,,yaw ✓,,,0.5160
+2026-08-09T15:59:08.640Z,manipulation,77.060,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,14.0,4603,1151,,,25,0.8729,4.0000,2.4799,2.5568,0.3989,-1.1256,yaw,,,0.5160
+2026-08-09T15:59:08.687Z,gesture,77.107,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,13.8,4606,1152,,,25,,,2.6025,2.7753,,,yaw ✓,,,0.2924
+2026-08-09T15:59:08.688Z,manipulation,77.108,2,1.7703,existingPlaneInfinite,normal,Changed,0.9839,13.8,4606,1152,,,25,0.8729,4.0000,2.6025,2.7753,0.3989,-1.1256,yaw,,,0.2924
+2026-08-09T15:59:08.771Z,gesture,77.191,2,1.7703,existingPlaneInfinite,normal,Changed,0.7452,10.7,4611,1153,,,25,,,-0.9131,2.8779,,,yaw ✓,,,0.1979
+2026-08-09T15:59:08.771Z,manipulation,77.191,2,1.7703,existingPlaneInfinite,normal,Changed,0.7452,10.7,4611,1153,,,25,0.8729,4.0000,-0.9131,2.8779,0.3989,-1.1256,yaw,,,0.1979
+2026-08-09T15:59:08.820Z,gesture,77.240,2,1.7703,existingPlaneInfinite,normal,Changed,0.7452,17.6,4614,1154,,,25,,,-0.4083,-2.6274,,,yaw ✓,,,0.0367
+2026-08-09T15:59:08.820Z,manipulation,77.240,2,1.7703,existingPlaneInfinite,normal,Changed,0.7452,17.6,4614,1154,,,25,0.8729,4.0000,-0.4083,-2.6274,0.3989,-1.1256,yaw,,,0.0367
+2026-08-09T15:59:08.886Z,gesture,77.306,2,1.7703,existingPlaneInfinite,normal,Changed,0.7452,21.5,4618,1155,,,25,,,-0.1347,-1.7713,,,yaw ✓,,,0.1335
+2026-08-09T15:59:08.887Z,manipulation,77.307,2,1.7703,existingPlaneInfinite,normal,Changed,0.7452,21.5,4618,1155,,,25,0.8729,4.0000,-0.1347,-1.7713,0.3989,-1.1256,yaw,,,0.1335
+2026-08-09T15:59:08.970Z,gesture,77.390,2,1.7703,existingPlaneInfinite,normal,Changed,2.1502,23.6,4623,1156,,,25,,,0.0152,-1.4595,,,yaw ✓,,,0.2249
+2026-08-09T15:59:08.971Z,manipulation,77.391,2,1.7703,existingPlaneInfinite,normal,Changed,2.1502,23.6,4623,1156,,,25,0.8729,4.0000,0.0152,-1.4595,0.3989,-1.1256,yaw,,,0.2249
+2026-08-09T15:59:09.020Z,gesture,77.440,2,1.7703,existingPlaneInfinite,normal,Changed,2.1502,25.7,4626,1157,,,25,,,0.0762,-1.4234,,,yaw ✓,,,0.2447
+2026-08-09T15:59:09.020Z,manipulation,77.440,2,1.7703,existingPlaneInfinite,normal,Changed,2.1502,25.7,4626,1157,,,25,0.8729,4.0000,0.0762,-1.4234,0.3989,-1.1256,yaw,,,0.2447
+2026-08-09T15:59:09.086Z,planeUpdate,77.506,2,1.7703,none,normal,,,,0,0,,,25,,,,,,,,,,
+2026-08-09T15:59:09.104Z,gesture,77.524,2,1.7703,existingPlaneInfinite,normal,Changed,2.1502,25.9,4631,1158,,,25,,,0.0790,-1.3778,,,yaw ✓,,,0.2511
+2026-08-09T15:59:09.104Z,manipulation,77.525,2,1.7703,existingPlaneInfinite,normal,Changed,2.1502,25.9,4631,1158,,,25,0.8729,4.0000,0.0790,-1.3778,0.3989,-1.1256,yaw,,,0.2511
+2026-08-09T15:59:09.170Z,gesture,77.591,2,1.7703,existingPlaneInfinite,normal,Changed,2.0960,25.1,4635,1159,,,25,,,0.0260,-1.5119,,,yaw ✓,,,0.2267
+2026-08-09T15:59:09.171Z,manipulation,77.591,2,1.7703,existingPlaneInfinite,normal,Changed,2.0960,25.1,4635,1159,,,25,0.8729,4.0000,0.0260,-1.5119,0.3989,-1.1256,yaw,,,0.2267
+2026-08-09T15:59:09.223Z,gesture,77.643,2,1.7703,existingPlaneInfinite,normal,Changed,2.0960,24.1,4638,1160,,,25,,,-0.0310,-1.5720,,,yaw ✓,,,0.1902
+2026-08-09T15:59:09.224Z,manipulation,77.644,2,1.7703,existingPlaneInfinite,normal,Changed,2.0960,24.1,4638,1160,,,25,0.8729,4.0000,-0.0310,-1.5720,0.3989,-1.1256,yaw,,,0.1902
+2026-08-09T15:59:09.286Z,gesture,77.706,2,1.7703,existingPlaneInfinite,normal,Changed,2.0960,24.8,4642,1161,,,25,,,-0.0630,-1.5982,,,yaw ✓,,,0.1667
+2026-08-09T15:59:09.287Z,manipulation,77.707,2,1.7703,existingPlaneInfinite,normal,Changed,2.0960,24.8,4642,1161,,,25,0.8729,4.0000,-0.0630,-1.5982,0.3989,-1.1256,yaw,,,0.1667
+2026-08-09T15:59:09.370Z,gesture,77.791,2,1.7703,existingPlaneInfinite,normal,Changed,2.2907,25.0,4647,1162,,,25,,,-0.0782,-1.5974,,,yaw ✓,,,0.1595
+2026-08-09T15:59:09.371Z,manipulation,77.791,2,1.7703,existingPlaneInfinite,normal,Changed,2.2907,25.0,4647,1162,,,25,0.8729,4.0000,-0.0782,-1.5974,0.3989,-1.1256,yaw,,,0.1595
+2026-08-09T15:59:09.421Z,gesture,77.841,2,1.7703,existingPlaneInfinite,normal,Changed,2.4679,24.9,4650,1163,,,25,,,-0.0897,-1.6499,,,yaw ✓,,,0.1528
+2026-08-09T15:59:09.421Z,manipulation,77.841,2,1.7703,existingPlaneInfinite,normal,Changed,2.4679,24.9,4650,1163,,,25,0.8729,4.0000,-0.0897,-1.6499,0.3989,-1.1256,yaw,,,0.1528
+2026-08-09T15:59:09.622Z,gesture,78.042,2,1.7703,existingPlaneInfinite,normal,Ended,2.6950,22.4,4663,1166,,,25,,,-0.4033,-2.6487,,,yaw ✓,,,0.0218
+2026-08-09T15:59:09.622Z,manipulation,78.042,2,1.7703,existingPlaneInfinite,normal,Ended,2.6950,22.4,4663,1166,,,25,,4.0000,-0.4033,-2.6487,,-1.1256,yaw,,,0.0218
+2026-08-09T15:59:09.622Z,gesture,78.042,2,1.7703,existingPlaneInfinite,normal,Possible,2.6950,22.4,4663,1166,,,,,,-0.4033,-2.6487,,,,,,0.0218
+2026-08-09T15:59:09.970Z,gesture,78.390,2,1.7703,existingPlaneInfinite,normal,Began,0.5965,17.0,4683,1171,,,,,,2.2591,2.7908,,,,,,0.2721
+2026-08-09T15:59:09.970Z,manipulation,78.390,2,1.7703,existingPlaneInfinite,normal,Began,0.5965,17.0,4683,1171,,,26,0.5965,4.0000,2.2591,2.7908,0.2721,-1.1256,ambiguous,,,0.2721
+2026-08-09T15:59:10.021Z,gesture,78.441,2,1.7703,existingPlaneInfinite,normal,Changed,0.6602,15.2,4686,1172,,,26,,,2.0328,2.8179,,,,,,0.2347
+2026-08-09T15:59:10.021Z,manipulation,78.441,2,1.7703,existingPlaneInfinite,normal,Changed,0.6602,15.2,4686,1172,,,26,,4.0000,2.0328,2.8179,,-1.1256,ambiguous,,,0.2347
+2026-08-09T15:59:10.086Z,planeUpdate,78.506,2,1.7703,none,normal,,,,0,0,,,26,,,,,,,,,,
+2026-08-09T15:59:10.222Z,gesture,78.642,2,1.7703,existingPlaneInfinite,normal,Cancelled,,,4698,1175,,,26,,,,,,,,,,
+2026-08-09T15:59:10.222Z,gesture,78.642,2,1.7703,existingPlaneInfinite,normal,Possible,,,4698,1175,,,,,,,,,,,,,
+2026-08-09T15:59:10.771Z,gesture,79.191,2,1.7703,existingPlaneInfinite,normal,Began,1.1922,23.2,4731,1183,,,,,,1.6033,2.7943,,,,,,0.4627
+2026-08-09T15:59:10.771Z,manipulation,79.191,2,1.7703,existingPlaneInfinite,normal,Began,1.1922,23.2,4731,1183,,,27,1.1922,4.0000,1.6033,2.7943,0.4627,-1.1256,ambiguous,,,0.4627
+2026-08-09T15:59:10.820Z,gesture,79.240,2,1.7703,existingPlaneInfinite,normal,Changed,0.9570,22.6,4734,1184,,,27,,,1.5584,2.7799,,,,,,0.4153
+2026-08-09T15:59:10.820Z,manipulation,79.241,2,1.7703,existingPlaneInfinite,normal,Changed,0.9570,22.6,4734,1184,,,27,,4.0000,1.5584,2.7799,,-1.1256,ambiguous,,,0.4153
+2026-08-09T15:59:10.888Z,gesture,79.308,2,1.7703,existingPlaneInfinite,normal,Changed,0.9570,20.9,4738,1185,,,27,,,1.3276,2.7162,,,,,,0.3219
+2026-08-09T15:59:10.888Z,manipulation,79.308,2,1.7703,existingPlaneInfinite,normal,Changed,0.9570,20.9,4738,1185,,,27,,4.0000,1.3276,2.7162,,-1.1256,ambiguous,,,0.3219
+2026-08-09T15:59:10.971Z,gesture,79.391,2,1.7703,existingPlaneInfinite,normal,Changed,0.9570,16.4,4743,1186,,,27,,,-0.1173,2.7204,,,,,,0.1413
+2026-08-09T15:59:10.971Z,manipulation,79.391,2,1.7703,existingPlaneInfinite,normal,Changed,0.9570,16.4,4743,1186,,,27,0.9570,4.0000,-0.1173,2.7204,0.3219,-1.1256,ambiguous,,,0.1413
+2026-08-09T15:59:11.021Z,gesture,79.441,2,1.7703,existingPlaneInfinite,normal,Changed,1.1040,15.8,4746,1187,,,27,,,-0.4619,2.5781,,,,,,0.0481
+2026-08-09T15:59:11.021Z,manipulation,79.441,2,1.7703,existingPlaneInfinite,normal,Changed,1.1040,15.8,4746,1187,,,27,0.9570,4.0000,-0.4619,2.5781,0.3219,-1.1256,ambiguous,,,0.0481
+2026-08-09T15:59:11.087Z,gesture,79.507,2,1.7703,existingPlaneInfinite,normal,Changed,1.1040,18.9,4750,1188,,,27,,,-0.4104,-3.0552,,,,,,0.0200
+2026-08-09T15:59:11.087Z,manipulation,79.507,2,1.7703,existingPlaneInfinite,normal,Changed,1.1040,18.9,4750,1188,,,27,0.9570,4.0000,-0.4104,-3.0552,0.3219,-1.1256,ambiguous,,,0.0200
+2026-08-09T15:59:11.103Z,planeUpdate,79.523,2,1.7703,none,normal,,,,0,0,,,27,,,,,,,,,,
+2026-08-09T15:59:11.287Z,gesture,79.707,2,1.7703,existingPlaneInfinite,normal,Ended,3.9239,19.6,4762,1191,,,27,,,-0.0800,-1.4501,,,,,,0.1699
+2026-08-09T15:59:11.287Z,manipulation,79.707,2,1.7703,existingPlaneInfinite,normal,Ended,3.9239,19.6,4762,1191,,,27,,4.0000,-0.0800,-1.4501,,-1.1256,ambiguous,,,0.1699
+2026-08-09T15:59:11.287Z,gesture,79.707,2,1.7703,existingPlaneInfinite,normal,Possible,3.9239,19.6,4762,1191,,,,,,-0.0800,-1.4501,,,,,,0.1699
+2026-08-09T15:59:12.103Z,planeUpdate,80.523,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:13.187Z,planeUpdate,81.607,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:14.187Z,planeUpdate,82.607,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:15.021Z,gesture,83.441,2,1.7703,existingPlaneInfinite,normal,Began,0.1974,15.9,4986,1247,,,,,,-0.1850,2.5398,,,,,,0.3305
+2026-08-09T15:59:15.021Z,manipulation,83.441,2,1.7703,existingPlaneInfinite,normal,Began,0.1974,15.9,4986,1247,,,28,0.1974,4.0000,-0.1850,2.5398,0.3305,-1.1256,ambiguous,,,0.3305
+2026-08-09T15:59:15.088Z,gesture,83.508,2,1.7703,existingPlaneInfinite,normal,Changed,0.2181,14.8,4990,1248,,,28,,,-0.2070,2.5195,,,,,,0.3559
+2026-08-09T15:59:15.089Z,manipulation,83.509,2,1.7703,existingPlaneInfinite,normal,Changed,0.2181,14.8,4990,1248,,,28,,4.0000,-0.2070,2.5195,,-1.1256,ambiguous,,,0.3559
+2026-08-09T15:59:15.171Z,gesture,83.591,2,1.7703,existingPlaneInfinite,normal,Changed,0.2181,13.3,4995,1249,,,28,,,-0.0244,2.6372,,,,,,0.3643
+2026-08-09T15:59:15.171Z,manipulation,83.591,2,1.7703,existingPlaneInfinite,normal,Changed,0.2181,13.3,4995,1249,,,28,,4.0000,-0.0244,2.6372,,-1.1256,ambiguous,,,0.3643
+2026-08-09T15:59:15.203Z,planeUpdate,83.623,2,1.7703,none,normal,,,,0,0,,,28,,,,,,,,,,
+2026-08-09T15:59:15.221Z,gesture,83.641,2,1.7703,existingPlaneInfinite,normal,Changed,0.1659,12.1,4998,1250,,,28,,,0.0658,2.6540,,,,,,0.3694
+2026-08-09T15:59:15.221Z,manipulation,83.641,2,1.7703,existingPlaneInfinite,normal,Changed,0.1659,12.1,4998,1250,,,28,0.2181,4.0000,0.0658,2.6540,0.3643,-1.1256,ambiguous,,,0.3694
+2026-08-09T15:59:15.288Z,gesture,83.708,2,1.7703,existingPlaneInfinite,normal,Changed,0.1777,11.7,5002,1251,,,28,,,0.0983,2.6312,,,,,,0.3682
+2026-08-09T15:59:15.289Z,manipulation,83.709,2,1.7703,existingPlaneInfinite,normal,Changed,0.1777,11.7,5002,1251,,,28,0.1777,4.0000,0.0983,2.6312,0.3682,-1.1256,scale,,,0.3682
+2026-08-09T15:59:15.371Z,gesture,83.791,2,1.7703,existingPlaneInfinite,normal,Changed,0.1693,11.9,5007,1252,,,28,,,0.0457,2.6165,,,scale,,,0.3689
+2026-08-09T15:59:15.372Z,manipulation,83.792,2,1.7703,existingPlaneInfinite,normal,Changed,0.1693,11.9,5007,1252,,,28,0.1777,3.8123,0.0457,2.6165,0.3682,-1.1256,scale,,,0.3689
+2026-08-09T15:59:15.421Z,gesture,83.841,2,1.7703,existingPlaneInfinite,normal,Changed,0.1659,11.7,5010,1253,,,28,,,0.0855,2.6285,,,scale,,,0.3663
+2026-08-09T15:59:15.421Z,manipulation,83.841,2,1.7703,existingPlaneInfinite,normal,Changed,0.1659,11.7,5010,1253,,,28,0.1777,3.7346,0.0855,2.6285,0.3682,-1.1256,scale,,,0.3663
+2026-08-09T15:59:15.505Z,gesture,83.925,2,1.7703,existingPlaneInfinite,normal,Changed,0.1644,11.4,5015,1254,,,28,,,0.0581,2.6292,,,scale,,,0.3599
+2026-08-09T15:59:15.506Z,manipulation,83.926,2,1.7703,existingPlaneInfinite,normal,Changed,0.1644,11.4,5015,1254,,,28,0.1777,3.7006,0.0581,2.6292,0.3682,-1.1256,scale,,,0.3599
+2026-08-09T15:59:15.570Z,gesture,83.990,2,1.7703,existingPlaneInfinite,normal,Changed,0.1693,10.3,5019,1255,,,28,,,0.0494,2.6040,,,scale ⏸,,,0.3511
+2026-08-09T15:59:15.570Z,manipulation,83.990,2,1.7703,existingPlaneInfinite,normal,Changed,0.1693,10.3,5019,1255,,,28,0.1777,3.7006,0.0494,2.6040,0.3682,-1.1256,scale,,,0.3511
+2026-08-09T15:59:15.621Z,gesture,84.041,2,1.7703,existingPlaneInfinite,normal,Changed,0.1693,9.7,5022,1256,,,28,,,0.1760,2.6390,,,scale ✓,,,0.3714
+2026-08-09T15:59:15.621Z,manipulation,84.041,2,1.7703,existingPlaneInfinite,normal,Changed,0.1693,9.7,5022,1256,,,28,0.1777,3.7006,0.1760,2.6390,0.3682,-1.1256,scale,,,0.3714
+2026-08-09T15:59:15.688Z,gesture,84.108,2,1.7703,existingPlaneInfinite,normal,Changed,0.2099,11.6,5026,1257,,,28,,,0.1969,2.6920,,,scale ✓,,,0.4039
+2026-08-09T15:59:15.688Z,manipulation,84.108,2,1.7703,existingPlaneInfinite,normal,Changed,0.2099,11.6,5026,1257,,,28,0.1777,3.7006,0.1969,2.6920,0.3682,-1.1256,scale,,,0.4039
+2026-08-09T15:59:15.771Z,gesture,84.191,2,1.7703,existingPlaneInfinite,normal,Changed,0.2099,12.1,5031,1258,,,28,,,0.1927,2.6954,,,scale ✓,,,0.3961
+2026-08-09T15:59:15.771Z,manipulation,84.191,2,1.7703,existingPlaneInfinite,normal,Changed,0.2099,12.1,5031,1258,,,28,0.1777,3.7006,0.1927,2.6954,0.3682,-1.1256,scale,,,0.3961
+2026-08-09T15:59:15.821Z,gesture,84.241,2,1.7703,existingPlaneInfinite,normal,Changed,0.2099,11.8,5034,1259,,,28,,,-0.1758,2.6888,,,scale ✓,,,0.3630
+2026-08-09T15:59:15.821Z,manipulation,84.242,2,1.7703,existingPlaneInfinite,normal,Changed,0.2099,11.8,5034,1259,,,28,0.1777,3.7006,-0.1758,2.6888,0.3682,-1.1256,scale,,,0.3630
+2026-08-09T15:59:15.888Z,gesture,84.308,2,1.7703,existingPlaneInfinite,normal,Changed,0.2432,10.2,5038,1260,,,28,,,-0.4425,2.5750,,,scale ✓,,,0.3269
+2026-08-09T15:59:15.888Z,manipulation,84.308,2,1.7703,existingPlaneInfinite,normal,Changed,0.2432,10.2,5038,1260,,,28,0.1777,3.7006,-0.4425,2.5750,0.3682,-1.1256,scale,,,0.3269
+2026-08-09T15:59:15.972Z,gesture,84.392,2,1.7703,existingPlaneInfinite,normal,Changed,0.2633,9.0,5043,1261,,,28,,,-0.4362,2.6819,,,scale ✓,,,0.2786
+2026-08-09T15:59:15.972Z,manipulation,84.392,2,1.7703,existingPlaneInfinite,normal,Changed,0.2633,9.0,5043,1261,,,28,0.1777,3.7006,-0.4362,2.6819,0.3682,-1.1256,scale,,,0.2786
+2026-08-09T15:59:16.022Z,gesture,84.442,2,1.7703,existingPlaneInfinite,normal,Changed,0.3291,8.6,5046,1262,,,28,,,-0.5150,2.7226,,,scale ✓,,,0.2623
+2026-08-09T15:59:16.023Z,manipulation,84.443,2,1.7703,existingPlaneInfinite,normal,Changed,0.3291,8.6,5046,1262,,,28,0.1777,3.7006,-0.5150,2.7226,0.3682,-1.1256,scale,,,0.2623
+2026-08-09T15:59:16.088Z,gesture,84.508,2,1.7703,existingPlaneInfinite,normal,Changed,0.3496,11.3,5050,1263,,,28,,,-0.3042,2.6840,,,scale ✓,,,0.2988
+2026-08-09T15:59:16.088Z,manipulation,84.509,2,1.7703,existingPlaneInfinite,normal,Changed,0.3496,11.3,5050,1263,,,28,0.1777,3.7006,-0.3042,2.6840,0.3682,-1.1256,scale,,,0.2988
+2026-08-09T15:59:16.170Z,gesture,84.590,2,1.7703,existingPlaneInfinite,normal,Changed,0.4050,15.9,5055,1264,,,28,,,0.1303,2.6821,,,scale ✓,,,0.3195
+2026-08-09T15:59:16.170Z,manipulation,84.590,2,1.7703,existingPlaneInfinite,normal,Changed,0.4050,15.9,5055,1264,,,28,0.1777,3.7006,0.1303,2.6821,0.3682,-1.1256,scale,,,0.3195
+2026-08-09T15:59:16.222Z,gesture,84.642,2,1.7703,existingPlaneInfinite,normal,Changed,0.4380,19.9,5058,1265,,,28,,,0.2998,2.6626,,,scale ✓,,,0.3509
+2026-08-09T15:59:16.222Z,manipulation,84.642,2,1.7703,existingPlaneInfinite,normal,Changed,0.4380,19.9,5058,1265,,,28,0.1777,3.7006,0.2998,2.6626,0.3682,-1.1256,scale,,,0.3509
+2026-08-09T15:59:16.288Z,gesture,84.708,2,1.7703,existingPlaneInfinite,normal,Changed,0.4749,21.7,5062,1266,,,28,,,0.3052,2.6886,,,scale ✓,,,0.3697
+2026-08-09T15:59:16.288Z,manipulation,84.708,2,1.7703,existingPlaneInfinite,normal,Changed,0.4749,21.7,5062,1266,,,28,0.1777,3.7006,0.3052,2.6886,0.3682,-1.1256,scale,,,0.3697
+2026-08-09T15:59:16.304Z,planeUpdate,84.724,2,1.7703,none,normal,,,,0,0,,,28,,,,,,,,,,
+2026-08-09T15:59:16.372Z,gesture,84.792,2,1.7703,existingPlaneInfinite,normal,Changed,0.5626,16.4,5067,1267,,,28,,,0.2114,2.6890,,,scale ✓,,,0.3303
+2026-08-09T15:59:16.372Z,manipulation,84.792,2,1.7703,existingPlaneInfinite,normal,Changed,0.5626,16.4,5067,1267,,,28,0.1777,3.7006,0.2114,2.6890,0.3682,-1.1256,scale,,,0.3303
+2026-08-09T15:59:16.421Z,gesture,84.841,2,1.7703,existingPlaneInfinite,normal,Changed,0.5626,11.2,5070,1268,,,28,,,0.1123,2.6860,,,scale ✓,,,0.3213
+2026-08-09T15:59:16.421Z,manipulation,84.841,2,1.7703,existingPlaneInfinite,normal,Changed,0.5626,11.2,5070,1268,,,28,0.1777,3.7006,0.1123,2.6860,0.3682,-1.1256,scale,,,0.3213
+2026-08-09T15:59:16.505Z,gesture,84.925,2,1.7703,existingPlaneInfinite,normal,Changed,0.5626,10.2,5075,1269,,,28,,,0.1610,2.6501,,,scale ✓,,,0.3157
+2026-08-09T15:59:16.505Z,manipulation,84.925,2,1.7703,existingPlaneInfinite,normal,Changed,0.5626,10.2,5075,1269,,,28,0.1777,3.7006,0.1610,2.6501,0.3682,-1.1256,scale,,,0.3157
+2026-08-09T15:59:16.574Z,gesture,84.994,2,1.7703,existingPlaneInfinite,normal,Changed,0.1859,8.8,5079,1270,,,28,,,0.3719,2.6986,,,scale ✓,,,0.3251
+2026-08-09T15:59:16.574Z,manipulation,84.994,2,1.7703,existingPlaneInfinite,normal,Changed,0.1859,8.8,5079,1270,,,28,0.1777,3.7006,0.3719,2.6986,0.3682,-1.1256,scale,,,0.3251
+2026-08-09T15:59:16.623Z,gesture,85.043,2,1.7703,existingPlaneInfinite,normal,Changed,0.1769,7.7,5082,1271,,,28,,,0.3095,2.6857,,,scale ✓,,,0.3187
+2026-08-09T15:59:16.624Z,manipulation,85.044,2,1.7703,existingPlaneInfinite,normal,Changed,0.1769,7.7,5082,1271,,,28,0.1777,3.7006,0.3095,2.6857,0.3682,-1.1256,scale,,,0.3187
+2026-08-09T15:59:16.687Z,gesture,85.107,2,1.7703,existingPlaneInfinite,normal,Changed,0.1536,6.7,5086,1272,,,28,,,0.2829,2.6912,,,scale ✓,,,0.3284
+2026-08-09T15:59:16.687Z,manipulation,85.107,2,1.7703,existingPlaneInfinite,normal,Changed,0.1536,6.7,5086,1272,,,28,0.1777,3.7006,0.2829,2.6912,0.3682,-1.1256,scale,,,0.3284
+2026-08-09T15:59:16.772Z,gesture,85.192,2,1.7703,existingPlaneInfinite,normal,Changed,0.1514,5.9,5091,1273,,,28,,,0.5258,2.6785,,,scale ✓,,,0.3216
+2026-08-09T15:59:16.772Z,manipulation,85.192,2,1.7703,existingPlaneInfinite,normal,Changed,0.1514,5.9,5091,1273,,,28,0.1777,3.7006,0.5258,2.6785,0.3682,-1.1256,scale,,,0.3216
+2026-08-09T15:59:16.825Z,gesture,85.245,2,1.7703,existingPlaneInfinite,normal,Changed,0.1307,5.1,5094,1274,,,28,,,0.1807,2.6108,,,scale ✓,,,0.2896
+2026-08-09T15:59:16.825Z,manipulation,85.245,2,1.7703,existingPlaneInfinite,normal,Changed,0.1307,5.1,5094,1274,,,28,0.1777,3.7006,0.1807,2.6108,0.3682,-1.1256,scale,,,0.2896
+2026-08-09T15:59:16.888Z,gesture,85.308,2,1.7703,existingPlaneInfinite,normal,Changed,0.1216,4.4,5098,1275,,,28,,,0.4493,2.6410,,,scale ✓,,,0.2659
+2026-08-09T15:59:16.888Z,manipulation,85.308,2,1.7703,existingPlaneInfinite,normal,Changed,0.1216,4.4,5098,1275,,,28,0.1777,3.7006,0.4493,2.6410,0.3682,-1.1256,scale,,,0.2659
+2026-08-09T15:59:16.970Z,gesture,85.391,2,1.7703,existingPlaneInfinite,normal,Changed,0.1002,3.9,5103,1276,,,28,,,0.7007,2.6954,,,scale ✓,,,0.2680
+2026-08-09T15:59:16.971Z,manipulation,85.391,2,1.7703,existingPlaneInfinite,normal,Changed,0.1002,3.9,5103,1276,,,28,0.1777,3.7006,0.7007,2.6954,0.3682,-1.1256,scale,,,0.2680
+2026-08-09T15:59:17.040Z,gesture,85.460,2,1.7703,existingPlaneInfinite,normal,Changed,0.0622,3.3,5107,1277,,,28,,,0.9879,2.6688,,,scale ✓,,,0.2398
+2026-08-09T15:59:17.040Z,manipulation,85.460,2,1.7703,existingPlaneInfinite,normal,Changed,0.0622,3.3,5107,1277,,,28,0.1777,3.7006,0.9879,2.6688,0.3682,-1.1256,scale,,,0.2398
+2026-08-09T15:59:17.088Z,gesture,85.508,2,1.7703,existingPlaneInfinite,normal,Changed,0.0607,3.0,5110,1278,,,28,,,0.5704,2.6788,,,scale ✓,,,0.2277
+2026-08-09T15:59:17.088Z,manipulation,85.508,2,1.7703,existingPlaneInfinite,normal,Changed,0.0607,3.0,5110,1278,,,28,0.1777,3.7006,0.5704,2.6788,0.3682,-1.1256,scale,,,0.2277
+2026-08-09T15:59:17.172Z,gesture,85.592,2,1.7703,existingPlaneInfinite,normal,Changed,0.0506,2.7,5115,1279,,,28,,,1.5212,2.6836,,,scale ✓,,,0.2033
+2026-08-09T15:59:17.173Z,manipulation,85.593,2,1.7703,existingPlaneInfinite,normal,Changed,0.0506,2.7,5115,1279,,,28,0.1777,3.7006,1.5212,2.6836,0.3682,-1.1256,scale,,,0.2033
+2026-08-09T15:59:17.221Z,gesture,85.641,2,1.7703,existingPlaneInfinite,normal,Changed,0.0481,2.6,5118,1280,,,28,,,1.0447,2.6642,,,scale ✓,,,0.1949
+2026-08-09T15:59:17.222Z,manipulation,85.642,2,1.7703,existingPlaneInfinite,normal,Changed,0.0481,2.6,5118,1280,,,28,0.1777,3.7006,1.0447,2.6642,0.3682,-1.1256,scale,,,0.1949
+2026-08-09T15:59:17.291Z,gesture,85.711,2,1.7703,existingPlaneInfinite,normal,Changed,0.0481,2.6,5122,1281,,,28,,,2.0431,2.6627,,,scale ✓,,,0.1734
+2026-08-09T15:59:17.291Z,manipulation,85.711,2,1.7703,existingPlaneInfinite,normal,Changed,0.0481,2.6,5122,1281,,,28,0.1777,3.7006,2.0431,2.6627,0.3682,-1.1256,scale,,,0.1734
+2026-08-09T15:59:17.304Z,planeUpdate,85.724,2,1.7703,none,normal,,,,0,0,,,28,,,,,,,,,,
+2026-08-09T15:59:17.372Z,gesture,85.792,2,1.7703,existingPlaneInfinite,normal,Changed,0.0422,2.6,5127,1282,,,28,,,1.3165,2.6506,,,scale ✓,,,0.1677
+2026-08-09T15:59:17.372Z,manipulation,85.792,2,1.7703,existingPlaneInfinite,normal,Changed,0.0422,2.6,5127,1282,,,28,0.1777,3.7006,1.3165,2.6506,0.3682,-1.1256,scale,,,0.1677
+2026-08-09T15:59:17.422Z,gesture,85.842,2,1.7703,existingPlaneInfinite,normal,Changed,0.0422,2.6,5130,1283,,,28,,,1.9794,2.6717,,,scale ✓,,,0.1741
+2026-08-09T15:59:17.422Z,manipulation,85.842,2,1.7703,existingPlaneInfinite,normal,Changed,0.0422,2.6,5130,1283,,,28,0.1777,3.7006,1.9794,2.6717,0.3682,-1.1256,scale,,,0.1741
+2026-08-09T15:59:17.487Z,gesture,85.907,2,1.7703,existingPlaneInfinite,normal,Changed,0.0489,2.7,5134,1284,,,28,,,1.7674,2.6931,,,scale ✓,,,0.2196
+2026-08-09T15:59:17.488Z,manipulation,85.908,2,1.7703,existingPlaneInfinite,normal,Changed,0.0489,2.7,5134,1284,,,28,0.1777,3.7006,1.7674,2.6931,0.3682,-1.1256,scale,,,0.2196
+2026-08-09T15:59:17.571Z,gesture,85.991,2,1.7703,existingPlaneInfinite,normal,Changed,0.0517,3.2,5139,1285,,,28,,,1.0304,2.7126,,,scale ✓,,,0.2500
+2026-08-09T15:59:17.572Z,manipulation,85.992,2,1.7703,existingPlaneInfinite,normal,Changed,0.0517,3.2,5139,1285,,,28,0.1777,3.7006,1.0304,2.7126,0.3682,-1.1256,scale,,,0.2500
+2026-08-09T15:59:17.622Z,gesture,86.042,2,1.7703,existingPlaneInfinite,normal,Changed,0.0517,4.1,5142,1286,,,28,,,0.4515,2.7180,,,scale ✓,,,0.2883
+2026-08-09T15:59:17.623Z,manipulation,86.043,2,1.7703,existingPlaneInfinite,normal,Changed,0.0517,4.1,5142,1286,,,28,0.1777,3.7006,0.4515,2.7180,0.3682,-1.1256,scale,,,0.2883
+2026-08-09T15:59:17.688Z,gesture,86.108,2,1.7703,existingPlaneInfinite,normal,Changed,0.0533,5.3,5146,1287,,,28,,,0.1560,2.6069,,,scale ✓,,,0.2898
+2026-08-09T15:59:17.688Z,manipulation,86.108,2,1.7703,existingPlaneInfinite,normal,Changed,0.0533,5.3,5146,1287,,,28,0.1777,3.7006,0.1560,2.6069,0.3682,-1.1256,scale,,,0.2898
+2026-08-09T15:59:17.772Z,gesture,86.192,2,1.7703,existingPlaneInfinite,normal,Changed,0.0645,7.9,5151,1288,,,28,,,0.1110,2.6296,,,scale ✓,,,0.3125
+2026-08-09T15:59:17.773Z,manipulation,86.193,2,1.7703,existingPlaneInfinite,normal,Changed,0.0645,7.9,5151,1288,,,28,0.1777,3.7006,0.1110,2.6296,0.3682,-1.1256,scale,,,0.3125
+2026-08-09T15:59:17.825Z,gesture,86.245,2,1.7703,existingPlaneInfinite,normal,Changed,0.0805,10.8,5154,1289,,,28,,,0.0660,2.6252,,,scale ✓,,,0.3087
+2026-08-09T15:59:17.825Z,manipulation,86.245,2,1.7703,existingPlaneInfinite,normal,Changed,0.0805,10.8,5154,1289,,,28,0.1777,3.7006,0.0660,2.6252,0.3682,-1.1256,scale,,,0.3087
+2026-08-09T15:59:17.904Z,gesture,86.324,2,1.7703,existingPlaneInfinite,normal,Changed,0.1291,13.4,5159,1290,,,28,,,0.0550,2.5783,,,scale ✓,,,0.2535
+2026-08-09T15:59:17.904Z,manipulation,86.324,2,1.7703,existingPlaneInfinite,normal,Changed,0.1291,13.4,5159,1290,,,28,0.1777,3.7006,0.0550,2.5783,0.3682,-1.1256,scale,,,0.2535
+2026-08-09T15:59:17.956Z,gesture,86.376,2,1.7703,existingPlaneInfinite,normal,Changed,0.1880,12.1,5162,1291,,,28,,,0.0546,2.4259,,,scale ✓,,,
+2026-08-09T15:59:17.956Z,manipulation,86.376,2,1.7703,existingPlaneInfinite,normal,Changed,0.1880,12.1,5162,1291,,,28,0.1777,3.7006,0.0546,2.4259,0.3682,-1.1256,scale,,,
+2026-08-09T15:59:18.021Z,gesture,86.441,2,1.7703,existingPlaneInfinite,normal,Changed,0.1954,15.2,5166,1292,,,28,,,-0.0267,1.9880,,,scale ✓,,,
+2026-08-09T15:59:18.022Z,manipulation,86.442,2,1.7703,existingPlaneInfinite,normal,Changed,0.1954,15.2,5166,1292,,,28,0.1777,3.7006,-0.0267,1.9880,0.3682,-1.1256,scale,,,
+2026-08-09T15:59:18.106Z,gesture,86.526,2,1.7703,existingPlaneInfinite,normal,Changed,0.1961,16.4,5171,1293,,,28,,,0.0626,1.4583,,,scale ✓,,,-0.1380
+2026-08-09T15:59:18.106Z,manipulation,86.526,2,1.7703,existingPlaneInfinite,normal,Changed,0.1961,16.4,5171,1293,,,28,0.1777,3.7006,0.0626,1.4583,0.3682,-1.1256,scale,,,-0.1380
+2026-08-09T15:59:18.172Z,gesture,86.592,2,1.7703,existingPlaneInfinite,normal,Changed,0.2381,17.3,5175,1294,,,28,,,0.1084,-0.8025,,,scale ✓,,,-0.1461
+2026-08-09T15:59:18.173Z,manipulation,86.593,2,1.7703,existingPlaneInfinite,normal,Changed,0.2381,17.3,5175,1294,,,28,0.1777,3.7006,0.1084,-0.8025,0.3682,-1.1256,scale,,,-0.1461
+2026-08-09T15:59:18.222Z,gesture,86.643,2,1.7703,existingPlaneInfinite,normal,Changed,0.4062,13.2,5178,1295,,,28,,,0.3135,-1.2721,,,scale ✓,,,-0.0557
+2026-08-09T15:59:18.223Z,manipulation,86.643,2,1.7703,existingPlaneInfinite,normal,Changed,0.4062,13.2,5178,1295,,,28,0.1777,3.7006,0.3135,-1.2721,0.3682,-1.1256,scale,,,-0.0557
+2026-08-09T15:59:18.288Z,gesture,86.708,2,1.7703,existingPlaneInfinite,normal,Changed,0.4797,9.4,5182,1296,,,28,,,0.3944,-1.4073,,,scale ✓,,,0.0085
+2026-08-09T15:59:18.288Z,manipulation,86.708,2,1.7703,existingPlaneInfinite,normal,Changed,0.4797,9.4,5182,1296,,,28,0.1777,3.7006,0.3944,-1.4073,0.3682,-1.1256,scale,,,0.0085
+2026-08-09T15:59:18.372Z,gesture,86.792,2,1.7703,existingPlaneInfinite,normal,Changed,0.4797,7.2,5187,1297,,,28,,,0.6036,-1.5742,,,scale ✓,,,0.0676
+2026-08-09T15:59:18.372Z,manipulation,86.792,2,1.7703,existingPlaneInfinite,normal,Changed,0.4797,7.2,5187,1297,,,28,0.1777,3.7006,0.6036,-1.5742,0.3682,-1.1256,scale,,,0.0676
+2026-08-09T15:59:18.404Z,planeUpdate,86.824,2,1.7703,none,normal,,,,0,0,,,28,,,,,,,,,,
+2026-08-09T15:59:18.424Z,gesture,86.844,2,1.7703,existingPlaneInfinite,normal,Changed,0.4797,6.1,5190,1298,,,28,,,0.3139,-1.8176,,,scale ✓,,,0.0848
+2026-08-09T15:59:18.424Z,manipulation,86.844,2,1.7703,existingPlaneInfinite,normal,Changed,0.4797,6.1,5190,1298,,,28,0.1777,3.7006,0.3139,-1.8176,0.3682,-1.1256,scale,,,0.0848
+2026-08-09T15:59:18.487Z,gesture,86.907,2,1.7703,existingPlaneInfinite,normal,Changed,0.3828,5.5,5194,1299,,,28,,,0.3134,-1.9547,,,scale ✓,,,0.1070
+2026-08-09T15:59:18.488Z,manipulation,86.908,2,1.7703,existingPlaneInfinite,normal,Changed,0.3828,5.5,5194,1299,,,28,0.1777,3.7006,0.3134,-1.9547,0.3682,-1.1256,scale,,,0.1070
+2026-08-09T15:59:18.571Z,gesture,86.991,2,1.7703,existingPlaneInfinite,normal,Changed,0.2670,5.0,5199,1300,,,28,,,0.2997,-2.0738,,,scale ✓,,,0.1095
+2026-08-09T15:59:18.571Z,manipulation,86.991,2,1.7703,existingPlaneInfinite,normal,Changed,0.2670,5.0,5199,1300,,,28,0.1777,3.7006,0.2997,-2.0738,0.3682,-1.1256,scale,,,0.1095
+2026-08-09T15:59:18.623Z,gesture,87.043,2,1.7703,existingPlaneInfinite,normal,Changed,0.2306,4.7,5202,1301,,,28,,,0.2927,-2.0915,,,scale ✓,,,0.1171
+2026-08-09T15:59:18.623Z,manipulation,87.043,2,1.7703,existingPlaneInfinite,normal,Changed,0.2306,4.7,5202,1301,,,28,0.1777,3.7006,0.2927,-2.0915,0.3682,-1.1256,scale,,,0.1171
+2026-08-09T15:59:18.706Z,gesture,87.126,2,1.7703,existingPlaneInfinite,normal,Changed,0.2306,5.4,5207,1302,,,28,,,-0.0473,-1.9205,,,scale ✓,,,0.1321
+2026-08-09T15:59:18.706Z,manipulation,87.126,2,1.7703,existingPlaneInfinite,normal,Changed,0.2306,5.4,5207,1302,,,28,0.1777,3.7006,-0.0473,-1.9205,0.3682,-1.1256,scale,,,0.1321
+2026-08-09T15:59:18.771Z,gesture,87.191,2,1.7703,existingPlaneInfinite,normal,Changed,0.2306,8.6,5211,1303,,,28,,,-0.1796,-1.8796,,,scale ✓,,,0.1668
+2026-08-09T15:59:18.771Z,manipulation,87.191,2,1.7703,existingPlaneInfinite,normal,Changed,0.2306,8.6,5211,1303,,,28,0.1777,3.7006,-0.1796,-1.8796,0.3682,-1.1256,scale,,,0.1668
+2026-08-09T15:59:18.822Z,gesture,87.242,2,1.7703,existingPlaneInfinite,normal,Changed,1.8982,11.7,5214,1304,,,28,,,-0.2340,-1.6976,,,scale ✓,,,0.1533
+2026-08-09T15:59:18.823Z,manipulation,87.243,2,1.7703,existingPlaneInfinite,normal,Changed,1.8982,11.7,5214,1304,,,28,0.1777,3.7006,-0.2340,-1.6976,0.3682,-1.1256,scale,,,0.1533
+2026-08-09T15:59:19.025Z,gesture,87.445,2,1.7703,existingPlaneInfinite,normal,Ended,6.3259,20.2,5226,1307,,,28,,,-0.3111,-0.8427,,,scale ✓,,,0.1171
+2026-08-09T15:59:19.025Z,manipulation,87.445,2,1.7703,existingPlaneInfinite,normal,Ended,6.3259,20.2,5226,1307,,,28,,3.7006,-0.3111,-0.8427,,-1.1256,scale,,,0.1171
+2026-08-09T15:59:19.025Z,gesture,87.445,2,1.7703,existingPlaneInfinite,normal,Possible,6.3259,20.2,5226,1307,,,,,,-0.3111,-0.8427,,,,,,0.1171
+2026-08-09T15:59:19.488Z,planeUpdate,87.908,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:20.173Z,gesture,88.593,2,1.7703,existingPlaneInfinite,normal,Began,0.3516,6.9,5295,1324,,,,,,0.2032,-2.7144,,,,,,-0.1045
+2026-08-09T15:59:20.173Z,manipulation,88.593,2,1.7703,existingPlaneInfinite,normal,Began,0.3516,6.9,5295,1324,,,29,0.3516,3.7006,0.2032,-2.7144,-0.1045,-1.1256,ambiguous,,,-0.1045
+2026-08-09T15:59:20.371Z,gesture,88.791,2,1.7703,existingPlaneInfinite,normal,Ended,9.4930,16.4,5307,1327,,,29,,,-0.2895,-1.8075,,,,,,0.0918
+2026-08-09T15:59:20.371Z,manipulation,88.791,2,1.7703,existingPlaneInfinite,normal,Ended,9.4930,16.4,5307,1327,,,29,,3.7006,-0.2895,-1.8075,,-1.1256,ambiguous,,,0.0918
+2026-08-09T15:59:20.371Z,gesture,88.792,2,1.7703,existingPlaneInfinite,normal,Possible,9.4930,16.4,5307,1327,,,,,,-0.2895,-1.8075,,,,,,0.0918
+2026-08-09T15:59:20.489Z,planeUpdate,88.909,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:21.588Z,planeUpdate,90.008,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:22.605Z,planeUpdate,91.025,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:23.607Z,planeUpdate,92.027,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:24.722Z,planeUpdate,93.142,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:25.722Z,planeUpdate,94.142,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:26.723Z,planeUpdate,95.143,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:27.806Z,planeUpdate,96.226,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:28.806Z,planeUpdate,97.226,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:29.907Z,planeUpdate,98.327,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:30.923Z,planeUpdate,99.343,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:32.024Z,planeUpdate,100.444,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:33.107Z,planeUpdate,101.527,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:34.207Z,planeUpdate,102.627,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:35.223Z,planeUpdate,103.643,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:36.324Z,planeUpdate,104.744,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:37.324Z,planeUpdate,105.744,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:38.424Z,planeUpdate,106.844,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:39.508Z,planeUpdate,107.928,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:40.526Z,planeUpdate,108.946,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,
+2026-08-09T15:59:41.592Z,planeUpdate,110.012,2,1.7703,none,normal,,,,0,0,,,,,,,,,,,,,

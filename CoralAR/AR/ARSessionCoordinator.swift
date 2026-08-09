@@ -1,7 +1,9 @@
 import ARKit
+import AVFoundation
 import Combine
 import RealityKit
 import SwiftUI
+import UIKit
 
 /// Owns ARView + ARSession. Horizontal planes + Vision hand pipeline (Phase 4).
 @MainActor
@@ -32,16 +34,48 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     @Published private(set) var pinchViewportPoint: CGPoint?
     @Published private(set) var raycastViewportPoint: CGPoint?
     @Published private(set) var viewportJoints: [(point: CGPoint, confidence: Float)] = []
+    @Published private(set) var manipulationModeName = "—"
 
     @Published var showPlaneVisualization = false {
         didSet { applyDebugOptions() }
     }
     @Published var showLandmarks = true
+    @Published var hudHidden = false
+
+    /// Torch works alongside an active ARSession — it's a device-level
+    /// property, not a second capture session, so this doesn't conflict
+    /// with ARKit owning the camera. Control Center's toggle often can't
+    /// reach the torch while another app holds the camera; this can.
+    @Published private(set) var torchOn = false
+
+    func toggleTorch() {
+        guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else { return }
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = torchOn ? .off : .on
+            torchOn = device.torchMode == .on
+            device.unlockForConfiguration()
+        } catch {
+            // No torch this session — not worth surfacing, debug affordance only.
+        }
+    }
     @Published var groundTruth: GroundTruthState?
 
     private var stateMachine = PinchStateMachine(tuning: .default)
+    private var manipulation = ManipulationTracker(tuning: .default)
     private var rollPalm = RollingMinMax()
+    /// Median-of-5 on pinchRatio — the single chokepoint every downstream
+    /// consumer (state machine, manipulation, HUD, CSV) reads through.
+    /// Raw per-frame Vision noise on this ratio is large (measured: ~35% of
+    /// consecutive frames jump enough on their own to blow through the scale
+    /// deadzone, hand held still) — median, not EMA, since the noise is
+    /// outlier spikes (up to 20x in one frame) that an EMA would smear
+    /// through rather than reject.
+    private var ratioFilterBuffer: [Double] = []
     private var machineTime: TimeInterval = 0
+    /// Tracks committed→false transition edge for the one-shot commit reaction
+    /// (collision regen + exit-threshold reset) in `.changed`.
+    private var manipulationCommitted = false
     private var tick: AnyCancellable?
     private var latestExtentM2: Float = 0
     private var latestTrackingState: ARCamera.TrackingState = .notAvailable
@@ -83,9 +117,12 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         // No sceneDepth / sceneReconstruction — no LiDAR (AGENTS.md).
 
         arView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
+        UIApplication.shared.isIdleTimerDisabled = true
         scene.clearAll()
         planeScan.sessionDidStart()
         stateMachine.reset()
+        manipulation.reset()
+        manipulationModeName = "—"
         publishScanState()
         resetHandUI()
         framesReceivedCounter = 0
@@ -113,6 +150,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         tick?.cancel()
         tick = nil
         arView.session.pause()
+        UIApplication.shared.isIdleTimerDisabled = false
         isRunning = false
         metrics.stop()
     }
@@ -136,12 +174,13 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
 
         inferenceHz = frame.inferenceHz
         let ratios = PinchRatioCalculator.ratios(from: frame.joints, confidenceGate: tuning.confidenceGate)
-        pinchRatio = ratios.palmWidth
+        let filteredRatio = filterRatio(ratios.palmWidth)
+        pinchRatio = filteredRatio
         // Real frame timestamp, not a counted-frame fake clock — Vision's actual
         // rate under AR load can be well below `tuning.inferenceInterval`'s assumed
         // 66ms, which would silently stretch the hysteresis/grace windows.
         machineTime = packet.timestamp
-        rollPalm.push(ratios.palmWidth, now: machineTime)
+        rollPalm.push(filteredRatio, now: machineTime)
         palmWidthMin = rollPalm.min
         palmWidthMax = rollPalm.max
 
@@ -150,7 +189,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
 
         let observation = PinchObservation(
             timestamp: machineTime,
-            pinchRatio: ratios.palmWidth,
+            pinchRatio: filteredRatio,
             confidence: frame.observationConfidence
         )
         let events = stateMachine.process(observation)
@@ -184,6 +223,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         packet: FramePacket,
         coverage: Double?
     ) {
+        let yawCandidates = YawAngleCalculator.angles(from: frame, confidenceGate: tuning.confidenceGate)
+
         metrics.log(
             event: .gesture,
             secondsSinceStart: planeScan.secondsSinceStart,
@@ -195,17 +236,159 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             pinchRatio: pinchRatio,
             handCoveragePct: coverage,
             framesReceived: framesReceived,
-            framesProcessed: framesProcessed
+            framesProcessed: framesProcessed,
+            yawAngle2D: yawCandidates.thumbIndex,
+            yawPalmAxis: yawCandidates.palmAxis,
+            yawWristAxis: yawCandidates.wristMiddle,
+            mode: manipulationModeName.lowercased() == "—" ? "" : manipulationModeName.lowercased()
         )
 
         switch event {
-        case .began:
-            placeFromHand(frame: frame, packet: packet)
-        case .ended, .cancelled:
-            break
+        case .began(let ratio):
+            // Stale samples from a previous gesture (or from before any gesture
+            // started) must not bleed into the first few frames' median.
+            ratioFilterBuffer = []
+            if scene.hasPlacedEntity, let model = scene.activeModel {
+                metrics.beginGesture()
+                let scale = model.scale.x
+                manipulation.begin(entityScale: scale, entityYaw: scene.modelYaw)
+                scene.setHighlighted(true)
+                manipulationModeName = "—"
+                manipulationCommitted = false
+                metrics.log(
+                    event: .manipulation,
+                    secondsSinceStart: planeScan.secondsSinceStart,
+                    planeCount: planeScan.planeCount,
+                    planeExtentM2: latestExtentM2,
+                    raycastTier: lastRaycastTier,
+                    trackingState: latestTrackingState,
+                    gesturePhase: "Began",
+                    pinchRatio: ratio,
+                    handCoveragePct: coverage,
+                    framesReceived: framesReceived,
+                    framesProcessed: framesProcessed,
+                    pinchRatioAtBegan: ratio,
+                    scaleFactor: scale,
+                    yawAngle2D: yawCandidates.thumbIndex,
+                    yawPalmAxis: yawCandidates.palmAxis,
+                    yawWristAxis: yawCandidates.wristMiddle,
+                    yawAtBegan: yawCandidates.wristMiddle,
+                    appliedYawRad: scene.modelYaw,
+                    mode: "ambiguous"
+                )
+            } else {
+                placeFromHand(frame: frame, packet: packet)
+            }
+
+        case .changed(let ratio):
+            guard manipulation.isActive else { break }
+            // wrist->middleMCP, not palmAxis (indexMCP->littleMCP) or thumbIndex:
+            // both of those share a vector with pinchRatio's numerator/denominator
+            // (PinchRatioCalculator.palmWidth), so wrist twist foreshortens them and
+            // spikes a spurious scale signal instead of a clean yaw one. wristMiddle
+            // is a distinct vector from both — see YawAngleCalculator.Candidates.
+            let result = manipulation.update(ratio: ratio, yaw: yawCandidates.wristMiddle, now: machineTime)
+            applyManipulation(result)
+            if result.didLock {
+                stateMachine.exitThresholdOverride = tuning.scaleModeExitThreshold
+            }
+            if result.committed, !manipulationCommitted {
+                // Fires once, on the committed=false->true edge.
+                if result.mode == .scale {
+                    scene.regenerateCollisionShapes()
+                }
+                stateMachine.exitThresholdOverride = nil
+            }
+            manipulationCommitted = result.committed
+
+            // ponytail: OK-sign pause override removed — okSignFingerExtendedRatio
+            // was an uncalibrated guess and fired on ordinary scaling pinches,
+            // force-committing the gesture within ~50ms (see DECISIONS.md).
+            // HandShapeClassifier/isOKSign stay in the codebase, unused, for
+            // whenever this gets a real hold-duration gate + calibrated data.
+
+            metrics.log(
+                event: .manipulation,
+                secondsSinceStart: planeScan.secondsSinceStart,
+                planeCount: planeScan.planeCount,
+                planeExtentM2: latestExtentM2,
+                raycastTier: lastRaycastTier,
+                trackingState: latestTrackingState,
+                gesturePhase: "Changed",
+                pinchRatio: ratio,
+                handCoveragePct: coverage,
+                framesReceived: framesReceived,
+                framesProcessed: framesProcessed,
+                pinchRatioAtBegan: result.baselineRatio,
+                scaleFactor: result.scaleFactor,
+                yawAngle2D: yawCandidates.thumbIndex,
+                yawPalmAxis: yawCandidates.palmAxis,
+                yawWristAxis: yawCandidates.wristMiddle,
+                yawAtBegan: result.baselineYaw,
+                appliedYawRad: result.appliedYaw ?? scene.modelYaw,
+                mode: result.mode.rawValue
+            )
+
+        case .ended:
+            if manipulation.isActive {
+                if manipulation.mode == .scale {
+                    scene.regenerateCollisionShapes()
+                }
+                metrics.log(
+                    event: .manipulation,
+                    secondsSinceStart: planeScan.secondsSinceStart,
+                    planeCount: planeScan.planeCount,
+                    planeExtentM2: latestExtentM2,
+                    raycastTier: lastRaycastTier,
+                    trackingState: latestTrackingState,
+                    gesturePhase: "Ended",
+                    pinchRatio: pinchRatio,
+                    handCoveragePct: coverage,
+                    framesReceived: framesReceived,
+                    framesProcessed: framesProcessed,
+                    scaleFactor: scene.activeModel?.scale.x,
+                    yawAngle2D: yawCandidates.thumbIndex,
+                    yawPalmAxis: yawCandidates.palmAxis,
+                    yawWristAxis: yawCandidates.wristMiddle,
+                    appliedYawRad: scene.modelYaw,
+                    mode: manipulation.mode.rawValue
+                )
+            }
+            finishManipulation()
+
+        case .cancelled:
+            // Leave transform as-is; do not regenerate.
+            finishManipulation()
+
         default:
             break
         }
+    }
+
+    private func applyManipulation(_ result: ManipulationResult) {
+        switch result.mode {
+        case .ambiguous:
+            manipulationModeName = "—"
+        case .scale:
+            manipulationModeName = result.committed ? "SCALE ✓" : "SCALE"
+            if let scale = result.scale {
+                scene.applyScale(scale)
+            }
+        case .yaw:
+            manipulationModeName = result.committed ? "YAW ✓" : "YAW"
+            if let yaw = result.appliedYaw {
+                scene.applyYaw(yaw)
+            }
+        }
+    }
+
+    private func finishManipulation() {
+        stateMachine.exitThresholdOverride = nil
+        manipulation.reset()
+        scene.setHighlighted(false)
+        manipulationModeName = "—"
+        manipulationCommitted = false
+        metrics.endGesture()
     }
 
     private func placeFromHand(frame: LandmarkFrame, packet: FramePacket) {
@@ -301,6 +484,17 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         raycastViewportPoint = nil
     }
 
+    /// Median-of-5 rolling filter. A dropped/gated frame (nil) doesn't reset
+    /// the window — a real gap in tracking is handled upstream by the state
+    /// machine's grace period, not here.
+    private func filterRatio(_ raw: Double?) -> Double? {
+        guard let raw else { return nil }
+        ratioFilterBuffer.append(raw)
+        if ratioFilterBuffer.count > 5 { ratioFilterBuffer.removeFirst() }
+        let sorted = ratioFilterBuffer.sorted()
+        return sorted[sorted.count / 2]
+    }
+
     private func resetHandUI() {
         lastRaycastTier = .none
         gesturePhaseName = "Possible"
@@ -311,6 +505,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         framesProcessed = 0
         machineTime = 0
         rollPalm = RollingMinMax()
+        ratioFilterBuffer = []
+        manipulation.reset()
+        manipulationModeName = "—"
         clearOverlay()
     }
 
@@ -368,7 +565,7 @@ extension ARSessionCoordinator: ARSessionDelegate {
         let viewport = cachedViewportSize
 
         frameTapLock.lock()
-        let packet = frameTap.tryBegin(frame: frame, viewportSize: viewport, interfaceOrientation: .portrait)
+        let packet = frameTap.tryBegin(frame: frame, viewportSize: viewport, interfaceOrientation: .landscapeRight)
         frameTapLock.unlock()
 
         guard let packet else { return }

@@ -1,7 +1,7 @@
 import ARKit
 import Foundation
 
-/// Phase 4 CSV — gesture + plane + calibration rows.
+/// Phase 5 CSV — gesture / placement / manipulation rows (TESTING.md Phase 5 schema).
 final class MetricsLogger {
     enum Event: String {
         case sessionStart
@@ -11,6 +11,7 @@ final class MetricsLogger {
         case gesture
         case calibration
         case frameStats
+        case manipulation
     }
 
     private(set) var fileURL: URL?
@@ -23,21 +24,28 @@ final class MetricsLogger {
 
     private var lastPlaneUpdateLog: Date?
     private let planeUpdateMinInterval: TimeInterval = 1.0
+    private var gestureSerial = 0
+    private(set) var currentGestureID = 0
 
     var isLogging: Bool { handle != nil }
 
     func startNewFile() {
         stop()
+        gestureSerial = 0
+        currentGestureID = 0
 
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let url = docs.appendingPathComponent("phase4_join_\(Self.fileStamp()).csv")
+        let url = docs.appendingPathComponent("phase5_manip_\(Self.fileStamp()).csv")
 
         let header = """
-        # phase=4 file=\(url.lastPathComponent)
+        # phase=5 file=\(url.lastPathComponent)
         # device=\(Self.deviceModel()) ios=\(ProcessInfo.processInfo.operatingSystemVersionString)
         # pinchThreshold=\(GestureTuning.default.pinchThreshold) hysteresisBand=\(GestureTuning.default.hysteresisBand)
+        # scaleDeadzoneLog=\(GestureTuning.default.scaleDeadzoneLog) yawDeadzoneRad=\(GestureTuning.default.yawDeadzoneRad)
+        # scaleSensitivity=\(GestureTuning.default.scaleSensitivity) yawSensitivity=\(GestureTuning.default.yawSensitivity)
+        # scaleModeExitThreshold=\(GestureTuning.default.scaleModeExitThreshold)
         # denominator=palmWidth seam=ARFrame.capturedImage orientation=.right
-        # raycast_chain=existingPlaneGeometry>existingPlaneInfinite>estimatedPlane
+        # mode_lock=dominant_axis_first_deadzone_crossing
         \(Self.csvColumns.joined(separator: ","))
 
         """
@@ -60,6 +68,16 @@ final class MetricsLogger {
         lastPlaneUpdateLog = nil
     }
 
+    func beginGesture() -> Int {
+        gestureSerial += 1
+        currentGestureID = gestureSerial
+        return currentGestureID
+    }
+
+    func endGesture() {
+        currentGestureID = 0
+    }
+
     func log(
         event: Event,
         secondsSinceStart: TimeInterval,
@@ -72,7 +90,18 @@ final class MetricsLogger {
         handCoveragePct: Double? = nil,
         framesReceived: Int = 0,
         framesProcessed: Int = 0,
-        groundTruth: String = ""
+        groundTruth: String = "",
+        gestureID: Int? = nil,
+        pinchRatioAtBegan: Double? = nil,
+        scaleFactor: Float? = nil,
+        yawAngle2D: Double? = nil,
+        yawPalmAxis: Double? = nil,
+        yawWristAxis: Double? = nil,
+        yawAtBegan: Double? = nil,
+        appliedYawRad: Float? = nil,
+        mode: String = "",
+        overshootCount: String = "",
+        finalError: String = ""
     ) {
         guard let handle else { return }
 
@@ -84,24 +113,37 @@ final class MetricsLogger {
             lastPlaneUpdateLog = now
         }
 
-        let row = [
-            dateFormatter.string(from: Date()),
-            event.rawValue,
-            String(format: "%.3f", secondsSinceStart),
-            String(planeCount),
-            String(format: "%.4f", planeExtentM2),
-            raycastTier.rawValue,
-            Self.trackingLabel(trackingState),
-            gesturePhase,
-            pinchRatio.map { String(format: "%.4f", $0) } ?? "",
-            handCoveragePct.map { String(format: "%.1f", $0) } ?? "",
-            String(framesReceived),
-            String(framesProcessed),
-            groundTruth,
-            "", // placement_error_cm — ruler (TESTING Run C)
-        ].joined(separator: ",") + "\n"
+        let gid = gestureID ?? (currentGestureID == 0 ? nil : currentGestureID)
 
-        if let data = row.data(using: .utf8) {
+        var cols: [String] = []
+        cols.append(dateFormatter.string(from: Date()))
+        cols.append(event.rawValue)
+        cols.append(String(format: "%.3f", secondsSinceStart))
+        cols.append(String(planeCount))
+        cols.append(String(format: "%.4f", planeExtentM2))
+        cols.append(raycastTier.rawValue)
+        cols.append(Self.trackingLabel(trackingState))
+        cols.append(gesturePhase)
+        cols.append(pinchRatio.map { String(format: "%.4f", $0) } ?? "")
+        cols.append(handCoveragePct.map { String(format: "%.1f", $0) } ?? "")
+        cols.append(String(framesReceived))
+        cols.append(String(framesProcessed))
+        cols.append(groundTruth)
+        cols.append("") // placement_error_cm — ruler (TESTING Run C)
+        cols.append(gid.map(String.init) ?? "")
+        cols.append(pinchRatioAtBegan.map { String(format: "%.4f", $0) } ?? "")
+        cols.append(scaleFactor.map { String(format: "%.4f", $0) } ?? "")
+        cols.append(yawAngle2D.map { String(format: "%.4f", $0) } ?? "")
+        cols.append(yawPalmAxis.map { String(format: "%.4f", $0) } ?? "")
+        cols.append(yawAtBegan.map { String(format: "%.4f", $0) } ?? "")
+        cols.append(appliedYawRad.map { String(format: "%.4f", $0) } ?? "")
+        cols.append(mode)
+        cols.append(overshootCount)
+        cols.append(finalError)
+        cols.append(yawWristAxis.map { String(format: "%.4f", $0) } ?? "")
+
+        let row = cols.joined(separator: ",") + "\n"
+        if let data = row.data(using: String.Encoding.utf8) {
             try? handle.write(contentsOf: data)
         }
     }
@@ -121,6 +163,17 @@ final class MetricsLogger {
         "frames_processed",
         "ground_truth",
         "placement_error_cm",
+        "gesture_id",
+        "pinch_ratio_at_began",
+        "scale_factor",
+        "yaw_angle_2d",
+        "yaw_palm_axis",
+        "yaw_at_began",
+        "applied_yaw_rad",
+        "mode",
+        "overshoot_count",
+        "final_error",
+        "yaw_wrist_axis",
     ]
 
     private static func fileStamp() -> String {

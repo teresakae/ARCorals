@@ -39,6 +39,8 @@ enum PinchGestureEvent: Equatable, Sendable {
 struct PinchStateMachine: Sendable {
     private(set) var tuning: GestureTuning
     private(set) var phase: PinchGestureEvent = .possible
+    /// When set (scale-mode lock), consulted instead of `tuning.pinchExitThreshold`.
+    var exitThresholdOverride: Double?
 
     private enum Internal: Equatable {
         case idle
@@ -49,6 +51,10 @@ struct PinchStateMachine: Sendable {
 
     private var internalState: Internal = .idle
 
+    private var exitThreshold: Double {
+        exitThresholdOverride ?? tuning.pinchExitThreshold
+    }
+
     init(tuning: GestureTuning = GestureTuning()) {
         self.tuning = tuning
     }
@@ -56,6 +62,7 @@ struct PinchStateMachine: Sendable {
     mutating func reset() {
         internalState = .idle
         phase = .possible
+        exitThresholdOverride = nil
     }
 
     @discardableResult
@@ -85,7 +92,7 @@ struct PinchStateMachine: Sendable {
 
         case .active(let beganAt, let lastValidAt):
             if let ratio = usable {
-                if ratio > tuning.pinchExitThreshold {
+                if ratio > exitThreshold {
                     internalState = .pendingEnd(
                         start: observation.timestamp,
                         beganAt: beganAt,
@@ -114,7 +121,7 @@ struct PinchStateMachine: Sendable {
                 } else {
                     internalState = .pendingEnd(start: start, beganAt: beganAt, lastValidAt: lastValidAt)
                 }
-            } else if let ratio = usable, ratio > tuning.pinchExitThreshold {
+            } else if let ratio = usable, ratio > exitThreshold {
                 if observation.timestamp - start >= tuning.hysteresisDuration {
                     internalState = .idle
                     let ended = PinchGestureEvent.ended(ratio: ratio)

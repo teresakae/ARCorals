@@ -6,20 +6,41 @@ struct ARStatusHUD: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            if session.needsScanPrompt {
-                scanBanner
-            }
-
-            HStack(alignment: .top, spacing: 8) {
-                statusCard
+            // Always-visible controls: hide/show toggle + Torch button
+            HStack {
                 Spacer(minLength: 0)
-                VStack(alignment: .trailing, spacing: 6) {
-                    toggle("Planes", isOn: $session.showPlaneVisualization, on: .teal)
-                    toggle("Dots", isOn: $session.showLandmarks, on: .green)
+                Button(action: { session.hudHidden.toggle() }) {
+                    Image(systemName: session.hudHidden ? "eye" : "eye.slash")
+                        .font(.caption)
+                        .frame(width: 20, height: 20)
                 }
+                .buttonStyle(.bordered)
+                .tint(.gray)
+
+                Button(session.torchOn ? "Torch: On" : "Torch: Off") {
+                    session.toggleTorch()
+                }
+                .buttonStyle(.bordered)
+                .tint(session.torchOn ? .yellow : .gray)
             }
 
-            calibrationBar
+            // Main HUD content (hidden when hudHidden is true)
+            if !session.hudHidden {
+                if session.needsScanPrompt {
+                    scanBanner
+                }
+
+                HStack(alignment: .top, spacing: 8) {
+                    statusCard
+                    Spacer(minLength: 0)
+                    VStack(alignment: .trailing, spacing: 6) {
+                        toggle("Planes", isOn: $session.showPlaneVisualization, on: .teal)
+                        toggle("Dots", isOn: $session.showLandmarks, on: .green)
+                    }
+                }
+
+                calibrationBar
+            }
 
             Spacer()
         }
@@ -58,6 +79,9 @@ struct ARStatusHUD: View {
             }
             Text("Gesture: \(session.gesturePhaseName)")
                 .font(.caption.monospacedDigit().weight(.semibold))
+            Text("Mode: \(session.manipulationModeName)")
+                .font(.caption.monospacedDigit().weight(.semibold))
+                .foregroundStyle(modeColor(session.manipulationModeName))
             Text("Raycast: \(tierLabel(session.lastRaycastTier))")
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(tierColor(session.lastRaycastTier))
@@ -142,6 +166,16 @@ struct ARStatusHUD: View {
         if r < session.tuning.pinchEnterThreshold { return .orange }
         if r > session.tuning.pinchExitThreshold { return .blue }
         return .yellow
+    }
+
+    private func modeColor(_ name: String) -> Color {
+        if name.hasSuffix("⏸") { return .red }
+        if name.hasSuffix("✓") { return .green }
+        switch name {
+        case "SCALE": return .orange
+        case "YAW": return .mint
+        default: return .secondary
+        }
     }
 
     private func tierLabel(_ tier: PlacementService.Tier) -> String {

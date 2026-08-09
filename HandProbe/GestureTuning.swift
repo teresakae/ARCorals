@@ -26,6 +26,26 @@ struct GestureTuning: Sendable, Equatable {
     /// Vision throttle. Matches HandPoseDetector.
     var inferenceInterval: TimeInterval = 0.066
 
+    // Phase 5 — mirrored from CoralAR for ManipulationTracker unit tests.
+    var scaleDeadzoneLog: Double = 0.22
+    var yawDeadzoneRad: Double = 0.21
+    var scaleSensitivity: Double = 1.0
+    var scaleShrinkSensitivity: Double = 1.75
+    var yawSensitivity: Double = 1.0
+    var scaleModeExitThreshold: Double = 3.5
+
+    // Settling window — mirrored from CoralAR (see CoralAR/Gesture/GestureTuning.swift).
+    var settleQuietLogDelta: Double = 0.06
+    var settleTimeout: TimeInterval = 0.6
+
+    // Dwell-to-commit — mirrored from CoralAR (see CoralAR/Gesture/GestureTuning.swift).
+    var dwellLogThreshold: Double = 0.05
+    var dwellYawThreshold: Double = 0.05
+    var dwellDuration: TimeInterval = 0.4
+
+    // OK-sign (pause/stop) detection — mirrored from CoralAR/Gesture/GestureTuning.swift.
+    var okSignFingerExtendedRatio: Double = 1.2
+
     var pinchEnterThreshold: Double { pinchThreshold - hysteresisBand / 2 }
     var pinchExitThreshold: Double { pinchThreshold + hysteresisBand / 2 }
 }

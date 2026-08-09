@@ -21,6 +21,8 @@ targets:
     platform: iOS
     sources:
       - path: HandProbe
+      # Shared with CoralAR so HandProbeTests can cover Phase 5 mode-lock math.
+      - path: CoralAR/Gesture/ManipulationTracker.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ada.ch5b.HandProbe
@@ -69,7 +71,7 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: CoralAR
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationLandscapeRight
         INFOPLIST_KEY_NSCameraUsageDescription: Camera is used for AR world tracking and hand-gesture placement of the coral model.
         CODE_SIGN_STYLE: Automatic
         CURRENT_PROJECT_VERSION: "1"
