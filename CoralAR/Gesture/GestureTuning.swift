@@ -47,6 +47,15 @@ struct GestureTuning: Sendable, Equatable {
     /// scaleSensitivity/scaleDeadzoneLog.
     var scaleShrinkSensitivity: Double = 1.75
     var yawSensitivity: Double = 1.0
+    /// Yaw driving signal switched from hand-rotation angle to horizontal
+    /// slide of the pinch point (normalized screen-width fraction), per user
+    /// call — rotation-by-angle from a short landmark vector kept losing to
+    /// scale/noise no matter which vector pair or tuning; a slide is a
+    /// position signal, same family as placement's raycast point, robust and
+    /// structurally independent from the aperture-based scale signal (shares
+    /// no landmarks). Provisional: comfortably slides across ~15-20% of
+    /// screen width for a full-range gesture; retune alongside yawDeadzoneRad.
+    var horizontalSlideGain: Double = 12.0
     /// Raised exit threshold while scale mode is locked (opening fingers is the scale signal).
     var scaleModeExitThreshold: Double = 3.5
 

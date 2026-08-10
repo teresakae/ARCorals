@@ -224,6 +224,15 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         coverage: Double?
     ) {
         let yawCandidates = YawAngleCalculator.angles(from: frame, confidenceGate: tuning.confidenceGate)
+        // Driving yaw signal: horizontal slide of the pinch point (screen-width
+        // fraction, gained up), not a hand-rotation angle. Reuses the same
+        // pinchViewportPoint the raycast preview already computes this frame in
+        // updateOverlay(), so it rides the tested displayTransform pipeline
+        // instead of a new raw-Vision-space axis computation. Position signal,
+        // not periodic — see GestureTuning.horizontalSlideGain.
+        let horizontalSlide: Double? = pinchViewportPoint.map { point in
+            Double(point.x / max(cachedViewportSize.width, 1)) * tuning.horizontalSlideGain
+        }
 
         metrics.log(
             event: .gesture,
@@ -239,7 +248,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             framesProcessed: framesProcessed,
             yawAngle2D: yawCandidates.thumbIndex,
             yawPalmAxis: yawCandidates.palmAxis,
-            yawWristAxis: yawCandidates.wristMiddle,
+            yawWristAxis: horizontalSlide,
             mode: manipulationModeName.lowercased() == "—" ? "" : manipulationModeName.lowercased()
         )
 
@@ -271,8 +280,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                     scaleFactor: scale,
                     yawAngle2D: yawCandidates.thumbIndex,
                     yawPalmAxis: yawCandidates.palmAxis,
-                    yawWristAxis: yawCandidates.wristMiddle,
-                    yawAtBegan: yawCandidates.wristMiddle,
+                    yawWristAxis: horizontalSlide,
+                    yawAtBegan: horizontalSlide,
                     appliedYawRad: scene.modelYaw,
                     mode: "ambiguous"
                 )
@@ -287,7 +296,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             // (PinchRatioCalculator.palmWidth), so wrist twist foreshortens them and
             // spikes a spurious scale signal instead of a clean yaw one. wristMiddle
             // is a distinct vector from both — see YawAngleCalculator.Candidates.
-            let result = manipulation.update(ratio: ratio, yaw: yawCandidates.wristMiddle, now: machineTime)
+            let result = manipulation.update(ratio: ratio, yaw: horizontalSlide, now: machineTime)
             applyManipulation(result)
             if result.didLock {
                 stateMachine.exitThresholdOverride = tuning.scaleModeExitThreshold
@@ -323,7 +332,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                 scaleFactor: result.scaleFactor,
                 yawAngle2D: yawCandidates.thumbIndex,
                 yawPalmAxis: yawCandidates.palmAxis,
-                yawWristAxis: yawCandidates.wristMiddle,
+                yawWristAxis: horizontalSlide,
                 yawAtBegan: result.baselineYaw,
                 appliedYawRad: result.appliedYaw ?? scene.modelYaw,
                 mode: result.mode.rawValue
@@ -349,7 +358,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                     scaleFactor: scene.activeModel?.scale.x,
                     yawAngle2D: yawCandidates.thumbIndex,
                     yawPalmAxis: yawCandidates.palmAxis,
-                    yawWristAxis: yawCandidates.wristMiddle,
+                    yawWristAxis: horizontalSlide,
                     appliedYawRad: scene.modelYaw,
                     mode: manipulation.mode.rawValue
                 )
