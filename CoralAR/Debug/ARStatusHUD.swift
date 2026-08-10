@@ -24,6 +24,8 @@ struct ARStatusHUD: View {
                 .tint(session.torchOn ? .yellow : .gray)
             }
 
+            demoModePicker
+
             // Main HUD content (hidden when hudHidden is true)
             if !session.hudHidden {
                 if session.needsScanPrompt {
@@ -147,6 +149,35 @@ struct ARStatusHUD: View {
         .controlSize(.small)
     }
 
+    /// Demo control — pins what a pinch means, for showing one capability at
+    /// a time. Individual buttons, not a segmented Picker (kept from the
+    /// Prompt 11 placeholder era, when Move needed a disabled per-item
+    /// state segmented controls can't express — no longer load-bearing now
+    /// that all three are live, but no reason to churn it).
+    private var demoModePicker: some View {
+        HStack(spacing: 6) {
+            ForEach(ARSessionCoordinator.DemoMode.allCases, id: \.self) { mode in
+                let active = session.demoMode == mode
+                Button(mode.rawValue) {
+                    session.demoMode = mode
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(active ? .purple : .gray)
+                .controlSize(.small)
+            }
+
+            // Place mode now accumulates objects instead of replacing —
+            // this is the reset affordance so a demo can clear without
+            // restarting the app.
+            Button("Clear All") {
+                session.scene.clearAll()
+            }
+            .buttonStyle(.bordered)
+            .tint(.red)
+            .controlSize(.small)
+        }
+    }
+
     private func toggle(_ title: String, isOn: Binding<Bool>, on: Color) -> some View {
         Toggle(isOn: isOn) {
             Text(title).font(.caption.weight(.semibold))
@@ -174,6 +205,7 @@ struct ARStatusHUD: View {
         switch name {
         case "SCALE": return .orange
         case "YAW": return .mint
+        case "MOVE": return .cyan
         default: return .secondary
         }
     }

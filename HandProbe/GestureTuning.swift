@@ -46,6 +46,10 @@ struct GestureTuning: Sendable, Equatable {
     // OK-sign (pause/stop) detection — mirrored from CoralAR/Gesture/GestureTuning.swift.
     var okSignFingerExtendedRatio: Double = 1.2
 
+    // Move (Prompt 11) — mirrored from CoralAR for MoveController unit tests.
+    var regrabWindow: TimeInterval = 0.4
+    var moveSmoothing: Float = 0.5
+
     var pinchEnterThreshold: Double { pinchThreshold - hysteresisBand / 2 }
     var pinchExitThreshold: Double { pinchThreshold + hysteresisBand / 2 }
 }

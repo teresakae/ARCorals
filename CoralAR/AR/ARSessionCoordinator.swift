@@ -36,6 +36,25 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     @Published private(set) var viewportJoints: [(point: CGPoint, confidence: Float)] = []
     @Published private(set) var manipulationModeName = "—"
 
+    /// Demo control — the *only* thing that decides what a pinch means. All
+    /// three are hard overrides: `.place` always places a fresh object,
+    /// `.adjust` always grabs into scale/yaw, `.move` always grabs into Move.
+    /// No timing-based auto-switch runs behind them.
+    ///
+    /// It used to: `.adjust` fell through to `moveOrAdjustTrigger` (quick
+    /// re-grab within `tuning.regrabWindow` → Adjust, else → Move), so with
+    /// no prior gesture — or any gap over 0.4s — picking "Adjust" still got
+    /// you Move. That's why the toggle looked dead and why adjusting kept
+    /// moving the object instead. `moveOrAdjustTrigger` stays in
+    /// MoveController.swift (tested, still the right shape for a future
+    /// no-toggle build) but nothing calls it while a mode is selectable.
+    enum DemoMode: String, CaseIterable, Sendable {
+        case place = "Place"
+        case adjust = "Adjust"
+        case move = "Move"
+    }
+    @Published var demoMode: DemoMode = .adjust
+
     @Published var showPlaneVisualization = false {
         didSet { applyDebugOptions() }
     }
@@ -63,6 +82,14 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
 
     private var stateMachine = PinchStateMachine(tuning: .default)
     private var manipulation = ManipulationTracker(tuning: .default)
+    private var moveController = MoveController(tuning: .default)
+    /// Timestamp (machineTime) the last gesture ended — the sole input to
+    /// the Move-vs-Adjust grab-timing decision. nil until the first gesture ends.
+    private var lastGestureEndTime: TimeInterval?
+    /// The live placement-preview raycast hit, refreshed every frame in
+    /// updateOverlay(). Move reads this directly instead of raycasting again
+    /// — see GestureTuning.regrabWindow doc and Prompt 11.
+    private var previewWorldHit: SIMD3<Float>?
     private var rollPalm = RollingMinMax()
     /// Median-of-5 on pinchRatio — the single chokepoint every downstream
     /// consumer (state machine, manipulation, HUD, CSV) reads through.
@@ -122,6 +149,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         planeScan.sessionDidStart()
         stateMachine.reset()
         manipulation.reset()
+        moveController.reset()
+        lastGestureEndTime = nil
         manipulationModeName = "—"
         publishScanState()
         resetHandUI()
@@ -168,7 +197,22 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         framesProcessed += 1
 
         guard let frame else {
+            // A nil frame (Vision request threw) still has to reach the state
+            // machine, or an in-flight gesture never times out: the machine
+            // sits in .active forever, moveController stays isActive, and the
+            // next frame that *does* arrive resumes the drag as if nothing
+            // happened. Feed it an empty observation so the grace period can
+            // cancel. Only .cancelled/.possible can come out of this path.
             clearOverlay()
+            machineTime = packet.timestamp
+            let events = stateMachine.process(
+                PinchObservation(timestamp: machineTime, pinchRatio: nil, confidence: nil)
+            )
+            gesturePhaseName = stateMachine.phase.name
+            if events.contains(.cancelled) {
+                lastGestureEndTime = machineTime
+                finishManipulation()
+            }
             return
         }
 
@@ -257,40 +301,77 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             // Stale samples from a previous gesture (or from before any gesture
             // started) must not bleed into the first few frames' median.
             ratioFilterBuffer = []
-            if scene.hasPlacedEntity, let model = scene.activeModel {
-                metrics.beginGesture()
-                let scale = model.scale.x
-                manipulation.begin(entityScale: scale, entityYaw: scene.modelYaw)
-                scene.setHighlighted(true)
-                manipulationModeName = "—"
-                manipulationCommitted = false
-                metrics.log(
-                    event: .manipulation,
-                    secondsSinceStart: planeScan.secondsSinceStart,
-                    planeCount: planeScan.planeCount,
-                    planeExtentM2: latestExtentM2,
-                    raycastTier: lastRaycastTier,
-                    trackingState: latestTrackingState,
-                    gesturePhase: "Began",
-                    pinchRatio: ratio,
-                    handCoveragePct: coverage,
-                    framesReceived: framesReceived,
-                    framesProcessed: framesProcessed,
-                    pinchRatioAtBegan: ratio,
-                    scaleFactor: scale,
-                    yawAngle2D: yawCandidates.thumbIndex,
-                    yawPalmAxis: yawCandidates.palmAxis,
-                    yawWristAxis: horizontalSlide,
-                    yawAtBegan: horizontalSlide,
-                    appliedYawRad: scene.modelYaw,
-                    mode: "ambiguous"
-                )
-            } else {
+            if demoMode != .place, scene.hasPlacedEntity,
+               let point = pinchViewportPoint, let model = scene.selectModel(at: point) {
+                // Deterministic: the selected mode is the decision. No timing
+                // fallback — see DemoMode's doc for why the old
+                // moveOrAdjustTrigger path was pulled out of here.
+                let trigger: GrabTrigger = demoMode == .move ? .move : .adjust
+
+                switch trigger {
+                case .adjust:
+                    metrics.beginGesture()
+                    let scale = model.scale.x
+                    manipulation.begin(entityScale: scale, entityYaw: scene.modelYaw)
+                    scene.setHighlighted(true)
+                    manipulationModeName = "—"
+                    manipulationCommitted = false
+                    metrics.log(
+                        event: .manipulation,
+                        secondsSinceStart: planeScan.secondsSinceStart,
+                        planeCount: planeScan.planeCount,
+                        planeExtentM2: latestExtentM2,
+                        raycastTier: lastRaycastTier,
+                        trackingState: latestTrackingState,
+                        gesturePhase: "Began",
+                        pinchRatio: ratio,
+                        handCoveragePct: coverage,
+                        framesReceived: framesReceived,
+                        framesProcessed: framesProcessed,
+                        pinchRatioAtBegan: ratio,
+                        scaleFactor: scale,
+                        yawAngle2D: yawCandidates.thumbIndex,
+                        yawPalmAxis: yawCandidates.palmAxis,
+                        yawWristAxis: horizontalSlide,
+                        yawAtBegan: horizontalSlide,
+                        appliedYawRad: scene.modelYaw,
+                        mode: "ambiguous"
+                    )
+
+                case .move:
+                    // Don't start until there's a real raycast hit. Falling
+                    // back to the model's own world position here used to
+                    // seed `hit0` in a different frame of reference than the
+                    // plane hits .changed feeds afterward — the moment the
+                    // raycast recovered, `hit - hit0` collapsed to `hit`
+                    // outright and the object snapped under the fingertip,
+                    // dropping its lift. No fallback: wait for a real hit.
+                    guard let hit = previewWorldHit else { break }
+                    metrics.beginGesture()
+                    moveController.begin(hit: hit, modelWorld: model.position(relativeTo: nil))
+                    scene.setHighlighted(true)
+                    manipulationModeName = "MOVE"
+                }
+            } else if demoMode == .place || !scene.hasPlacedEntity {
+                // Place mode adds a new object every pinch instead of
+                // replacing the existing one — Move/Adjust only reach here
+                // when nothing's placed yet. SceneController.place() appends
+                // to the tracked list and makes the new entity active.
                 placeFromHand(frame: frame, packet: packet)
             }
+            // else: demoMode is Move/Adjust, something's placed, but the
+            // pinch point didn't hit-test onto any of it — no grab, nothing
+            // happens (see SceneController.selectModel fallback rationale).
 
         case .changed(let ratio):
-            guard manipulation.isActive else { break }
+            guard manipulation.isActive || moveController.isActive else { break }
+
+            if moveController.isActive {
+                let newTarget = moveController.update(hit: previewWorldHit)
+                scene.moveModel(toWorld: newTarget)
+                break
+            }
+
             // wrist->middleMCP, not palmAxis (indexMCP->littleMCP) or thumbIndex:
             // both of those share a vector with pinchRatio's numerator/denominator
             // (PinchRatioCalculator.palmWidth), so wrist twist foreshortens them and
@@ -363,10 +444,14 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                     mode: manipulation.mode.rawValue
                 )
             }
+            // No re-anchor on move-end — moveModel() already works at any
+            // offset from the (never-moving) anchor; see SceneController.
+            lastGestureEndTime = machineTime
             finishManipulation()
 
         case .cancelled:
             // Leave transform as-is; do not regenerate.
+            lastGestureEndTime = machineTime
             finishManipulation()
 
         default:
@@ -394,6 +479,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     private func finishManipulation() {
         stateMachine.exitThresholdOverride = nil
         manipulation.reset()
+        moveController.reset()
         scene.setHighlighted(false)
         manipulationModeName = "—"
         manipulationCommitted = false
@@ -461,17 +547,22 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             pinchViewportPoint = viewPoint
 
             // Live ray preview (does not place) so misalignment is visible before pinch.
+            // Move (Prompt 11) reads previewWorldHit directly — same raycast,
+            // zero extra calls.
             let preview = placement.raycast(from: viewPoint, in: arView)
             if let transform = preview.worldTransform {
                 let world = SIMD3<Float>(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
                 raycastViewportPoint = arView.project(world)
+                previewWorldHit = world
                 // Don't overwrite lastRaycastTier on every frame — only on place.
             } else {
                 raycastViewportPoint = nil
+                previewWorldHit = nil
             }
         } else {
             pinchViewportPoint = nil
             raycastViewportPoint = nil
+            previewWorldHit = nil
         }
     }
 
@@ -491,6 +582,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         pinchViewportPoint = nil
         // Keep last raycast point briefly? Clear for honesty.
         raycastViewportPoint = nil
+        previewWorldHit = nil
     }
 
     /// Median-of-5 rolling filter. A dropped/gated frame (nil) doesn't reset
@@ -516,6 +608,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         rollPalm = RollingMinMax()
         ratioFilterBuffer = []
         manipulation.reset()
+        moveController.reset()
         manipulationModeName = "—"
         clearOverlay()
     }

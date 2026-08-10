@@ -96,4 +96,19 @@ struct GestureTuning: Sendable, Equatable {
     /// per-finger tip/MCP distances). Retune once real OK-sign vs.
     /// pinch/grab hold data exists.
     var okSignFingerExtendedRatio: Double = 1.2
+
+    // Move (Prompt 11) — grab-timing trigger, not a signal race against Adjust.
+    /// A re-grab within this long of the previous gesture ending is treated
+    /// as "still working the object" → Adjust. Longer than this (or no prior
+    /// gesture) → Move. Provisional — needs an on-device pass: log
+    /// gesture-end-to-next-gesture-start intervals (the CSV already has
+    /// timestamps) and pick the value that separates "deliberate quick
+    /// re-grab" from "just moved, grabbing again to move more". At ~15Hz
+    /// inference (ADR-011), 0.4s is only ~6 frames of margin either side of
+    /// the boundary — worth widening once real intervals exist rather than
+    /// trusting this guess.
+    var regrabWindow: TimeInterval = 0.4
+    /// EMA factor for Move's per-frame target position (1.0 = no smoothing,
+    /// snaps straight to the raw raycast delta). Provisional.
+    var moveSmoothing: Float = 0.5
 }

@@ -23,6 +23,8 @@ targets:
       - path: HandProbe
       # Shared with CoralAR so HandProbeTests can cover Phase 5 mode-lock math.
       - path: CoralAR/Gesture/ManipulationTracker.swift
+      # Shared so HandProbeTests can cover the Prompt 11 move-vs-adjust trigger decision.
+      - path: CoralAR/Gesture/MoveController.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ada.ch5b.HandProbe
