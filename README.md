@@ -18,3 +18,4 @@ An experimental iOS AR app in which the rear camera watches the user's hands whi
 | [`DECISIONS.md`](docs/DECISIONS.md) | ADR-style log of all technical decisions with status | When evaluating trade-offs or reconsidering design choices |
 | [`TESTING.md`](docs/TESTING.md) | How to validate each phase, test procedures, and pass criteria | At the start of each phase; defines what "done" means |
 | [`PROMPTS.md`](docs/PROMPTS.md) | Ready-to-send prompts, one per phase, plus analysis and recurring prompts | Every time you start a phase; copy the matching prompt |
+| [`GESTURE_LOG.md`](docs/GESTURE_LOG.md) | Living log of every gesture tried, current status, and known limits | Update every test session; check before testing to see what's already known |

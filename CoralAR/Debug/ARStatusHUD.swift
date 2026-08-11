@@ -84,6 +84,8 @@ struct ARStatusHUD: View {
             Text("Mode: \(session.manipulationModeName)")
                 .font(.caption.monospacedDigit().weight(.semibold))
                 .foregroundStyle(modeColor(session.manipulationModeName))
+            Text("Wave: \(session.waveCount)")
+                .font(.caption.monospacedDigit().weight(.semibold))
             Text("Raycast: \(tierLabel(session.lastRaycastTier))")
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(tierColor(session.lastRaycastTier))

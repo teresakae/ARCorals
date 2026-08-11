@@ -36,5 +36,11 @@ struct LandmarkFrame: Sendable {
         return CGPoint(x: (thumb.x + index.x) / 2, y: (thumb.y + index.y) / 2)
     }
 
+    /// Index fingertip point (point-and-dwell target). Nil if gated out.
+    func indexTipPoint(confidenceGate: Float) -> CGPoint? {
+        guard let index = joints[.indexTip], index.confidence >= confidenceGate else { return nil }
+        return CGPoint(x: index.x, y: index.y)
+    }
+
     var jointList: [JointSample] { Array(joints.values) }
 }

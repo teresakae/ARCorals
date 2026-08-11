@@ -48,7 +48,24 @@ struct GestureTuning: Sendable, Equatable {
 
     // Move (Prompt 11) — mirrored from CoralAR for MoveController unit tests.
     var regrabWindow: TimeInterval = 0.4
-    var moveSmoothing: Float = 0.5
+    var moveSmoothing: Float = 1.0
+
+    // Point — mirrored from CoralAR for PointStateMachine unit tests (see
+    // CoralAR/Gesture/GestureTuning.swift).
+    var pointDwellDuration: TimeInterval = 0.4
+
+    // Carry — mirrored from CoralAR for CarryStateMachine unit tests.
+    var carryToggleMaxDuration: TimeInterval = 0.5
+
+    // Wave — mirrored from CoralAR for WaveDetector unit tests (see
+    // CoralAR/Gesture/GestureTuning.swift).
+    var waveWindow: TimeInterval = 1.0
+    var waveMinReversals: Int = 3
+    var waveMinAmplitude: Double = 0.05
+    var waveHoldDuration: TimeInterval = 2.0
+    var waveProgressDecay: TimeInterval = 2.5
+    var waveStationaryRadius: Double = 0.02
+    var waveCooldownDuration: TimeInterval = 2.0
 
     var pinchEnterThreshold: Double { pinchThreshold - hysteresisBand / 2 }
     var pinchExitThreshold: Double { pinchThreshold + hysteresisBand / 2 }

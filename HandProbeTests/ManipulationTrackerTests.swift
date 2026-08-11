@@ -68,34 +68,40 @@ final class ManipulationTrackerTests: XCTestCase {
         XCTAssertNotNil(last.appliedYaw)
     }
 
-    // MARK: - Unwrap across ±π
+    // MARK: - Linear slide signal (current generation) accumulates without aliasing
+    //
+    // The production `yaw:` input is horizontalSlide (screen-position fraction
+    // × gain 12.0) — bounded, not periodic, not an angle. This replaces a
+    // prior test that fed a genuinely periodic angle wrapping across ±π
+    // (generation-2 signal, thumb/index or wrist/middleMCP angle — see
+    // GESTURE_LOG.md §3). That signal isn't what production sends anymore;
+    // asserting periodic unwrap behavior against it was pinning dead code.
+    // This test instead proves the thing that actually matters for the
+    // current signal: large per-frame deltas (well over π, which the old
+    // atan2 unwrap would have aliased) must still accumulate exactly, with
+    // no sign flips and no wrap-related jumps.
 
-    func testYawSweepAcrossPiIsMonotonicWithoutTwoPiJump() {
+    func testYawAccumulatesLinearSlideWithoutAliasing() {
         var mt = makeTracker()
         mt.begin(entityScale: 1.0, entityYaw: 0.0)
         establishBaseline(&mt, ratio: 1.0, yaw: 0.0)
 
-        var angles: [Double] = []
-        let start = Double.pi - 0.30
-        for i in 0..<20 {
-            let yaw = start + Double(i) * 0.05
-            var wrapped = yaw
-            while wrapped > .pi { wrapped -= 2 * .pi }
-            while wrapped <= -.pi { wrapped += 2 * .pi }
-            let r = mt.update(ratio: 1.0, yaw: wrapped)
-            if r.mode == .yaw, let applied = r.appliedYaw {
-                angles.append(Double(applied))
+        // Steps of 2.0 rad-equivalent units per frame — comfortably over π,
+        // the exact magnitude the old periodic unwrap would have aliased.
+        var applied: [Float] = []
+        var slide = 0.0
+        for _ in 0..<10 {
+            slide += 2.0
+            let r = mt.update(ratio: 1.0, yaw: slide)
+            if r.mode == .yaw, let value = r.appliedYaw {
+                applied.append(value)
             }
         }
 
-        XCTAssertGreaterThanOrEqual(angles.count, 5, "should be in yaw mode for most of the sweep")
-        for i in 1..<angles.count {
-            let delta = angles[i] - angles[i - 1]
-            XCTAssertGreaterThan(delta, -0.01, "accumulated yaw must not jump backward across ±π")
-            XCTAssertLessThan(abs(delta), .pi, "no 2π discontinuity between frames")
-        }
-        if let first = angles.first, let last = angles.last {
-            XCTAssertGreaterThan(last - first, 0.4)
+        XCTAssertGreaterThanOrEqual(applied.count, 5, "should be in yaw mode for most of the sweep")
+        for i in 1..<applied.count {
+            let delta = applied[i] - applied[i - 1]
+            XCTAssertEqual(delta, 2.0, accuracy: 0.01, "each 2.0-unit slide step must accumulate exactly, not alias")
         }
     }
 }

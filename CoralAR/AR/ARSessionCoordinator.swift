@@ -35,6 +35,11 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     @Published private(set) var raycastViewportPoint: CGPoint?
     @Published private(set) var viewportJoints: [(point: CGPoint, confidence: Float)] = []
     @Published private(set) var manipulationModeName = "—"
+    /// Mirrors `CarryStateMachine.carried` — everything renderable (highlight,
+    /// contact shadow, HUD) derives from this one optional. Not `private(set)`
+    /// — written from ARSessionCoordinator+Carry.swift's `handleCarryRouting`,
+    /// the only place that feeds or resets it outside `start()`.
+    @Published var carriedEntity: EntityID?
 
     /// Demo control — the *only* thing that decides what a pinch means. All
     /// three are hard overrides: `.place` always places a fresh object,
@@ -80,16 +85,45 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     }
     @Published var groundTruth: GroundTruthState?
 
-    private var stateMachine = PinchStateMachine(tuning: .default)
+    /// Annotation currently showing its popup (nil = none). Written by
+    /// ARSessionCoordinator+Point.swift on `.hoverBegan` / `.hoverEnded`.
+    @Published var activeAnnotationID: AnnotationID?
+    /// Live point-and-dwell fill, for a future ring affordance. Written by
+    /// ARSessionCoordinator+Point.swift.
+    @Published var dwellProgress: Double = 0
+
+    /// `private(set)`, not `private` — ARSessionCoordinator+Point.swift reads
+    /// `.phase` each frame to know whether a pinch is active (point/carry
+    /// never run on the same target together).
+    private(set) var stateMachine = PinchStateMachine(tuning: .default)
     private var manipulation = ManipulationTracker(tuning: .default)
-    private var moveController = MoveController(tuning: .default)
+    /// Not `private` — also driven from ARSessionCoordinator+Carry.swift's
+    /// `.pickedUp`/`.putDown` (the carry toggle reuses the same follow
+    /// controller Move already uses, per Prompt C).
+    var moveController = MoveController(tuning: .default)
+    /// Not `private` — mutated from ARSessionCoordinator+Point.swift's
+    /// `handlePoint`, the only place that feeds or resets it outside `start()`.
+    var pointStateMachine = PointStateMachine(tuning: .default)
+    /// Not `private` — mutated from ARSessionCoordinator+Wave.swift's
+    /// `handleWave`, the only place that feeds or resets it outside `start()`.
+    var waveDetector = WaveDetector(tuning: .default)
+    /// Not `private` — fed from ARSessionCoordinator+Carry.swift's
+    /// `handleCarryRouting`, the only place that feeds or resets it outside `start()`.
+    var carryMachine = CarryStateMachine(tuning: .default)
+    /// Count of `.waved` fires this session — debug HUD affordance so a
+    /// wave/hold can be confirmed on device without a console attached. Not
+    /// `private(set)` — incremented from ARSessionCoordinator+Wave.swift's
+    /// `handleWave` (pre-existing scaffolding bug fixed in passing: this file
+    /// wouldn't build otherwise).
+    @Published var waveCount = 0
     /// Timestamp (machineTime) the last gesture ended — the sole input to
     /// the Move-vs-Adjust grab-timing decision. nil until the first gesture ends.
     private var lastGestureEndTime: TimeInterval?
     /// The live placement-preview raycast hit, refreshed every frame in
     /// updateOverlay(). Move reads this directly instead of raycasting again
-    /// — see GestureTuning.regrabWindow doc and Prompt 11.
-    private var previewWorldHit: SIMD3<Float>?
+    /// — see GestureTuning.regrabWindow doc and Prompt 11. `private(set)`,
+    /// not `private` — ARSessionCoordinator+Carry.swift reads it the same way.
+    private(set) var previewWorldHit: SIMD3<Float>?
     private var rollPalm = RollingMinMax()
     /// Median-of-5 on pinchRatio — the single chokepoint every downstream
     /// consumer (state machine, manipulation, HUD, CSV) reads through.
@@ -99,7 +133,10 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// outlier spikes (up to 20x in one frame) that an EMA would smear
     /// through rather than reject.
     private var ratioFilterBuffer: [Double] = []
-    private var machineTime: TimeInterval = 0
+    /// `private(set)` — ARSessionCoordinator+Point.swift (and future
+    /// +Carry/+Wave) read this as the shared frame clock instead of deriving
+    /// their own from `packet.timestamp` a second time.
+    private(set) var machineTime: TimeInterval = 0
     /// Tracks committed→false transition edge for the one-shot commit reaction
     /// (collision regen + exit-threshold reset) in `.changed`.
     private var manipulationCommitted = false
@@ -150,6 +187,13 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         stateMachine.reset()
         manipulation.reset()
         moveController.reset()
+        pointStateMachine.reset()
+        waveDetector = WaveDetector(tuning: tuning)
+        waveCount = 0
+        carryMachine.reset()
+        carriedEntity = nil
+        activeAnnotationID = nil
+        dwellProgress = 0
         lastGestureEndTime = nil
         manipulationModeName = "—"
         publishScanState()
@@ -213,6 +257,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                 lastGestureEndTime = machineTime
                 finishManipulation()
             }
+            handleCarryRouting(frame: nil, packet: packet, pinchEvents: events)
+            handlePoint(frame: nil, packet: packet)
+            handleWave(frame: nil, packet: packet)
             return
         }
 
@@ -238,6 +285,10 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         )
         let events = stateMachine.process(observation)
         gesturePhaseName = stateMachine.phase.name
+
+        handleCarryRouting(frame: frame, packet: packet, pinchEvents: events)
+        handlePoint(frame: frame, packet: packet)
+        handleWave(frame: frame, packet: packet)
 
         if let gt = groundTruth, ratios.palmWidth != nil {
             metrics.log(
@@ -372,11 +423,11 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                 break
             }
 
-            // wrist->middleMCP, not palmAxis (indexMCP->littleMCP) or thumbIndex:
-            // both of those share a vector with pinchRatio's numerator/denominator
-            // (PinchRatioCalculator.palmWidth), so wrist twist foreshortens them and
-            // spikes a spurious scale signal instead of a clean yaw one. wristMiddle
-            // is a distinct vector from both — see YawAngleCalculator.Candidates.
+            // horizontalSlide, not an angle candidate (thumbIndex / palmAxis /
+            // wristMiddle) — see the comment where horizontalSlide is computed,
+            // above. ManipulationTracker.unwrapYaw treats this as a plain
+            // linear delta, not a periodic angle — do not feed a radians
+            // signal through this path without also restoring the ±π wrap.
             let result = manipulation.update(ratio: ratio, yaw: horizontalSlide, now: machineTime)
             applyManipulation(result)
             if result.didLock {

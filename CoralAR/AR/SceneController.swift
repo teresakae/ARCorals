@@ -1,6 +1,7 @@
 import RealityKit
 import simd
 import CoreGraphics
+import UIKit
 
 /// Owns placed entities. Scale/yaw go on the child ModelEntity, never the anchor.
 @MainActor
@@ -28,6 +29,21 @@ final class SceneController {
     /// `activeModel`'s materials before `setHighlighted(true)` swapped them out.
     /// nil whenever not currently highlighted.
     private var unhighlightedMaterials: [Material]?
+
+    /// Registered annotation markers, parallel to `placedModels` for
+    /// `selectModel(at:)` — `selectAnnotation(at:)` walks the parent chain
+    /// the same way, against this map instead of placed models.
+    private var annotationEntities: [ObjectIdentifier: AnnotationID] = [:]
+    /// Cube-prototype scaffolding: exactly one test annotation, added to the
+    /// first-ever placed cube (see Gesture Build Prompt B) — enough to
+    /// exercise point-and-dwell, not a real annotation system.
+    private var didPlaceTestAnnotation = false
+    static let testAnnotationID = AnnotationID("Test annotation — coral fact goes here.")
+
+    /// One contact shadow per placed entity, added alongside it in `place()`
+    /// and kept in sync with the active model in `updateContactShadow()` —
+    /// Carry's pick-up/place affordance (GESTURE_BUILD_PROMPTS.md Prompt C).
+    private var shadows: [ObjectIdentifier: ModelEntity] = [:]
 
     var hasPlacedEntity: Bool { activeModel != nil }
 
@@ -59,6 +75,49 @@ final class SceneController {
         placedModels.append(model)
         activeModel = model
         unhighlightedMaterials = nil
+
+        let shadow = Self.makeContactShadow()
+        anchor.addChild(shadow)
+        shadows[ObjectIdentifier(model)] = shadow
+
+        if !didPlaceTestAnnotation {
+            addAnnotation(Self.testAnnotationID, on: model, relativePosition: [0, 0, ModelProvider.halfHeight])
+            didPlaceTestAnnotation = true
+        }
+    }
+
+    /// Adds a small marker as a child of `model`, registered under `id` for
+    /// `selectAnnotation(at:)`. Collision shape sized to at least the plan's
+    /// ~4.4cm hit-volume threshold even though the visible marker is smaller
+    /// — the mark, not the hitbox, is what's meant to look small.
+    @discardableResult
+    func addAnnotation(_ id: AnnotationID, on model: ModelEntity, relativePosition: SIMD3<Float>) -> ModelEntity {
+        let markerRadius: Float = 0.006
+        let hitRadius: Float = 0.022
+        var material = SimpleMaterial()
+        material.color = .init(tint: .systemYellow, texture: nil)
+        let marker = ModelEntity(mesh: .generateSphere(radius: markerRadius), materials: [material])
+        marker.name = "annotation-\(id.rawValue)"
+        marker.position = relativePosition
+        marker.collision = CollisionComponent(shapes: [.generateSphere(radius: hitRadius)])
+        model.addChild(marker)
+        annotationEntities[ObjectIdentifier(marker)] = id
+        return marker
+    }
+
+    /// Hit-tests `viewportPoint` against registered annotation markers,
+    /// parallel to `selectModel(at:)` — walks the parent chain the same way,
+    /// against `annotationEntities` instead of placed models.
+    func selectAnnotation(at viewportPoint: CGPoint) -> AnnotationID? {
+        guard let hit = arView.entity(at: viewportPoint) else { return nil }
+        var candidate: Entity? = hit
+        while let entity = candidate {
+            if let id = annotationEntities[ObjectIdentifier(entity)] {
+                return id
+            }
+            candidate = entity.parent
+        }
+        return nil
     }
 
     /// Hit-tests `viewportPoint` against placed entities and makes whichever
@@ -143,6 +202,38 @@ final class SceneController {
         model.position = parent.convert(position: world, from: nil)
     }
 
+    /// Flat, unlit disc sitting just above the anchor's plane level — a
+    /// child of the anchor (not the model), so scaling/yawing the model
+    /// doesn't distort the shadow. Alpha/size adjusted per-frame by
+    /// `updateContactShadow()`.
+    private static func makeContactShadow() -> ModelEntity {
+        let mesh = MeshResource.generatePlane(width: 0.08, depth: 0.08, cornerRadius: 0.04)
+        let material = UnlitMaterial(color: UIColor.black.withAlphaComponent(0.35))
+        let shadow = ModelEntity(mesh: mesh, materials: [material])
+        shadow.name = "contactShadow"
+        shadow.position = [0, 0.0005, 0] // just off the plane to avoid z-fighting
+        return shadow
+    }
+
+    /// Tightens/darkens the active model's contact shadow as it nears the
+    /// surface — `model.position.y` is height above the anchor, and the
+    /// anchor is plane-level by construction (see `place()`), so this is
+    /// literally clearance above the surface. Called every frame while
+    /// carrying (ARSessionCoordinator+Carry.swift); harmless to call
+    /// otherwise, it just re-settles the shadow at the model's current rest
+    /// height. No-op if nothing's placed or the active model has no shadow.
+    func updateContactShadow() {
+        guard let model = activeModel, let shadow = shadows[ObjectIdentifier(model)] else { return }
+        let resting = ModelProvider.halfHeight * model.scale.x
+        let clearance = max(model.position.y - resting, 0)
+        let liftFraction = Float(min(clearance / 0.15, 1.0)) // fully faded by ~15cm up
+        let material = UnlitMaterial(color: UIColor.black.withAlphaComponent(CGFloat(0.35 * (1 - liftFraction))))
+        shadow.model?.materials = [material]
+        shadow.scale = SIMD3<Float>(repeating: 1 + liftFraction * 0.6)
+        shadow.position.x = model.position.x
+        shadow.position.z = model.position.z
+    }
+
     // ponytail: no end-of-move re-anchor. A prior version swapped the model onto a
     // fresh AnchorEntity at move-end, justified as "keeps the anchor tied to the
     // tracked plane" — false: place()'s anchor is AnchorEntity(world:), a fixed
@@ -162,5 +253,8 @@ final class SceneController {
         placedModels.removeAll()
         activeModel = nil
         unhighlightedMaterials = nil
+        annotationEntities.removeAll()
+        didPlaceTestAnnotation = false
+        shadows.removeAll()
     }
 }

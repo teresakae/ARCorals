@@ -356,11 +356,18 @@ struct ManipulationTracker: Sendable {
         }
     }
 
+    // Named unwrapYaw from signal generation #2 (thumb/index angle, radians,
+    // periodic at ±π — atan2(sin,cos) unwrap was correct there). Generation
+    // #3 (current) drives this off horizontalSlide — a screen-position
+    // fraction times a gain of 12, bounded ~0...12, not an angle and not
+    // periodic. Wrapping a non-periodic signal through ±π aliased any
+    // per-frame delta over π: a normal-speed hand slide reads back as small,
+    // wrong-signed, or ~0 depending on where it lands relative to the wrap
+    // point. Plain delta — no wrap — is correct for this signal.
     private mutating func unwrapYaw(_ yaw: Double?) {
         guard let yaw else { return }
         if let previousYaw {
-            let delta = atan2(sin(yaw - previousYaw), cos(yaw - previousYaw))
-            accumulatedYaw += delta
+            accumulatedYaw += yaw - previousYaw
         }
         previousYaw = yaw
     }

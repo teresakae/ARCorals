@@ -109,6 +109,62 @@ struct GestureTuning: Sendable, Equatable {
     /// trusting this guess.
     var regrabWindow: TimeInterval = 0.4
     /// EMA factor for Move's per-frame target position (1.0 = no smoothing,
-    /// snaps straight to the raw raycast delta). Provisional.
-    var moveSmoothing: Float = 0.5
+    /// snaps straight to the raw raycast delta). Was 0.5; raised to 1.0 for
+    /// Carry's decided 1:1 follow (GESTURE_BUILD_PROMPTS.md Prompt C) — also
+    /// affects the existing Move demo mode, since both share this controller
+    /// and this tuning value. Unverified on device whether 1:1 reads as
+    /// jittery; if it does, this is the first knob to revisit.
+    var moveSmoothing: Float = 1.0
+
+    // MARK: - Point
+
+    /// How long the index fingertip has to hold on one annotation target
+    /// before it counts as a hover (not a glance-through) and the popup
+    /// shows. ~400ms per the plan's §2 — provisional, same order of
+    /// magnitude as `dwellDuration` above; retune once real on-device
+    /// annotation passes exist (Prompt G).
+    var pointDwellDuration: TimeInterval = 0.4
+
+    // MARK: - Carry
+
+    /// A pinch that began→ended in under this long is the pick-up/place
+    /// toggle; longer is a grab-and-drag (today's existing Adjust/Move flow,
+    /// ADR-019), not a toggle. Provisional ~0.5s per the plan's §2 (Carry) —
+    /// not yet re-derived from a real on-device toggle-vs-drag interval sweep.
+    var carryToggleMaxDuration: TimeInterval = 0.5
+
+    // MARK: - Wave
+
+    /// Rolling window for reversal/amplitude detection. Source: the plan's
+    /// §2 (Wave), "~1.0s" — not yet re-derived from device data.
+    var waveWindow: TimeInterval = 1.0
+    /// Direction reversals required inside `waveWindow` to count as
+    /// "waving". Source: the plan's §2, "~3" — untested against real wave
+    /// cadence on this rig.
+    var waveMinReversals: Int = 3
+    /// Peak-to-peak horizontal travel (normalized, image-width fraction)
+    /// required to count as "waving". Source: the plan's §2, "~4-6cm-
+    /// equivalent in normalized units" — picked a value in that band
+    /// assuming a ~30-40cm working distance; needs a real on-device
+    /// hand-span measurement to firm up (Prompt G).
+    var waveMinAmplitude: Double = 0.05
+    /// Continuous qualifying time (wave motion or stationary hold) required
+    /// to fire `.waved`. Decided at 2.0s (not the plan's original 3.0s) —
+    /// GESTURE_BUILD_PROMPTS.md Prompt E.
+    var waveHoldDuration: TimeInterval = 2.0
+    /// Seconds of non-qualifying time for a full `waveHoldDuration` of
+    /// accumulated progress to decay back to zero. Source: the plan's §2,
+    /// "2-3s" — picked the middle of that band.
+    var waveProgressDecay: TimeInterval = 2.5
+    /// Stationary-hold fallback: the wrist must stay within this
+    /// normalized-x radius of one point to count as "held still". No
+    /// explicit number in the plan — set to less than half of
+    /// `waveMinAmplitude` so ordinary wave motion can't also read as a
+    /// stationary hold. Provisional, retune on device.
+    var waveStationaryRadius: Double = 0.02
+    /// Cooldown after a fire before another `.waved` can trigger. Not named
+    /// in the plan; picked equal to `waveHoldDuration` so a second wave
+    /// needs a deliberate fresh gesture rather than the trailing edge of
+    /// the first one.
+    var waveCooldownDuration: TimeInterval = 2.0
 }
