@@ -129,9 +129,11 @@ struct GestureTuning: Sendable, Equatable {
 
     /// A pinch that began→ended in under this long is the pick-up/place
     /// toggle; longer is a grab-and-drag (today's existing Adjust/Move flow,
-    /// ADR-019), not a toggle. Provisional ~0.5s per the plan's §2 (Carry) —
-    /// not yet re-derived from a real on-device toggle-vs-drag interval sweep.
-    var carryToggleMaxDuration: TimeInterval = 0.5
+    /// ADR-019), not a toggle. Provisional ~0.7s (loosened from the plan's original 0.5s —
+    /// on-device testing found 0.5s too tight for a deliberate pick-up pinch) — still
+    /// not re-derived from a real on-device toggle-vs-drag interval sweep; Prompt G is
+    /// where that happens properly.
+    var carryToggleMaxDuration: TimeInterval = 0.7
 
     // MARK: - Wave
 

@@ -55,7 +55,7 @@ struct GestureTuning: Sendable, Equatable {
     var pointDwellDuration: TimeInterval = 0.4
 
     // Carry — mirrored from CoralAR for CarryStateMachine unit tests.
-    var carryToggleMaxDuration: TimeInterval = 0.5
+    var carryToggleMaxDuration: TimeInterval = 0.7
 
     // Wave — mirrored from CoralAR for WaveDetector unit tests (see
     // CoralAR/Gesture/GestureTuning.swift).

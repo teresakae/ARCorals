@@ -89,4 +89,22 @@ final class CarryStateMachineTests: XCTestCase {
         XCTAssertEqual(events, [.pickedUp(targetB)])
         XCTAssertEqual(machine.carried, targetB)
     }
+
+    /// Prompt D: never-placed → Carry; after a `.putDown` → rotate on re-pinch.
+    func testRegrabRoutesToRotateAfterPutDown() {
+        XCTAssertEqual(
+            routeCarryPinch(target: targetA, previouslyPlaced: [], isCarrying: false),
+            .carry
+        )
+        XCTAssertEqual(
+            routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: false),
+            .rotate
+        )
+        // Put-down toggle must not be stolen while still carrying.
+        XCTAssertEqual(
+            routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: true),
+            .carry
+        )
+        XCTAssertNil(routeCarryPinch(target: nil, previouslyPlaced: [targetA], isCarrying: false))
+    }
 }

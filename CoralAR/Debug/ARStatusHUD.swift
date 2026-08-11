@@ -155,7 +155,7 @@ struct ARStatusHUD: View {
     /// a time. Individual buttons, not a segmented Picker (kept from the
     /// Prompt 11 placeholder era, when Move needed a disabled per-item
     /// state segmented controls can't express — no longer load-bearing now
-    /// that all three are live, but no reason to churn it).
+    /// that Place/Adjust/Move/Carry are live, but no reason to churn it).
     private var demoModePicker: some View {
         HStack(spacing: 6) {
             ForEach(ARSessionCoordinator.DemoMode.allCases, id: \.self) { mode in

@@ -11,6 +11,28 @@ enum CarryEvent: Equatable, Sendable {
     case putDown(EntityID)
 }
 
+/// Where a fresh pinch goes under Carry demo mode. Re-grab on an entity that
+/// has already been put down once routes to ManipulationTracker (yaw via
+/// horizontal slide) instead of another carry cycle — see Prompt D.
+enum CarryPinchRoute: Equatable, Sendable {
+    case carry
+    case rotate
+}
+
+/// Pure routing decision for Prompt D. `previouslyPlaced` is the set of
+/// entity IDs for which Carry has already emitted `.putDown` this session.
+/// While already carrying, always `.carry` so the put-down toggle is not
+/// stolen by rotate (the entity is not in the set until after put-down).
+func routeCarryPinch(
+    target: EntityID?,
+    previouslyPlaced: Set<EntityID>,
+    isCarrying: Bool
+) -> CarryPinchRoute? {
+    if isCarrying { return .carry }
+    guard let target else { return nil }
+    return previouslyPlaced.contains(target) ? .rotate : .carry
+}
+
 /// One sample from the carry-toggle stream. Carry does not re-derive pinch
 /// detection — it reacts to `PinchStateMachine`'s own event output.
 struct CarryObservation: Equatable, Sendable {

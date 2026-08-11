@@ -95,7 +95,7 @@
 		6FE2821B761120522C71C81B /* WaveDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveDetectorTests.swift; sourceTree = "<group>"; };
 		71CC590BE4A6A2DF2A8D83BF /* ARSessionCoordinator+Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSessionCoordinator+Wave.swift"; sourceTree = "<group>"; };
 		72668F3E87BF44CE4F99F001 /* PointStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointStateMachineTests.swift; sourceTree = "<group>"; };
-		746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		7501DF558FF4AB1AC0BC4449 /* WaveDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveDetector.swift; sourceTree = "<group>"; };
 		75511E48841B7DFDA3F7B215 /* GestureTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureTuning.swift; sourceTree = "<group>"; };
 		80EC5936D4EF7EEC866090A3 /* LandmarkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkSpace.swift; sourceTree = "<group>"; };
@@ -122,7 +122,7 @@
 		F18D521B81126C6C857A1697 /* HandDebugOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandDebugOverlay.swift; sourceTree = "<group>"; };
 		F3D629D52B1C792CF6E8F614 /* HandShapeClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandShapeClassifier.swift; sourceTree = "<group>"; };
 		F7063B66E60770028FD9ECBD /* FrameTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameTap.swift; sourceTree = "<group>"; };
-		FF3660D74BC1117359540FE4 /* CoralAR.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CoralAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3660D74BC1117359540FE4 /* CoralAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoralAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -532,6 +532,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P23A73L3J8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = CoralAR;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used for AR world tracking and hand-gesture placement of the coral model.";
@@ -574,6 +575,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P23A73L3J8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = CoralAR;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used for AR world tracking and hand-gesture placement of the coral model.";

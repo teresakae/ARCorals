@@ -42,9 +42,10 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     @Published var carriedEntity: EntityID?
 
     /// Demo control — the *only* thing that decides what a pinch means. All
-    /// three are hard overrides: `.place` always places a fresh object,
-    /// `.adjust` always grabs into scale/yaw, `.move` always grabs into Move.
-    /// No timing-based auto-switch runs behind them.
+    /// four are hard overrides: `.place` always places a fresh object,
+    /// `.adjust` always grabs into scale/yaw, `.move` always grabs into Move,
+    /// `.carry` owns pick-up/place + re-grab rotate (Prompt C/D). No
+    /// timing-based auto-switch runs behind them.
     ///
     /// It used to: `.adjust` fell through to `moveOrAdjustTrigger` (quick
     /// re-grab within `tuning.regrabWindow` → Adjust, else → Move), so with
@@ -57,6 +58,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         case place = "Place"
         case adjust = "Adjust"
         case move = "Move"
+        case carry = "Carry"
     }
     @Published var demoMode: DemoMode = .adjust
 
@@ -92,15 +94,20 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// ARSessionCoordinator+Point.swift.
     @Published var dwellProgress: Double = 0
 
-    /// `private(set)`, not `private` — ARSessionCoordinator+Point.swift reads
-    /// `.phase` each frame to know whether a pinch is active (point/carry
-    /// never run on the same target together).
-    private(set) var stateMachine = PinchStateMachine(tuning: .default)
-    private var manipulation = ManipulationTracker(tuning: .default)
+    /// Not `private` — ARSessionCoordinator+Carry.swift may set
+    /// `exitThresholdOverride` when re-grab rotate locks scale mode.
+    var stateMachine = PinchStateMachine(tuning: .default)
+    /// Not `private` — ARSessionCoordinator+Carry.swift drives this for
+    /// re-grab rotate under `.carry` demo mode (Prompt D).
+    var manipulation = ManipulationTracker(tuning: .default)
     /// Not `private` — also driven from ARSessionCoordinator+Carry.swift's
     /// `.pickedUp`/`.putDown` (the carry toggle reuses the same follow
     /// controller Move already uses, per Prompt C).
     var moveController = MoveController(tuning: .default)
+    /// Entity IDs that Carry has put down at least once this session. A
+    /// re-pinch on one of these routes to ManipulationTracker (yaw) instead
+    /// of another carry cycle — the only new Prompt D state.
+    var previouslyPlacedEntities: Set<EntityID> = []
     /// Not `private` — mutated from ARSessionCoordinator+Point.swift's
     /// `handlePoint`, the only place that feeds or resets it outside `start()`.
     var pointStateMachine = PointStateMachine(tuning: .default)
@@ -192,6 +199,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         waveCount = 0
         carryMachine.reset()
         carriedEntity = nil
+        previouslyPlacedEntities = []
         activeAnnotationID = nil
         dwellProgress = 0
         lastGestureEndTime = nil
@@ -346,6 +354,12 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             yawWristAxis: horizontalSlide,
             mode: manipulationModeName.lowercased() == "—" ? "" : manipulationModeName.lowercased()
         )
+
+        // Carry mode owns its own pinch → pick-up / put-down / re-grab-rotate
+        // path in handleCarryRouting. Feeding the same events into Adjust/Move
+        // here races: Carry's .pickedUp starts moveController, then this
+        // .ended calls finishManipulation() and undoes it (Prompt D).
+        guard demoMode != .carry else { return }
 
         switch event {
         case .began(let ratio):
@@ -510,7 +524,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         }
     }
 
-    private func applyManipulation(_ result: ManipulationResult) {
+    /// Not `private` — ARSessionCoordinator+Carry.swift applies ManipulationTracker
+    /// results for re-grab rotate under `.carry` demo mode.
+    func applyManipulation(_ result: ManipulationResult) {
         switch result.mode {
         case .ambiguous:
             manipulationModeName = "—"
@@ -527,7 +543,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         }
     }
 
-    private func finishManipulation() {
+    /// Not `private` — ARSessionCoordinator+Carry.swift ends a re-grab rotate
+    /// the same way Adjust does.
+    func finishManipulation() {
         stateMachine.exitThresholdOverride = nil
         manipulation.reset()
         moveController.reset()
