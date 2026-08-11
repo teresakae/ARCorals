@@ -295,6 +295,8 @@ C — it edits the same file C creates, so it must run after C lands. Prompt F n
 > skip this paragraph entirely and note why. If 0.7x is viable, re-run the distance/confidence
 > sweep at 0.7x alongside 1x and report whether thresholds diverge enough to need per-lens tuning.
 >
+> Some constants already got a first ad-hoc bump during interactive testing between Prompts D and F, based on real device feedback but without a proper calibration sweep: `carryToggleMaxDuration` 0.5→0.7s (0.5s too tight for a deliberate pick-up pinch), `hitRadius` (annotation dwell target) 0.022→0.035m (HIG floor too small for noisy fingertip tracking), `waveProximityRadiusPt` 130→220pt (too tight once an object is stationary vs. glued to the hand mid-carry). Also, rotate-via-re-grab is now scoped to `.carry` mode only (O1 stand-in) — `.sim` mode (O2/O3 stand-in) never rotates, by design, not by omission. Treat the three bumped numbers as starting points to validate/refine here, not to re-derive from scratch — the direction (looser) is already confirmed right, the exact value isn't.
+>
 > For each of the four gestures, run a short on-device pass against the plan's threshold table
 > (§4) and report where the starting numbers need adjustment for this specific rig/lighting/hand:
 > pinch enter/exit hysteresis, annotation hit volume, carry-toggle window, brush-proximity gate,

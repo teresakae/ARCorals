@@ -41,11 +41,11 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// the only place that feeds or resets it outside `start()`.
     @Published var carriedEntity: EntityID?
 
-    /// Demo control — the *only* thing that decides what a pinch means. All
-    /// four are hard overrides: `.place` always places a fresh object,
-    /// `.adjust` always grabs into scale/yaw, `.move` always grabs into Move,
-    /// `.carry` owns pick-up/place + re-grab rotate (Prompt C/D). No
-    /// timing-based auto-switch runs behind them.
+    /// Demo control — hard overrides for what a pinch / point / wave mean.
+    /// Place/Adjust/Move are the Phase 5 legacy path (ADR-019). Point / Carry /
+    /// Sim are Prompt F stand-ins for the plan's flow-state gating table
+    /// (showcase / place-O1 / sim-with-wave) until a real showcase/sim/quiz
+    /// phase machine exists.
     ///
     /// It used to: `.adjust` fell through to `moveOrAdjustTrigger` (quick
     /// re-grab within `tuning.regrabWindow` → Adjust, else → Move), so with
@@ -58,7 +58,25 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         case place = "Place"
         case adjust = "Adjust"
         case move = "Move"
+        /// Showcase / quiz stand-in — Point/dwell only.
+        case point = "Point"
+        /// Sim "place O1" stand-in — Carry only; after put-down, re-grab rotates.
+        /// Point and wave stay dead (plan rows B-place / B-placed-idle).
         case carry = "Carry"
+        /// Sim brush-phase stand-in — Carry + Wave only, never rotate.
+        /// Represents O2/O3 (tools that are picked up and follow the hand) —
+        /// only O1 (the `.carry` stand-in) needs rotate, to reach
+        /// predetermined dirt/pest patches from any placement angle. A
+        /// re-grab on a previously-placed entity in Sim mode just re-enters
+        /// carry, it does not rotate. Point stays dead.
+        case sim = "Sim"
+
+        var allowsPoint: Bool { self == .point }
+        var allowsCarry: Bool { self == .carry || self == .sim }
+        var allowsWave: Bool { self == .sim }
+        var allowsLegacyPinch: Bool {
+            self == .place || self == .adjust || self == .move
+        }
     }
     @Published var demoMode: DemoMode = .adjust
 
@@ -255,6 +273,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             // next frame that *does* arrive resumes the drag as if nothing
             // happened. Feed it an empty observation so the grace period can
             // cancel. Only .cancelled/.possible can come out of this path.
+            // Same requirement for carry / point / wave (plan §2) — each must
+            // sit on this path or a drop mid-gesture hangs that recognizer.
             clearOverlay()
             machineTime = packet.timestamp
             let events = stateMachine.process(
@@ -284,6 +304,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         palmWidthMax = rollPalm.max
 
         let coverage = handCoveragePct(frame)
+        // Per-frame order (plan §2): ratio → overlay → pinch → carry/rotate → point → wave.
+        // Legacy Place/Adjust/Move (`handleGestureEvent`) is not in that list — it still
+        // runs after wave below, gated by `demoMode.allowsLegacyPinch`.
         updateOverlay(frame: frame, packet: packet)
 
         let observation = PinchObservation(
@@ -359,7 +382,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         // path in handleCarryRouting. Feeding the same events into Adjust/Move
         // here races: Carry's .pickedUp starts moveController, then this
         // .ended calls finishManipulation() and undoes it (Prompt D).
-        guard demoMode != .carry else { return }
+        // Point/Sim likewise must not fall through into Adjust (Sim would look
+        // like Adjust via `demoMode == .move ? .move : .adjust`).
+        guard demoMode.allowsLegacyPinch else { return }
 
         switch event {
         case .began(let ratio):

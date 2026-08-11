@@ -90,21 +90,36 @@ final class CarryStateMachineTests: XCTestCase {
         XCTAssertEqual(machine.carried, targetB)
     }
 
-    /// Prompt D: never-placed → Carry; after a `.putDown` → rotate on re-pinch.
+    /// Prompt D: never-placed → Carry; after a `.putDown` → rotate on re-pinch
+    /// when `allowRotate` is true (the `.carry` demo mode).
     func testRegrabRoutesToRotateAfterPutDown() {
         XCTAssertEqual(
-            routeCarryPinch(target: targetA, previouslyPlaced: [], isCarrying: false),
+            routeCarryPinch(target: targetA, previouslyPlaced: [], isCarrying: false, allowRotate: true),
             .carry
         )
         XCTAssertEqual(
-            routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: false),
+            routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: false, allowRotate: true),
             .rotate
         )
         // Put-down toggle must not be stolen while still carrying.
         XCTAssertEqual(
-            routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: true),
+            routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: true, allowRotate: true),
             .carry
         )
-        XCTAssertNil(routeCarryPinch(target: nil, previouslyPlaced: [targetA], isCarrying: false))
+        XCTAssertNil(routeCarryPinch(target: nil, previouslyPlaced: [targetA], isCarrying: false, allowRotate: true))
+    }
+
+    /// `.sim` (O2/O3 stand-in) passes `allowRotate: false` — a re-grab on a
+    /// previously-placed entity must stay `.carry`, never become `.rotate`.
+    func testRegrabStaysCarryWhenRotateDisallowed() {
+        XCTAssertEqual(
+            routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: false, allowRotate: false),
+            .carry
+        )
+        // Still-carrying case is unaffected by allowRotate.
+        XCTAssertEqual(
+            routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: true, allowRotate: false),
+            .carry
+        )
     }
 }

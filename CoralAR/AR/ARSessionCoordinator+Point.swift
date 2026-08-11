@@ -5,13 +5,18 @@ import Foundation
 /// `HandShapeClassifier.isPointing` + `SceneController.selectAnnotation(at:)`
 /// into `PointStateMachine`, and mirrors its events into the annotation
 /// popup state.
+///
+/// Gated to `demoMode.allowsPoint` (Prompt F / plan §1 Showcase+Quiz). When
+/// gated off, still fed a nil-target observation so an in-flight dwell ends
+/// cleanly instead of hanging across a mode switch.
 extension ARSessionCoordinator {
     /// Called from `handleVision`, after carry/rotate routing. `frame` is nil on the
     /// dropped/nil-Vision-frame path — must still be fed so an in-flight dwell can time out.
     func handlePoint(frame: LandmarkFrame?, packet: FramePacket) {
         var target: AnnotationID?
 
-        if let frame,
+        if demoMode.allowsPoint,
+           let frame,
            HandShapeClassifier.isPointing(joints: frame.joints, confidenceGate: tuning.confidenceGate, tuning: tuning),
            let visionPoint = frame.indexTipPoint(confidenceGate: tuning.confidenceGate) {
             let viewPoint = LandmarkSpace.visionToViewport(

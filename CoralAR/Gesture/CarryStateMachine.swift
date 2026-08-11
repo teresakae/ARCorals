@@ -13,7 +13,10 @@ enum CarryEvent: Equatable, Sendable {
 
 /// Where a fresh pinch goes under Carry demo mode. Re-grab on an entity that
 /// has already been put down once routes to ManipulationTracker (yaw via
-/// horizontal slide) instead of another carry cycle — see Prompt D.
+/// horizontal slide) instead of another carry cycle — see Prompt D. Only
+/// reachable when `allowRotate` is true (the `.carry` / O1 stand-in); modes
+/// that represent O2/O3 tools never rotate, so a re-grab there is always
+/// `.carry`.
 enum CarryPinchRoute: Equatable, Sendable {
     case carry
     case rotate
@@ -23,14 +26,23 @@ enum CarryPinchRoute: Equatable, Sendable {
 /// entity IDs for which Carry has already emitted `.putDown` this session.
 /// While already carrying, always `.carry` so the put-down toggle is not
 /// stolen by rotate (the entity is not in the set until after put-down).
+///
+/// `allowRotate` gates whether a re-grab may ever become `.rotate`: only O1
+/// (the `.carry` demo mode stand-in) needs to rotate in place to reach
+/// predetermined dirt/pest patches from any placement angle. O2/O3 stand-ins
+/// (`.sim`) are picked up and just follow the hand — with `allowRotate`
+/// false, a re-grab on a previously-placed target still re-enters a carry
+/// cycle, it just never becomes a rotate.
 func routeCarryPinch(
     target: EntityID?,
     previouslyPlaced: Set<EntityID>,
-    isCarrying: Bool
+    isCarrying: Bool,
+    allowRotate: Bool
 ) -> CarryPinchRoute? {
     if isCarrying { return .carry }
     guard let target else { return nil }
-    return previouslyPlaced.contains(target) ? .rotate : .carry
+    if previouslyPlaced.contains(target) && allowRotate { return .rotate }
+    return .carry
 }
 
 /// One sample from the carry-toggle stream. Carry does not re-derive pinch

@@ -7,14 +7,14 @@ extension ARSessionCoordinator {
     /// Called from `handleVision`, right after existing pinch processing. `frame` is nil on the
     /// dropped/nil-Vision-frame path — must still be fed so an in-flight carry can time out.
     ///
-    /// Only runs when `demoMode == .carry`. Adjust/Move keep the legacy `handleGestureEvent`
-    /// path untouched; running both on the same pinch raced Carry's pickup against
-    /// `finishManipulation()` (Prompt D finding from Prompt C).
+    /// Only runs when `demoMode.allowsCarry` (`.carry` / `.sim`). Adjust/Move keep the legacy
+    /// `handleGestureEvent` path untouched; running both on the same pinch raced Carry's
+    /// pickup against `finishManipulation()` (Prompt D finding from Prompt C).
     ///
     /// `pinchEvents` is this frame's output from the shared `PinchStateMachine` — Carry does
     /// not re-derive pinch detection.
     func handleCarryRouting(frame: LandmarkFrame?, packet: FramePacket, pinchEvents: [PinchGestureEvent]) {
-        guard demoMode == .carry else { return }
+        guard demoMode.allowsCarry else { return }
 
         for pinchEvent in pinchEvents {
             switch pinchEvent {
@@ -29,7 +29,8 @@ extension ARSessionCoordinator {
                 switch routeCarryPinch(
                     target: target,
                     previouslyPlaced: previouslyPlacedEntities,
-                    isCarrying: carriedEntity != nil
+                    isCarrying: carriedEntity != nil,
+                    allowRotate: demoMode == .carry
                 ) {
                 case .rotate:
                     guard let model = scene.activeModel else { break }
@@ -91,8 +92,6 @@ extension ARSessionCoordinator {
             let newTarget = moveController.update(hit: previewWorldHit)
             scene.moveModel(toWorld: newTarget)
         }
-
-        scene.updateContactShadow()
     }
 
     private func applyCarryEvents(_ events: [CarryEvent]) {
