@@ -85,9 +85,11 @@ struct GestureTuning: Sendable, Equatable {
 
     /// World-space distance (m) from O1's centre beyond which a released pest fades and is
     /// deleted; within it counts as an accidental near-drop and the pest just stays placed.
-    /// Provisional — guessed starting value (~3x the 5cm placeholder cube), pending real
-    /// device calibration. Content-layer constant, not yet measured on this rig.
-    var pestDiscardDistance: Float = 0.15
+    /// Intent is detachment, not distance: the fade should read as "it came off the cube's
+    /// surface," not "it got thrown." Set to `ModelProvider.halfHeight` (cube half-size) plus a
+    /// small few-cm margin past the surface. Provisional — guessed margin, pending real device
+    /// calibration. Content-layer constant, not yet measured on this rig.
+    var pestDiscardDistance: Float = 0.045
 
     // MARK: - Wave
 

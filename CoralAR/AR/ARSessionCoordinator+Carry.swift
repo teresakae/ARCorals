@@ -14,6 +14,7 @@ extension ARSessionCoordinator {
                 // would otherwise resolve the same tap to the parent cube (pest content).
                 if let point = pinchViewportPoint, let pest = scene.selectPest(at: point) {
                     draggedPest = pest
+                    scene.setHighlighted(true, for: pest)
                     if let hit = previewWorldHit {
                         pestMoveController.begin(hit: hit, modelWorld: pest.position(relativeTo: nil))
                     }
@@ -127,6 +128,7 @@ extension ARSessionCoordinator {
     private func finishPestDrag(_ pest: ModelEntity) {
         draggedPest = nil
         defer { pestMoveController.reset() }
+        scene.setHighlighted(false, for: pest)
         guard let anchor = pest.parent?.position(relativeTo: nil) else { return }
         let released = pest.position(relativeTo: nil)
         if shouldDiscardPest(releaseWorldPosition: released, anchorWorldPosition: anchor, discardDistance: tuning.pestDiscardDistance) {

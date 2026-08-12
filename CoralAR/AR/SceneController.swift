@@ -17,8 +17,9 @@ final class SceneController {
         let q = model.transform.rotation.vector
         return 2 * atan2(q.y, q.w)
     }
-    /// Saved materials before setHighlighted(true); nil when not highlighted.
-    private var unhighlightedMaterials: [Material]?
+    /// Saved materials before setHighlighted(true), keyed per-entity so O1 and a pest
+    /// can be highlighted independently without corrupting each other's restore state.
+    private var unhighlightedMaterials: [ObjectIdentifier: [Material]] = [:]
 
     /// Annotation markers for selectAnnotation(at:) — parallel to placedModels / selectModel.
     private var annotationEntities: [ObjectIdentifier: AnnotationID] = [:]
@@ -56,7 +57,6 @@ final class SceneController {
         placedAnchors.append(anchor)
         placedModels.append(model)
         activeModel = model
-        unhighlightedMaterials = nil
 
         if !didPlaceTestAnnotation {
             // Top face (Y-up) — [0,0,halfHeight] was +Z side, invisible from overhead.
@@ -204,19 +204,24 @@ final class SceneController {
         return best?.entity
     }
 
-    /// Material grab highlight — HoverEffectComponent never fires here (docs/GESTURES.md §2.7).
+    /// Material grab highlight on activeModel — HoverEffectComponent never fires here (docs/GESTURES.md §2.7).
     func setHighlighted(_ on: Bool) {
         guard let model = activeModel else { return }
+        setHighlighted(on, for: model)
+    }
+
+    /// Same highlight, targeted at any entity (e.g. a dragged pest) rather than activeModel.
+    func setHighlighted(_ on: Bool, for model: ModelEntity) {
+        let key = ObjectIdentifier(model)
         if on {
-            guard unhighlightedMaterials == nil else { return }
-            unhighlightedMaterials = model.model?.materials
+            guard unhighlightedMaterials[key] == nil else { return }
+            unhighlightedMaterials[key] = model.model?.materials
             var highlight = SimpleMaterial()
             highlight.color = .init(tint: .systemYellow, texture: nil)
             model.model?.materials = [highlight]
         } else {
-            guard let saved = unhighlightedMaterials else { return }
+            guard let saved = unhighlightedMaterials.removeValue(forKey: key) else { return }
             model.model?.materials = saved
-            unhighlightedMaterials = nil
         }
     }
 
@@ -259,7 +264,7 @@ final class SceneController {
         placedAnchors.removeAll()
         placedModels.removeAll()
         activeModel = nil
-        unhighlightedMaterials = nil
+        unhighlightedMaterials.removeAll()
         annotationEntities.removeAll()
         annotationMarkers.removeAll()
         didPlaceTestAnnotation = false
