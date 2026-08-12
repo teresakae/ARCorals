@@ -1,8 +1,6 @@
 import Foundation
 
-/// Identity of a placed entity, opaque to the Gesture layer. Callers pass
-/// `ObjectIdentifier(modelEntity)` — same handle Prompt B's AnnotationID map
-/// is built around — so this layer never needs to import RealityKit.
+/// Placed-entity id (`ObjectIdentifier`); Gesture/ stays RealityKit-free. docs/ARCHITECTURE.md
 typealias EntityID = ObjectIdentifier
 
 /// Carry (pinch-toggle pick up / place) lifecycle events.
@@ -11,28 +9,13 @@ enum CarryEvent: Equatable, Sendable {
     case putDown(EntityID)
 }
 
-/// Where a fresh pinch goes under Carry demo mode. Re-grab on an entity that
-/// has already been put down once routes to ManipulationTracker (yaw via
-/// horizontal slide) instead of another carry cycle — see Prompt D. Only
-/// reachable when `allowRotate` is true (the `.carry` / O1 stand-in); modes
-/// that represent O2/O3 tools never rotate, so a re-grab there is always
-/// `.carry`.
+/// Carry vs re-grab-rotate. Rotate only when `allowRotate` (`.carry`/O1). docs/GESTURES.md §1
 enum CarryPinchRoute: Equatable, Sendable {
     case carry
     case rotate
 }
 
-/// Pure routing decision for Prompt D. `previouslyPlaced` is the set of
-/// entity IDs for which Carry has already emitted `.putDown` this session.
-/// While already carrying, always `.carry` so the put-down toggle is not
-/// stolen by rotate (the entity is not in the set until after put-down).
-///
-/// `allowRotate` gates whether a re-grab may ever become `.rotate`: only O1
-/// (the `.carry` demo mode stand-in) needs to rotate in place to reach
-/// predetermined dirt/pest patches from any placement angle. O2/O3 stand-ins
-/// (`.sim`) are picked up and just follow the hand — with `allowRotate`
-/// false, a re-grab on a previously-placed target still re-enters a carry
-/// cycle, it just never becomes a rotate.
+/// Re-grab → rotate iff put-down once + `allowRotate`; else carry. docs/ARCHITECTURE.md
 func routeCarryPinch(
     target: EntityID?,
     previouslyPlaced: Set<EntityID>,
@@ -45,25 +28,15 @@ func routeCarryPinch(
     return .carry
 }
 
-/// One sample from the carry-toggle stream. Carry does not re-derive pinch
-/// detection — it reacts to `PinchStateMachine`'s own event output.
+/// Carry input: reacts to `PinchStateMachine` events; does not re-detect pinch.
 struct CarryObservation: Equatable, Sendable {
     let timestamp: TimeInterval
     let pinchEvent: PinchGestureEvent
-    /// Which placed entity, if any, the pinch point hit-tested onto this
-    /// frame. Only consulted on `.began` while `empty` — a toggle that
-    /// starts while already carrying always targets the carried entity,
-    /// wherever the second pinch lands (see `process`).
+    /// Hit-tested entity; used only on `.began` while empty — put-down ignores landing target.
     let target: EntityID?
 }
 
-/// Carry toggle-latch lifecycle. Feed observations; collect events.
-///
-/// `empty` + a short pinch (began→ended under `tuning.carryToggleMaxDuration`)
-/// that began on a target → `carrying(id)`, emits `.pickedUp(id)`. A pinch
-/// over that duration, or one that ends in `.cancelled`, is a grab (today's
-/// existing Adjust/Move flow) rather than a toggle — no event, stays put.
-/// `carrying(id)` + another short pinch (any target) → `empty`, `.putDown(id)`.
+/// Short pinch (<`carryToggleMaxDuration`) toggles pick-up/put-down. docs/GESTURES.md §2.8
 struct CarryStateMachine: Sendable {
     var tuning: GestureTuning
 
@@ -71,12 +44,7 @@ struct CarryStateMachine: Sendable {
     private(set) var carried: EntityID?
 
     private var pinchStart: TimeInterval?
-    /// Snapshot of what the in-flight pinch would toggle, taken at `.began`:
-    /// the currently carried entity if there is one, else whatever the pinch
-    /// point hit. Reading `carried`/`target` again at `.ended` would be wrong
-    /// the instant a pickup and a put-down could ever straddle two different
-    /// hit-tests — this pins the toggle to the entity the pinch actually
-    /// started on.
+    /// ⚠️ Toggle target latched at `.began` — never re-read `carried`/`target` at `.ended`.
     private var pinchTarget: EntityID?
 
     init(tuning: GestureTuning = .default) {
@@ -115,9 +83,7 @@ struct CarryStateMachine: Sendable {
             }
 
         case .cancelled:
-            // A long hold-and-drag pinch that gets cancelled (tracking loss,
-            // grace period expiry) is not a toggle either — same as running
-            // out the clock, just via a different exit. No state change.
+            // Cancelled ≠ toggle; clear in-flight pinch, no state change.
             pinchStart = nil
             pinchTarget = nil
             return []

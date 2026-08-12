@@ -2,13 +2,9 @@ import CoreGraphics
 import Foundation
 import Vision
 
-/// Only place coordinate conversion happens.
-/// Vision bottom-left → image top-left normalized → viewport pixels via `displayTransform`.
+/// Sole coordinate-conversion site: Vision → image-norm → viewport via displayTransform.
 enum LandmarkSpace {
-    /// Vision-normalized (bottom-left, `.right`-oriented/upright) → camera-image-normalized
-    /// (upper-left, native landscape). `ARFrame.displayTransform` expects the native landscape
-    /// image space, not the upright space Vision returns when run with `orientation: .right`
-    /// (AGENTS gotcha #2 + #3) — this needs the axis swap, not just the y-flip.
+    /// ⚠️ `.right` Vision upright ≠ landscape displayTransform — axis-swap, not y-flip (AGENTS #1–3).
     static func visionToImageNormalized(_ vision: CGPoint) -> CGPoint {
         CGPoint(x: 1 - vision.y, y: 1 - vision.x)
     }

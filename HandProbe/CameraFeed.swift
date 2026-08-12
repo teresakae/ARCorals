@@ -2,8 +2,7 @@ import AVFoundation
 import CoreVideo
 import UIKit
 
-/// Rear-camera capture. Data-output buffers stay in native sensor orientation
-/// (rotation angle 0) so Vision can use `orientation: .right`, matching ARKit.
+/// Rear camera; buffers stay native sensor orient (angle 0) for Vision `.right` (AGENTS gotcha #1).
 final class CameraFeed: NSObject {
     let session = AVCaptureSession()
     private let sessionQueue = DispatchQueue(label: "handprobe.camera.session")

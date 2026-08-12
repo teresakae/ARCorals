@@ -2,8 +2,7 @@ import Foundation
 import XCTest
 @testable import HandProbe
 
-/// Move vs Adjust is decided purely by elapsed time since the last gesture
-/// ended (Prompt 11) — never by racing signals. Three cases per the prompt.
+/// Move vs Adjust by time since last gesture end only — never signal race. GESTURES.md §2.8.
 final class MoveTriggerTests: XCTestCase {
     private let regrabWindow: TimeInterval = 0.4
 

@@ -67,7 +67,7 @@ final class MetricsLogger {
             String(format: "%.4f", result.observationConfidence),
         ]
 
-        for name in JointSample.allNames {
+        for name in LandmarkFrame.jointNames {
             if let j = result.joints[name] {
                 fields.append(String(format: "%.6f", j.x))
                 fields.append(String(format: "%.6f", j.y))
@@ -106,7 +106,7 @@ final class MetricsLogger {
 
     static let csvColumns: [String] = {
         var cols = ["timestamp", "distance_cm", "observation_count", "observation_confidence"]
-        for name in JointSample.allNames {
+        for name in LandmarkFrame.jointNames {
             let key = name.rawValue
             cols.append(contentsOf: ["\(key)_x", "\(key)_y", "\(key)_conf"])
         }

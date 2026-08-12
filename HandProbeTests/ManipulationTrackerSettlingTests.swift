@@ -63,8 +63,7 @@ final class ManipulationTrackerSettlingTests: XCTestCase {
         XCTAssertTrue(mt.isArmed, "settleTimeout must arm a gesture that never stabilizes")
     }
 
-    /// Bug B: settling jitter on the ratio channel must not win the mode-lock
-    /// race against a real, sustained rotation that starts afterwards.
+    /// Bug B: settle-jitter on ratio must not beat later sustained yaw (mode-lock). GESTURES.md §2.4.
     func testSettlingJitterThenSustainedYawLocksYaw() {
         var mt = makeTracker()
         mt.begin(entityScale: 1.0, entityYaw: 0.0)
@@ -107,8 +106,7 @@ final class ManipulationTrackerSettlingTests: XCTestCase {
         XCTAssertEqual(last.mode, .scale)
         last = mt.update(ratio: 0.31, yaw: 0.0, now: t)
         let scale = try XCTUnwrap(last.scale)
-        // At the symmetric sensitivity (1.0) this same motion only reaches
-        // ~0.48x; the shrink exponent has to carry it well below that.
+        // Symmetric sensitivity 1.0 only reaches ~0.48x; shrink exponent must go well below that.
         XCTAssertLessThan(scale, 0.40, "shrink must reach a visibly smaller model")
     }
 }

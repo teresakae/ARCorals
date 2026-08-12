@@ -1,13 +1,3 @@
-# Planning docs (local only)
-docs/AGENTS.md
-docs/ARCHITECTURE.md
-docs/DECISIONS.md
-docs/PRD.md
-docs/PROMPTS.md
-docs/RESEARCH.md
-docs/STEPS.md
-docs/TESTING.md
-
 # Xcode
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
@@ -20,6 +10,11 @@ build/
 *.ipa
 *.dSYM.zip
 *.dSYM
+
+# Device container pulls. Extract the CSVs into Measurements/ and discard the
+# bundle — it also carries Metal caches, splash snapshots and saved state.
+*.xcappdata
+appdata/
 
 # Swift Package Manager
 .build/

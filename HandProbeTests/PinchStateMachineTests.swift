@@ -68,7 +68,8 @@ final class PinchStateMachineTests: XCTestCase {
 
     func testChatterInNoiseBandDoesNotBegin() {
         var sm = machine()
-        let chatter: [Double?] = (0..<30).map { i in i % 2 == 0 ? 5.7 : 6.1 }
+        // Noise band around shipping pinchThreshold 1.98 ± hysteresisBand/2 → [1.48, 2.48].
+        let chatter: [Double?] = (0..<30).map { i in i % 2 == 0 ? 1.7 : 2.2 }
         let (events, _) = feed(&sm, ratios: chatter, start: 0)
         XCTAssertFalse(names(events).contains("Began"), "band chatter must not arm a pinch")
     }
@@ -76,7 +77,7 @@ final class PinchStateMachineTests: XCTestCase {
     func testChatterDoesNotEndActiveDrag() {
         var sm = machine()
         var t = armPinch(&sm)
-        let band: [Double?] = (0..<20).map { i in i % 2 == 0 ? 5.6 : 6.2 }
+        let band: [Double?] = (0..<20).map { i in i % 2 == 0 ? 1.7 : 2.3 }
         let (events, _) = feed(&sm, ratios: band, start: t)
         XCTAssertFalse(names(events).contains("Ended"))
         XCTAssertFalse(names(events).contains("Cancelled"))

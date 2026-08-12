@@ -2,42 +2,21 @@ import CoreGraphics
 import Foundation
 import RealityKit
 
-/// Wave / stationary-hold dispatch. Reads wrist position every frame,
-/// regardless of pinch state, and gates it against a placeholder proximity
-/// target (a marker on the cube's top face) before feeding `WaveDetector`.
-/// The gate is content-layer only — `WaveDetector` has no concept of "near a
-/// target," it just processes whatever `x` it's handed.
-///
-/// App-state gating (Prompt F / plan §1): only `demoMode.allowsWave` (`.sim`)
-/// feeds a real wrist `x`. Other modes still call `process` with `x: nil` so
-/// progress decays on the nil-frame path instead of hanging.
+/// Wave/hold dispatch; content-layer proximity; live x when allowsWave (docs/GESTURES.md §2.10).
 extension ARSessionCoordinator {
-    /// Screen radius (points) around the placeholder marker inside which
-    /// wrist motion is fed to `waveDetector`. Content-layer placeholder, not
-    /// a `GestureTuning` constant (plan §2/§3: proximity gating is content-
-    /// layer, not part of the recognizer) — a real dirt-patch/annotation hit
-    /// volume replaces this once that content exists; this just exercises
-    /// the gating pattern on the cube prototype. Widened from an initial 130pt
-    /// after on-device testing found wave silently stopped working once an
-    /// object was placed and no longer glued to the hand — a stationary target
-    /// needs more forgiveness than a carried one. Still a placeholder guess
-    /// pending Prompt G's real calibration pass.
+    /// ⚠️ Screen-pt gate (not world cm); 220pt ad-hoc — docs/GESTURES.md §2.10 / §3.
     private static let waveProximityRadiusPt: CGFloat = 220
 
-    /// Called from `handleVision`, after point. `frame` is nil on the
-    /// dropped/nil-Vision-frame path — must still be fed so wave progress
-    /// decays correctly rather than hard-resetting.
+    /// After point; nil frame still fed so progress decays (docs/ARCHITECTURE.md §5 seam 5).
     func handleWave(frame: LandmarkFrame?, packet: FramePacket) {
         let x = demoMode.allowsWave ? gatedWristX(frame: frame, packet: packet) : nil
-        let events = waveDetector.process(WaveObservation(timestamp: packet.timestamp, x: x))
+        let events = waveDetector.process(WaveObservation(timestamp: machineTime, x: x))
         if events.contains(.waved) {
             waveCount += 1
         }
     }
 
-    /// The wrist's raw Vision-normalized x, or nil if there's no frame, no
-    /// confident wrist landmark, or the wrist isn't near the placeholder
-    /// target marker.
+    /// Vision wrist x when confident and within waveProximityRadiusPt of the target.
     private func gatedWristX(frame: LandmarkFrame?, packet: FramePacket) -> Double? {
         guard let frame,
               let wrist = frame.joints[.wrist], wrist.confidence >= tuning.confidenceGate,
@@ -56,10 +35,7 @@ extension ARSessionCoordinator {
         return Double(wrist.x)
     }
 
-    /// Placeholder target volume: the projected screen point of the active
-    /// cube's top-face center. Enough to exercise the proximity-gate pattern
-    /// without building real dirt-patch content — a real annotation/hit
-    /// volume replaces this marker later.
+    /// Placeholder target: projected top-face center of active cube (docs/GESTURES.md §2.10).
     private var waveTargetViewportPoint: CGPoint? {
         guard let model = scene.activeModel else { return nil }
         let topFaceCenter = model.position(relativeTo: nil)

@@ -9,36 +9,25 @@ final class SceneController {
     private let arView: ARView
     private(set) var placedAnchors: [AnchorEntity] = []
     private(set) var placedModels: [ModelEntity] = []
-    /// The entity Adjust/Move act on. Reassigned on `place()` and, per grab,
-    /// by `selectModel(at:)` — real spatial selection: whichever placed
-    /// entity the pinch point's viewport position actually hit-tests onto.
-    /// No more "most-recently-placed-or-grabbed" guessing.
+    /// Entity Adjust/Move act on; place()/selectModel(at:) hit-test reassigns (docs/GESTURES.md §2.1).
     private(set) var activeModel: ModelEntity?
-    /// Yaw of `activeModel` about world Y, decoded from its own transform —
-    /// per-model, not a single stored field. A stored field was wrong with
-    /// multiple objects: place() reset it to 0 and grabbing object B reused
-    /// whatever object A left behind as the baseline, snapping B's rotation
-    /// on the first yaw frame after switching objects. Since every write here
-    /// is a pure-Y `simd_quatf` (never `move(to:)` — AGENTS.md), decoding
-    /// back is exact: real = cos(θ/2), y-imaginary = sin(θ/2).
+    /// World-Y yaw from activeModel quat each read — not a stored field (docs/GESTURES.md §2.8).
     var modelYaw: Float {
         guard let model = activeModel else { return 0 }
         let q = model.transform.rotation.vector
         return 2 * atan2(q.y, q.w)
     }
-    /// `activeModel`'s materials before `setHighlighted(true)` swapped them out.
-    /// nil whenever not currently highlighted.
+    /// Saved materials before setHighlighted(true); nil when not highlighted.
     private var unhighlightedMaterials: [Material]?
 
-    /// Registered annotation markers, parallel to `placedModels` for
-    /// `selectModel(at:)` — `selectAnnotation(at:)` walks the parent chain
-    /// the same way, against this map instead of placed models.
+    /// Annotation markers for selectAnnotation(at:) — parallel to placedModels / selectModel.
     private var annotationEntities: [ObjectIdentifier: AnnotationID] = [:]
-    /// Cube-prototype scaffolding: exactly one test annotation, added to the
-    /// first-ever placed cube (see Gesture Build Prompt B) — enough to
-    /// exercise point-and-dwell, not a real annotation system.
+    private var annotationMarkers: [ModelEntity] = []
+    /// Cube-prototype: one test annotation on first placed cube (docs/GESTURES.md §2.9).
     private var didPlaceTestAnnotation = false
     static let testAnnotationID = AnnotationID("Test annotation — coral fact goes here.")
+    /// ⚠️ Screen-pt fat grab after `entity(at:)` miss. Same unit class as `waveProximityRadiusPt`. Ad-hoc; docs/GESTURES.md §2.1 / §3.
+    static let screenGrabRadiusPt: CGFloat = 220
 
     var hasPlacedEntity: Bool { activeModel != nil }
 
@@ -46,18 +35,9 @@ final class SceneController {
         self.arView = arView
     }
 
-    /// Adds a new object every call — does not clear existing ones (that's
-    /// the caller's choice, see ARSessionCoordinator's Place-mode handling).
-    /// The newly-placed entity becomes active per the most-recently-touched
-    /// rule (see `activeModel` doc).
+    /// Appends a new object and makes it active; caller clears if needed (ADR-019).
     func place(at worldTransform: simd_float4x4) {
-        // Position only, rotation dropped: the raycast's transform carries the
-        // hit plane's orientation, and on the .estimatedPlane tier that normal
-        // is a guess that can come back visibly off-vertical — which tilts the
-        // whole anchor and stands the cube up crooked on a flat table. An
-        // identity-rotation anchor is gravity-aligned by construction. Nothing
-        // downstream wanted the plane's yaw either: applyYaw writes an absolute
-        // world-Y rotation on the child, and modelYaw decodes it back.
+        // Position only + identity rot — estimatedPlane normals tilt anchors (docs/GESTURES.md §2.1).
         var upright = matrix_identity_float4x4
         upright.columns.3 = worldTransform.columns.3
         let anchor = AnchorEntity(world: upright)
@@ -77,19 +57,11 @@ final class SceneController {
         }
     }
 
-    /// Adds a small marker as a child of `model`, registered under `id` for
-    /// `selectAnnotation(at:)`. Collision shape sized well past the plan's
-    /// ~4.4cm HIG-floor hit-volume threshold — on-device testing found the
-    /// floor too tight for noisy fingertip tracking; the visible marker stays
-    /// small, only the hitbox is generous.
+    /// Child marker for selectAnnotation(at:); hitbox oversized (docs/GESTURES.md §2.9).
     @discardableResult
     func addAnnotation(_ id: AnnotationID, on model: ModelEntity, relativePosition: SIMD3<Float>) -> ModelEntity {
         let markerRadius: Float = 0.006
-        // Collision hit volume for point-and-dwell. Plan §4 start: ≥4.4cm @ 1m
-        // (visionOS HIG 60pt/2.5°). Initial code used 0.022m; ad-hoc on-device
-        // bump to 0.035m between Prompts D–F (HIG floor too small for noisy
-        // fingertip tracking on this rig). Still provisional — not from a
-        // measured miss/hit sweep (Prompt G).
+        // ⚠️ hitRadius 0.035m ad-hoc (HIG ~4.4cm too tight); provisional — docs/GESTURES.md §3.
         let hitRadius: Float = 0.035
         var material = SimpleMaterial()
         material.color = .init(tint: .systemYellow, texture: nil)
@@ -99,56 +71,58 @@ final class SceneController {
         marker.collision = CollisionComponent(shapes: [.generateSphere(radius: hitRadius)])
         model.addChild(marker)
         annotationEntities[ObjectIdentifier(marker)] = id
+        annotationMarkers.append(marker)
         return marker
     }
 
-    /// Hit-tests `viewportPoint` against registered annotation markers,
-    /// parallel to `selectModel(at:)` — walks the parent chain the same way,
-    /// against `annotationEntities` instead of placed models.
+    /// `entity(at:)` then nearest projected marker within `screenGrabRadiusPt` (docs/GESTURES.md §2.9).
     func selectAnnotation(at viewportPoint: CGPoint) -> AnnotationID? {
-        guard let hit = arView.entity(at: viewportPoint) else { return nil }
-        var candidate: Entity? = hit
-        while let entity = candidate {
-            if let id = annotationEntities[ObjectIdentifier(entity)] {
-                return id
+        if let hit = arView.entity(at: viewportPoint) {
+            var candidate: Entity? = hit
+            while let entity = candidate {
+                if let id = annotationEntities[ObjectIdentifier(entity)] {
+                    return id
+                }
+                candidate = entity.parent
             }
-            candidate = entity.parent
         }
-        return nil
+        guard let marker = nearestEntity(to: viewportPoint, in: annotationMarkers) else { return nil }
+        return annotationEntities[ObjectIdentifier(marker)]
     }
 
-    /// Hit-tests `viewportPoint` against placed entities and makes whichever
-    /// one it landed on active. Uses `ARView.entity(at:)`, RealityKit's own
-    /// hit-testing against each entity's `CollisionComponent` — every
-    /// placeholder already gets one from `ModelProvider.makePlaceholder()`,
-    /// and `regenerateCollisionShapes()` keeps it current after scaling, so
-    /// there's no new collision setup to add here.
-    ///
-    /// Fallback when the point lands on nothing placed: return nil and leave
-    /// `activeModel` untouched — the grab does nothing. Picked over a
-    /// nearest-within-radius fallback because it needs no new distance
-    /// threshold to tune (radius-based forgiveness would have to be
-    /// calibrated against real pinch/landmark noise at 30-40cm range); if
-    /// missed grabs turn out common in practice, that's the first thing to add.
+    /// `entity(at:)` then nearest projected cube within `screenGrabRadiusPt` (docs/GESTURES.md §2.1).
     @discardableResult
     func selectModel(at viewportPoint: CGPoint) -> ModelEntity? {
-        guard let hit = arView.entity(at: viewportPoint) else { return nil }
-        var candidate: Entity? = hit
-        while let entity = candidate {
-            if let model = entity as? ModelEntity, placedModels.contains(model) {
-                activeModel = model
-                return model
+        if let hit = arView.entity(at: viewportPoint) {
+            var candidate: Entity? = hit
+            while let entity = candidate {
+                if let model = entity as? ModelEntity, placedModels.contains(model) {
+                    activeModel = model
+                    return model
+                }
+                candidate = entity.parent
             }
-            candidate = entity.parent
         }
-        return nil
+        guard let model = nearestEntity(to: viewportPoint, in: placedModels) else { return nil }
+        activeModel = model
+        return model
     }
 
-    /// Visual feedback for "actively being grabbed" — HUD text alone is easy
-    /// to miss while watching your hand. Plain material-color swap, not
-    /// `HoverEffectComponent`: that component only lights up on RealityKit's
-    /// own hover/gaze input pipeline, which our Vision-driven pinch gestures
-    /// never feed, so it would never actually trigger here.
+    /// Screen-space nearest within `screenGrabRadiusPt`. Nil if all off-screen or outside radius.
+    private func nearestEntity<E: Entity>(to viewportPoint: CGPoint, in entities: [E]) -> E? {
+        var best: (entity: E, dist: CGFloat)?
+        for entity in entities {
+            guard let projected = arView.project(entity.position(relativeTo: nil)) else { continue }
+            let d = hypot(projected.x - viewportPoint.x, projected.y - viewportPoint.y)
+            guard d <= Self.screenGrabRadiusPt else { continue }
+            if best == nil || d < best!.dist {
+                best = (entity, d)
+            }
+        }
+        return best?.entity
+    }
+
+    /// Material grab highlight — HoverEffectComponent never fires here (docs/GESTURES.md §2.7).
     func setHighlighted(_ on: Bool) {
         guard let model = activeModel else { return }
         if on {
@@ -166,10 +140,7 @@ final class SceneController {
 
     func applyScale(_ uniform: Float) {
         guard let model = activeModel else { return }
-        // Scaling grows the box about its centre, so it eats down through the
-        // plane as it gets bigger (and floats as it shrinks). Shift y by the
-        // change in half-height so the base stays where it is — incremental,
-        // so it survives moves that already changed y.
+        // Keep base on plane: scale is about centre — shift y by Δhalf-height (docs/GESTURES.md §2.1).
         model.position.y += ModelProvider.halfHeight * (uniform - model.scale.x)
         model.scale = SIMD3<Float>(repeating: uniform)
     }
@@ -190,24 +161,13 @@ final class SceneController {
         activeModel?.position(relativeTo: nil)
     }
 
-    /// Move mode: write the child's position directly from a world-space
-    /// target, converted through whatever the current parent anchor is.
-    /// The anchor itself never moves — the child can sit at any offset from
-    /// it indefinitely, this conversion works regardless (no re-anchoring).
+    /// Write child world position through parent; no re-anchor (docs/GESTURES.md §2.8 / ADR-019).
     func moveModel(toWorld world: SIMD3<Float>) {
         guard let model = activeModel, let parent = model.parent else { return }
         model.position = parent.convert(position: world, from: nil)
     }
 
-    // ponytail: no end-of-move re-anchor. A prior version swapped the model onto a
-    // fresh AnchorEntity at move-end, justified as "keeps the anchor tied to the
-    // tracked plane" — false: place()'s anchor is AnchorEntity(world:), a fixed
-    // world transform, not a child of the plane anchor, and the swap used the
-    // same kind. It bought nothing and its removeFromParent()/preservingWorldTransform
-    // sequence was actually broken (doubled every drag, added 2.5cm per grab-release
-    // — see DECISIONS.md/GESTURE_LOG.md). moveModel() already converts through
-    // whatever the current parent is regardless of offset, so there's nothing to fix
-    // by re-anchoring. Deleted, not patched.
+    // ponytail: end-of-move re-anchor deleted — doubled drag + 2.5cm/release (ADR-019).
 
     /// Removes every placed object, not just the active one.
     func clearAll() {
@@ -219,6 +179,7 @@ final class SceneController {
         activeModel = nil
         unhighlightedMaterials = nil
         annotationEntities.removeAll()
+        annotationMarkers.removeAll()
         didPlaceTestAnnotation = false
     }
 }

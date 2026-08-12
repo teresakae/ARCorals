@@ -35,50 +35,38 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     @Published private(set) var raycastViewportPoint: CGPoint?
     @Published private(set) var viewportJoints: [(point: CGPoint, confidence: Float)] = []
     @Published private(set) var manipulationModeName = "—"
-    /// Mirrors `CarryStateMachine.carried` — everything renderable (highlight,
-    /// contact shadow, HUD) derives from this one optional. Not `private(set)`
-    /// — written from ARSessionCoordinator+Carry.swift's `handleCarryRouting`,
-    /// the only place that feeds or resets it outside `start()`.
+    /// Mirrors `CarryStateMachine.carried`; all carry-related UI derives from this. Written by +Carry.swift.
     @Published var carriedEntity: EntityID?
 
-    /// Demo control — hard overrides for what a pinch / point / wave mean.
-    /// Place/Adjust/Move are the Phase 5 legacy path (ADR-019). Point / Carry /
-    /// Sim are Prompt F stand-ins for the plan's flow-state gating table
-    /// (showcase / place-O1 / sim-with-wave) until a real showcase/sim/quiz
-    /// phase machine exists.
-    ///
-    /// It used to: `.adjust` fell through to `moveOrAdjustTrigger` (quick
-    /// re-grab within `tuning.regrabWindow` → Adjust, else → Move), so with
-    /// no prior gesture — or any gap over 0.4s — picking "Adjust" still got
-    /// you Move. That's why the toggle looked dead and why adjusting kept
-    /// moving the object instead. `moveOrAdjustTrigger` stays in
-    /// MoveController.swift (tested, still the right shape for a future
-    /// no-toggle build) but nothing calls it while a mode is selectable.
+    /// Demo control — hard override for what a pinch/point/wave means; six cases, no auto-switch. See docs/GESTURES.md §1.
     enum DemoMode: String, CaseIterable, Sendable {
         case place = "Place"
         case adjust = "Adjust"
         case move = "Move"
         /// Showcase / quiz stand-in — Point/dwell only.
         case point = "Point"
-        /// Sim "place O1" stand-in — Carry only; after put-down, re-grab rotates.
-        /// Point and wave stay dead (plan rows B-place / B-placed-idle).
+        /// Sim "place O1" stand-in — Carry only; after put-down, re-grab rotates. Point/wave stay dead.
         case carry = "Carry"
-        /// Sim brush-phase stand-in — Carry + Wave only, never rotate.
-        /// Represents O2/O3 (tools that are picked up and follow the hand) —
-        /// only O1 (the `.carry` stand-in) needs rotate, to reach
-        /// predetermined dirt/pest patches from any placement angle. A
-        /// re-grab on a previously-placed entity in Sim mode just re-enters
-        /// carry, it does not rotate. Point stays dead.
+        /// Sim brush-phase stand-in — Carry + Wave only, never rotate; O2/O3 tools are carried, not spun (§2.3).
         case sim = "Sim"
 
         var allowsPoint: Bool { self == .point }
         var allowsCarry: Bool { self == .carry || self == .sim }
+        /// Re-grab rotate after first placement — O1 / `.carry` only. Sim (O2/O3) never rotates.
+        var allowsRotate: Bool { self == .carry }
         var allowsWave: Bool { self == .sim }
         var allowsLegacyPinch: Bool {
             self == .place || self == .adjust || self == .move
         }
     }
-    @Published var demoMode: DemoMode = .adjust
+    @Published var demoMode: DemoMode = .adjust {
+        didSet {
+            // Edge only: per-frame endCarryIfActive() also killed Adjust's shared ManipulationTracker.
+            if oldValue.allowsCarry, !demoMode.allowsCarry {
+                endCarryIfActive()
+            }
+        }
+    }
 
     @Published var showPlaneVisualization = false {
         didSet { applyDebugOptions() }
@@ -86,10 +74,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     @Published var showLandmarks = true
     @Published var hudHidden = false
 
-    /// Torch works alongside an active ARSession — it's a device-level
-    /// property, not a second capture session, so this doesn't conflict
-    /// with ARKit owning the camera. Control Center's toggle often can't
-    /// reach the torch while another app holds the camera; this can.
+    /// Device-level property, not a second capture session — coexists with ARKit owning the camera;
+    /// Control Center's toggle often can't reach the torch while another app holds it, this can.
     @Published private(set) var torchOn = false
 
     func toggleTorch() {
@@ -112,55 +98,32 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// ARSessionCoordinator+Point.swift.
     @Published var dwellProgress: Double = 0
 
-    /// Not `private` — ARSessionCoordinator+Carry.swift may set
-    /// `exitThresholdOverride` when re-grab rotate locks scale mode.
+    /// Not `private` — +Rotate.swift sets `exitThresholdOverride` when re-grab rotate locks scale mode.
     var stateMachine = PinchStateMachine(tuning: .default)
-    /// Not `private` — ARSessionCoordinator+Carry.swift drives this for
-    /// re-grab rotate under `.carry` demo mode (Prompt D).
+    /// Not `private` — +Rotate.swift drives this for re-grab rotate under `.carry` demo mode.
     var manipulation = ManipulationTracker(tuning: .default)
-    /// Not `private` — also driven from ARSessionCoordinator+Carry.swift's
-    /// `.pickedUp`/`.putDown` (the carry toggle reuses the same follow
-    /// controller Move already uses, per Prompt C).
+    /// Not `private` — also driven from +Carry.swift's `.pickedUp`/`.putDown` (carry reuses Move's follow controller).
     var moveController = MoveController(tuning: .default)
-    /// Entity IDs that Carry has put down at least once this session. A
-    /// re-pinch on one of these routes to ManipulationTracker (yaw) instead
-    /// of another carry cycle — the only new Prompt D state.
+    /// Entities Carry has put down at least once; a re-pinch on one routes to ManipulationTracker (yaw) instead of a new carry.
     var previouslyPlacedEntities: Set<EntityID> = []
-    /// Not `private` — mutated from ARSessionCoordinator+Point.swift's
-    /// `handlePoint`, the only place that feeds or resets it outside `start()`.
+    /// Not `private` — mutated only from +Point.swift's `handlePoint` outside `start()`.
     var pointStateMachine = PointStateMachine(tuning: .default)
-    /// Not `private` — mutated from ARSessionCoordinator+Wave.swift's
-    /// `handleWave`, the only place that feeds or resets it outside `start()`.
+    /// Not `private` — mutated only from +Wave.swift's `handleWave` outside `start()`.
     var waveDetector = WaveDetector(tuning: .default)
-    /// Not `private` — fed from ARSessionCoordinator+Carry.swift's
-    /// `handleCarryRouting`, the only place that feeds or resets it outside `start()`.
+    /// Not `private` — fed only from +Carry.swift's `handleCarryRouting` outside `start()`.
     var carryMachine = CarryStateMachine(tuning: .default)
-    /// Count of `.waved` fires this session — debug HUD affordance so a
-    /// wave/hold can be confirmed on device without a console attached. Not
-    /// `private(set)` — incremented from ARSessionCoordinator+Wave.swift's
-    /// `handleWave` (pre-existing scaffolding bug fixed in passing: this file
-    /// wouldn't build otherwise).
+    /// `.waved` fire count — debug HUD affordance. Not `private(set)` — incremented from +Wave.swift's `handleWave`.
     @Published var waveCount = 0
-    /// Timestamp (machineTime) the last gesture ended — the sole input to
-    /// the Move-vs-Adjust grab-timing decision. nil until the first gesture ends.
+    /// Last gesture-end timestamp — sole input to the Move-vs-Adjust grab-timing decision.
     private var lastGestureEndTime: TimeInterval?
-    /// The live placement-preview raycast hit, refreshed every frame in
-    /// updateOverlay(). Move reads this directly instead of raycasting again
-    /// — see GestureTuning.regrabWindow doc and Prompt 11. `private(set)`,
-    /// not `private` — ARSessionCoordinator+Carry.swift reads it the same way.
+    /// Live placement-preview raycast hit (refreshed in updateOverlay()); Move reads this instead of re-raycasting.
+    /// `private(set)`, not `private` — +Carry.swift reads it the same way.
     private(set) var previewWorldHit: SIMD3<Float>?
     private var rollPalm = RollingMinMax()
-    /// Median-of-5 on pinchRatio — the single chokepoint every downstream
-    /// consumer (state machine, manipulation, HUD, CSV) reads through.
-    /// Raw per-frame Vision noise on this ratio is large (measured: ~35% of
-    /// consecutive frames jump enough on their own to blow through the scale
-    /// deadzone, hand held still) — median, not EMA, since the noise is
-    /// outlier spikes (up to 20x in one frame) that an EMA would smear
-    /// through rather than reject.
+    /// Median-of-5 on pinchRatio, the chokepoint every consumer reads through — not EMA, since raw noise is
+    /// outlier spikes (up to 20x in one frame; ~35% of consecutive frames jump enough to blow the deadzone).
     private var ratioFilterBuffer: [Double] = []
-    /// `private(set)` — ARSessionCoordinator+Point.swift (and future
-    /// +Carry/+Wave) read this as the shared frame clock instead of deriving
-    /// their own from `packet.timestamp` a second time.
+    /// `private(set)` — +Point.swift (and future +Carry/+Wave) read this as the shared frame clock.
     private(set) var machineTime: TimeInterval = 0
     /// Tracks committed→false transition edge for the one-shot commit reaction
     /// (collision regen + exit-threshold reset) in `.changed`.
@@ -213,7 +176,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         manipulation.reset()
         moveController.reset()
         pointStateMachine.reset()
-        waveDetector = WaveDetector(tuning: tuning)
+        waveDetector.tuning = tuning
+        waveDetector.reset()
         waveCount = 0
         carryMachine.reset()
         carriedEntity = nil
@@ -267,14 +231,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         framesProcessed += 1
 
         guard let frame else {
-            // A nil frame (Vision request threw) still has to reach the state
-            // machine, or an in-flight gesture never times out: the machine
-            // sits in .active forever, moveController stays isActive, and the
-            // next frame that *does* arrive resumes the drag as if nothing
-            // happened. Feed it an empty observation so the grace period can
-            // cancel. Only .cancelled/.possible can come out of this path.
-            // Same requirement for carry / point / wave (plan §2) — each must
-            // sit on this path or a drop mid-gesture hangs that recognizer.
+            // Nil frame (Vision threw) still must reach every state machine or an in-flight
+            // gesture never times out — see docs/ARCHITECTURE.md §5 seam 5.
             clearOverlay()
             machineTime = packet.timestamp
             let events = stateMachine.process(
@@ -295,18 +253,15 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         let ratios = PinchRatioCalculator.ratios(from: frame.joints, confidenceGate: tuning.confidenceGate)
         let filteredRatio = filterRatio(ratios.palmWidth)
         pinchRatio = filteredRatio
-        // Real frame timestamp, not a counted-frame fake clock — Vision's actual
-        // rate under AR load can be well below `tuning.inferenceInterval`'s assumed
-        // 66ms, which would silently stretch the hysteresis/grace windows.
+        // Real frame timestamp, not a counted-frame clock — Vision's actual rate under AR load can dip
+        // below inferenceInterval's assumed 66ms, which would silently stretch hysteresis/grace windows.
         machineTime = packet.timestamp
         rollPalm.push(filteredRatio, now: machineTime)
         palmWidthMin = rollPalm.min
         palmWidthMax = rollPalm.max
 
         let coverage = handCoveragePct(frame)
-        // Per-frame order (plan §2): ratio → overlay → pinch → carry/rotate → point → wave.
-        // Legacy Place/Adjust/Move (`handleGestureEvent`) is not in that list — it still
-        // runs after wave below, gated by `demoMode.allowsLegacyPinch`.
+        // Order: ratio→overlay→pinch→carry/rotate→point→wave; legacy after, gated (ARCHITECTURE.md §4).
         updateOverlay(frame: frame, packet: packet)
 
         let observation = PinchObservation(
@@ -350,12 +305,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         coverage: Double?
     ) {
         let yawCandidates = YawAngleCalculator.angles(from: frame, confidenceGate: tuning.confidenceGate)
-        // Driving yaw signal: horizontal slide of the pinch point (screen-width
-        // fraction, gained up), not a hand-rotation angle. Reuses the same
-        // pinchViewportPoint the raycast preview already computes this frame in
-        // updateOverlay(), so it rides the tested displayTransform pipeline
-        // instead of a new raw-Vision-space axis computation. Position signal,
-        // not periodic — see GestureTuning.horizontalSlideGain.
+        // Yaw = horizontalSlide of pinchViewportPoint × gain (docs/GESTURES.md §2.3).
         let horizontalSlide: Double? = pinchViewportPoint.map { point in
             Double(point.x / max(cachedViewportSize.width, 1)) * tuning.horizontalSlideGain
         }
@@ -374,16 +324,11 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             framesProcessed: framesProcessed,
             yawAngle2D: yawCandidates.thumbIndex,
             yawPalmAxis: yawCandidates.palmAxis,
-            yawWristAxis: horizontalSlide,
+            horizontalSlide: horizontalSlide,
             mode: manipulationModeName.lowercased() == "—" ? "" : manipulationModeName.lowercased()
         )
 
-        // Carry mode owns its own pinch → pick-up / put-down / re-grab-rotate
-        // path in handleCarryRouting. Feeding the same events into Adjust/Move
-        // here races: Carry's .pickedUp starts moveController, then this
-        // .ended calls finishManipulation() and undoes it (Prompt D).
-        // Point/Sim likewise must not fall through into Adjust (Sim would look
-        // like Adjust via `demoMode == .move ? .move : .adjust`).
+        // ⚠️ Skip when !allowsLegacyPinch — races Carry's moveController (docs/ARCHITECTURE.md §4).
         guard demoMode.allowsLegacyPinch else { return }
 
         switch event {
@@ -393,19 +338,14 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             ratioFilterBuffer = []
             if demoMode != .place, scene.hasPlacedEntity,
                let point = pinchViewportPoint, let model = scene.selectModel(at: point) {
-                // Deterministic: the selected mode is the decision. No timing
-                // fallback — see DemoMode's doc for why the old
-                // moveOrAdjustTrigger path was pulled out of here.
+                // HUD DemoMode decides; moveOrAdjustTrigger not on live path (docs/GESTURES.md §1).
                 let trigger: GrabTrigger = demoMode == .move ? .move : .adjust
 
                 switch trigger {
                 case .adjust:
                     metrics.beginGesture()
                     let scale = model.scale.x
-                    manipulation.begin(entityScale: scale, entityYaw: scene.modelYaw)
-                    scene.setHighlighted(true)
-                    manipulationModeName = "—"
-                    manipulationCommitted = false
+                    beginManipulation(entityScale: scale, entityYaw: scene.modelYaw)
                     metrics.log(
                         event: .manipulation,
                         secondsSinceStart: planeScan.secondsSinceStart,
@@ -422,20 +362,14 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                         scaleFactor: scale,
                         yawAngle2D: yawCandidates.thumbIndex,
                         yawPalmAxis: yawCandidates.palmAxis,
-                        yawWristAxis: horizontalSlide,
+                        horizontalSlide: horizontalSlide,
                         yawAtBegan: horizontalSlide,
                         appliedYawRad: scene.modelYaw,
                         mode: "ambiguous"
                     )
 
                 case .move:
-                    // Don't start until there's a real raycast hit. Falling
-                    // back to the model's own world position here used to
-                    // seed `hit0` in a different frame of reference than the
-                    // plane hits .changed feeds afterward — the moment the
-                    // raycast recovered, `hit - hit0` collapsed to `hit`
-                    // outright and the object snapped under the fingertip,
-                    // dropping its lift. No fallback: wait for a real hit.
+                    // ⚠️ Wait for previewWorldHit — model-world hit0 snaps under fingertip (GESTURES.md §2.8).
                     guard let hit = previewWorldHit else { break }
                     metrics.beginGesture()
                     moveController.begin(hit: hit, modelWorld: model.position(relativeTo: nil))
@@ -443,15 +377,10 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                     manipulationModeName = "MOVE"
                 }
             } else if demoMode == .place || !scene.hasPlacedEntity {
-                // Place mode adds a new object every pinch instead of
-                // replacing the existing one — Move/Adjust only reach here
-                // when nothing's placed yet. SceneController.place() appends
-                // to the tracked list and makes the new entity active.
+                // Place appends; Move/Adjust only place when nothing exists yet (ADR-019).
                 placeFromHand(frame: frame, packet: packet)
             }
-            // else: demoMode is Move/Adjust, something's placed, but the
-            // pinch point didn't hit-test onto any of it — no grab, nothing
-            // happens (see SceneController.selectModel fallback rationale).
+            // else: miss even with screen-radius fallback → no grab (docs/GESTURES.md §2.1).
 
         case .changed(let ratio):
             guard manipulation.isActive || moveController.isActive else { break }
@@ -462,30 +391,11 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                 break
             }
 
-            // horizontalSlide, not an angle candidate (thumbIndex / palmAxis /
-            // wristMiddle) — see the comment where horizontalSlide is computed,
-            // above. ManipulationTracker.unwrapYaw treats this as a plain
-            // linear delta, not a periodic angle — do not feed a radians
-            // signal through this path without also restoring the ±π wrap.
+            // ⚠️ horizontalSlide is linear — don't feed radians w/o ±π unwrap (ARCHITECTURE.md §4).
             let result = manipulation.update(ratio: ratio, yaw: horizontalSlide, now: machineTime)
             applyManipulation(result)
-            if result.didLock {
-                stateMachine.exitThresholdOverride = tuning.scaleModeExitThreshold
-            }
-            if result.committed, !manipulationCommitted {
-                // Fires once, on the committed=false->true edge.
-                if result.mode == .scale {
-                    scene.regenerateCollisionShapes()
-                }
-                stateMachine.exitThresholdOverride = nil
-            }
-            manipulationCommitted = result.committed
 
-            // ponytail: OK-sign pause override removed — okSignFingerExtendedRatio
-            // was an uncalibrated guess and fired on ordinary scaling pinches,
-            // force-committing the gesture within ~50ms (see DECISIONS.md).
-            // HandShapeClassifier/isOKSign stay in the codebase, unused, for
-            // whenever this gets a real hold-duration gate + calibrated data.
+            // ponytail: OK-sign pause removed — uncalibrated, fired ~50ms (docs/GESTURES.md §2.6).
 
             metrics.log(
                 event: .manipulation,
@@ -503,7 +413,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                 scaleFactor: result.scaleFactor,
                 yawAngle2D: yawCandidates.thumbIndex,
                 yawPalmAxis: yawCandidates.palmAxis,
-                yawWristAxis: horizontalSlide,
+                horizontalSlide: horizontalSlide,
                 yawAtBegan: result.baselineYaw,
                 appliedYawRad: result.appliedYaw ?? scene.modelYaw,
                 mode: result.mode.rawValue
@@ -529,7 +439,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                     scaleFactor: scene.activeModel?.scale.x,
                     yawAngle2D: yawCandidates.thumbIndex,
                     yawPalmAxis: yawCandidates.palmAxis,
-                    yawWristAxis: horizontalSlide,
+                    horizontalSlide: horizontalSlide,
                     appliedYawRad: scene.modelYaw,
                     mode: manipulation.mode.rawValue
                 )
@@ -549,8 +459,15 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         }
     }
 
-    /// Not `private` — ARSessionCoordinator+Carry.swift applies ManipulationTracker
-    /// results for re-grab rotate under `.carry` demo mode.
+    /// Shared Adjust / re-grab-rotate start. Not `private` — `+Rotate.swift` calls this.
+    func beginManipulation(entityScale: Float, entityYaw: Float) {
+        manipulation.begin(entityScale: entityScale, entityYaw: entityYaw)
+        scene.setHighlighted(true)
+        manipulationModeName = "—"
+        manipulationCommitted = false
+    }
+
+    /// Shared Adjust/rotate apply + commit-edge; called from +Rotate.swift.
     func applyManipulation(_ result: ManipulationResult) {
         switch result.mode {
         case .ambiguous:
@@ -566,9 +483,19 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                 scene.applyYaw(yaw)
             }
         }
+        if result.didLock {
+            stateMachine.exitThresholdOverride = tuning.scaleModeExitThreshold
+        }
+        if result.committed, !manipulationCommitted {
+            if result.mode == .scale {
+                scene.regenerateCollisionShapes()
+            }
+            stateMachine.exitThresholdOverride = nil
+        }
+        manipulationCommitted = result.committed
     }
 
-    /// Not `private` — ARSessionCoordinator+Carry.swift ends a re-grab rotate
+    /// Not `private` — ARSessionCoordinator+Rotate.swift ends a re-grab rotate
     /// the same way Adjust does.
     func finishManipulation() {
         stateMachine.exitThresholdOverride = nil
@@ -640,9 +567,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             )
             pinchViewportPoint = viewPoint
 
-            // Live ray preview (does not place) so misalignment is visible before pinch.
-            // Move (Prompt 11) reads previewWorldHit directly — same raycast,
-            // zero extra calls.
+            // Live ray preview (no place); Move reuses previewWorldHit.
             let preview = placement.raycast(from: viewPoint, in: arView)
             if let transform = preview.worldTransform {
                 let world = SIMD3<Float>(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
@@ -679,9 +604,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         previewWorldHit = nil
     }
 
-    /// Median-of-5 rolling filter. A dropped/gated frame (nil) doesn't reset
-    /// the window — a real gap in tracking is handled upstream by the state
-    /// machine's grace period, not here.
+    /// Median-of-5; nil does not reset — grace is upstream (docs/ARCHITECTURE.md §4).
     private func filterRatio(_ raw: Double?) -> Double? {
         guard let raw else { return nil }
         ratioFilterBuffer.append(raw)
@@ -752,10 +675,7 @@ extension ARSessionCoordinator: ARSessionDelegate {
     nonisolated func session(_ session: ARSession, didUpdate frame: ARFrame) {
         framesReceivedCounter += 1
         let received = framesReceivedCounter
-        // Publish on every delegate callback, not just successful hand-off to
-        // Vision below — otherwise this counter reads 0 whenever `packet` is nil
-        // (e.g. viewport size not yet known), hiding exactly the failure it
-        // exists to surface.
+        // Count every callback, not only Vision hand-offs — else hides packet=nil failures.
         Task { @MainActor in self.framesReceived = received }
 
         let viewport = cachedViewportSize

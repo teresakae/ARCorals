@@ -32,12 +32,7 @@ struct ManipulationTracker: Sendable {
     private(set) var mode: ManipulationMode = .ambiguous
     private(set) var isActive = false
 
-    // Settling window (arming). Distinct from dwell-to-commit below: settling
-    // runs BEFORE any baseline/mode-lock exists and asks "has the hand stopped
-    // closing yet?" off per-frame rate of change; dwell runs AFTER a mode is
-    // locked and asks "has the control signal held near one anchor long
-    // enough to freeze?" Different questions, different state, no shared
-    // helper worth forcing.
+    // Settling (pre-lock arming) ≠ dwell-to-commit (post-lock freeze). docs/ARCHITECTURE.md §4
     private(set) var isArmed = false
     private var settleWindow: [Double] = []
     private var settleQuietRun = 0
@@ -46,9 +41,7 @@ struct ManipulationTracker: Sendable {
     private var yawSamples: [Double] = []
     private var baselineRatio: Double?
     private var baselineYaw: Double?
-    /// Trailing samples for the lock-instant rebase — a single frame at lock
-    /// is, by definition, likely to be the noise spike that triggered the
-    /// lock; median a short trailing window instead.
+    /// Lock-rebase trailing samples (median, not the spike lock frame). docs/ARCHITECTURE.md §4
     private var lockRatioSamples: [Double] = []
     private var lockYawSamples: [Double] = []
 
@@ -60,8 +53,7 @@ struct ManipulationTracker: Sendable {
     private var pendingScale: Float = 1
     private var pendingYaw: Float = 0
 
-    // Dwell-to-commit: once locked, holding the control signal still for
-    // tuning.dwellDuration freezes the gesture at its current value.
+    // Dwell-to-commit: hold control signal still for `dwellDuration` → freeze. docs/GESTURES.md §2.5
     private(set) var committed = false
     private var dwellAnchor: Double?
     private var dwellStartTime: TimeInterval?
@@ -106,9 +98,7 @@ struct ManipulationTracker: Sendable {
         committedYaw = nil
     }
 
-    /// `now` should be a real, monotonically increasing clock (e.g. ARFrame
-    /// timestamp) — dwell-to-commit times off it. Defaults to wall clock so
-    /// call sites that don't care (tests) don't have to thread one through.
+    /// Prefer ARFrame timestamps for dwell; wall clock default for tests.
     mutating func update(
         ratio: Double?,
         yaw: Double?,
@@ -130,8 +120,7 @@ struct ManipulationTracker: Sendable {
             )
         }
 
-        // Already committed: frozen at the value captured at commit time,
-        // regardless of further hand motion, until reset() (gesture end).
+        // Committed: hold frozen values until reset().
         if committed {
             return ManipulationResult(
                 mode: mode,
@@ -148,20 +137,10 @@ struct ManipulationTracker: Sendable {
             )
         }
 
-        // Always unwrap yaw, arming or not — a real grab-and-turn is one
-        // continuous motion, not grab-pause-turn. If accumulation only
-        // started once armed, a rotation that begins during the settle
-        // window (which is common: closing the pinch and starting the turn
-        // happen together) would be silently thrown away, and the race
-        // would then see no yaw motion at all and lock scale by default.
+        // ⚠️ Unwrap yaw before arming — settle-gated accum discarded grab-and-turn. docs/GESTURES.md §2.4
         unwrapYaw(yaw)
 
-        // Settling window. A natural grab is one continuous fast closure and
-        // `.began` fires part-way through it, so the frames right after begin
-        // are pinch-closing motion, not scale intent. The RATIO baseline and
-        // the mode-lock race wait for the ratio to go quiet (or timeout) —
-        // but yaw accumulation above is NOT gated on this, so real rotation
-        // that happens while the pinch is still settling still counts.
+        // Settling waits for quiet ratio; yaw already unwrapping above. docs/GESTURES.md §2.4
         if !isArmed {
             arm(ratio: ratio, yaw: yaw, now: now)
             if !isArmed {
@@ -169,10 +148,7 @@ struct ManipulationTracker: Sendable {
             }
         }
 
-        // Yaw baseline is established independently of ratio's — the yaw
-        // signal's confidence gate (two MCP joints) can lag ratio's by
-        // several frames, and gating both together stalls the whole gesture
-        // on a single dropped frame (the "stuck ambiguous" bug).
+        // ⚠️ Yaw baseline independent of ratio — co-gating stalled on lag ("stuck ambiguous").
         if baselineYaw == nil, let yaw {
             yawSamples.append(yaw)
             if yawSamples.count >= 3 {
@@ -190,8 +166,7 @@ struct ManipulationTracker: Sendable {
                 return frozen(didLock: false, scaleProgress: 0, yawProgress: 0)
             }
 
-            // Keep a short trailing window so the lock-instant rebase medians
-            // recent samples instead of trusting the single (likely spiky) frame.
+            // Trailing window for lock-rebase median.
             lockRatioSamples.append(ratio)
             if lockRatioSamples.count > 3 { lockRatioSamples.removeFirst() }
             if let yaw {
@@ -209,8 +184,7 @@ struct ManipulationTracker: Sendable {
                 } else {
                     mode = .yaw
                 }
-                // Rebase at lock so the object does not jump. Median the trailing
-                // window rather than the single lock frame — see lockRatioSamples.
+                // Rebase baselines at lock (median trailing) so the object doesn't jump.
                 self.baselineRatio = Self.median(lockRatioSamples)
                 self.baselineYaw = lockYawSamples.isEmpty ? self.baselineYaw : Self.median(lockYawSamples)
                 accumulatedYaw = 0
@@ -231,9 +205,7 @@ struct ManipulationTracker: Sendable {
             guard let ratio, let br = self.baselineRatio else {
                 return frozen(didLock: didLock, scaleProgress: 1, yawProgress: 0)
             }
-            // Asymmetric by direction: a settled pinch sits near the physical
-            // closing floor, so the closing side has far less travel left than
-            // the opening side (see GestureTuning.scaleShrinkSensitivity).
+            // Asymmetric scale gain — closing has less travel left. docs/GESTURES.md §2.2
             let logRatio = log(ratio / br)
             let sensitivity = logRatio < 0 ? tuning.scaleShrinkSensitivity : tuning.scaleSensitivity
             let factor = exp(logRatio * sensitivity)
@@ -280,10 +252,7 @@ struct ManipulationTracker: Sendable {
         }
     }
 
-    /// Immediately freezes the gesture at the given value, bypassing the
-    /// dwell timer — the OK-sign pause override (HandShapeClassifier, via
-    /// ARSessionCoordinator) calls this instead of waiting out
-    /// tuning.dwellDuration. No-op if not actively locked or already committed.
+    /// Bypass dwell and freeze now (OK-sign pause path; unused live). docs/GESTURES.md §2.6
     mutating func forceCommit(scale: Float?, yaw: Float?) {
         guard isActive, !committed else { return }
         committed = true
@@ -291,10 +260,7 @@ struct ManipulationTracker: Sendable {
         committedYaw = yaw
     }
 
-    /// Shared dwell-still-detector for both the scale (log-ratio) and yaw
-    /// (radians) control signals — only one is ever active per locked
-    /// gesture, so one anchor/timer pair covers both. Returns true on the
-    /// frame commit fires (caller stores its own frozen value that frame).
+    /// Shared dwell detector for scale/yaw; true on the commit frame.
     private mutating func trackDwell(
         signal: Double,
         now: TimeInterval,
@@ -318,18 +284,10 @@ struct ManipulationTracker: Sendable {
         return false
     }
 
-    /// Arms the gesture once the pinch has stopped closing: three consecutive
-    /// ratio samples within `settleQuietLogDelta` of each other. The quiet
-    /// samples are themselves the baseline (same median-of-3 as before, just
-    /// taken from frames that are known-still), so arming costs no extra
-    /// frames beyond the settling itself. `settleTimeout` arms anyway if the
-    /// hand never goes quiet — a laggy gesture beats a dead one.
+    /// Arm after 3 quiet ratio samples (or `settleTimeout`) = baseline. docs/ARCHITECTURE.md §4
     private mutating func arm(ratio: Double?, yaw: Double?, now: TimeInterval) {
         if settleStart == nil { settleStart = now }
-        // Yaw rides along so its baseline is ready the instant we arm. Yaw's
-        // deadzone needs motion accumulated over several frames to trip; if it
-        // also had to spend 3 post-arm frames finding a baseline it would lose
-        // the mode-lock race to scale's single-frame check every time.
+        // Prefill yaw samples during settle so yaw doesn't lose the mode-lock race to scale.
         if let yaw {
             yawSamples.append(yaw)
             if yawSamples.count > 3 { yawSamples.removeFirst() }
@@ -349,21 +307,11 @@ struct ManipulationTracker: Sendable {
         baselineRatio = Self.median(settleWindow)
         if !yawSamples.isEmpty {
             baselineYaw = Self.median(yawSamples)
-            // previousYaw and accumulatedYaw are NOT reset here — unwrapYaw
-            // has been running continuously since .began (see update()), so
-            // any real rotation during the settle window is already reflected
-            // and must survive into the mode-lock race, not be discarded.
+            // Keep settle-window yaw accum into the race — do not zero here. docs/GESTURES.md §2.4
         }
     }
 
-    // Named unwrapYaw from signal generation #2 (thumb/index angle, radians,
-    // periodic at ±π — atan2(sin,cos) unwrap was correct there). Generation
-    // #3 (current) drives this off horizontalSlide — a screen-position
-    // fraction times a gain of 12, bounded ~0...12, not an angle and not
-    // periodic. Wrapping a non-periodic signal through ±π aliased any
-    // per-frame delta over π: a normal-speed hand slide reads back as small,
-    // wrong-signed, or ~0 depending on where it lands relative to the wrap
-    // point. Plain delta — no wrap — is correct for this signal.
+    // ⚠️ Plain delta, not ±π unwrap — `horizontalSlide` isn't periodic (GESTURES.md §2.3).
     private mutating func unwrapYaw(_ yaw: Double?) {
         guard let yaw else { return }
         if let previousYaw {

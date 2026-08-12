@@ -9,7 +9,7 @@ import Vision
 final class ProbeController: ObservableObject {
     @Published var latest: HandPoseResult?
     @Published var latestRatios: PinchRatioCalculator.Ratios?
-    @Published var overlayJoints: [JointSample] = []
+    @Published var overlayJoints: [LandmarkFrame.JointSample] = []
     /// Oriented image size after applying `.right` (width/height swapped from buffer).
     @Published var orientedImageSize: CGSize = .zero
     @Published var distanceCm: Int = 40
@@ -131,7 +131,7 @@ final class ProbeController: ObservableObject {
 
     private func publish(result: HandPoseResult, orientedSize: CGSize) {
         latest = result
-        overlayJoints = JointSample.allNames.compactMap { result.joints[$0] }
+        overlayJoints = LandmarkFrame.jointNames.compactMap { result.joints[$0] }
         orientedImageSize = orientedSize
 
         let ratios = PinchRatioCalculator.ratios(from: result.joints)

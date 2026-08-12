@@ -1,12 +1,4 @@
-import CoreGraphics
 import Foundation
-
-/// Screen-space / scalar only — no ARKit types. 2D/3D seam.
-enum GestureIntent: Equatable, Sendable {
-    case placeRequested(at: CGPoint)
-    case gestureEnded
-    case gestureCancelled
-}
 
 /// One sample from the (ratio, confidence) stream.
 struct PinchObservation: Equatable, Sendable {

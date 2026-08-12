@@ -1,7 +1,7 @@
 import ARKit
 import Foundation
 
-/// Phase 5 CSV — gesture / placement / manipulation rows (TESTING.md Phase 5 schema).
+/// Phase 5 CSV — gesture/placement/manipulation rows; rig + reporting in GESTURES.md.
 final class MetricsLogger {
     enum Event: String {
         case sessionStart
@@ -96,7 +96,7 @@ final class MetricsLogger {
         scaleFactor: Float? = nil,
         yawAngle2D: Double? = nil,
         yawPalmAxis: Double? = nil,
-        yawWristAxis: Double? = nil,
+        horizontalSlide: Double? = nil,
         yawAtBegan: Double? = nil,
         appliedYawRad: Float? = nil,
         mode: String = "",
@@ -129,7 +129,7 @@ final class MetricsLogger {
         cols.append(String(framesReceived))
         cols.append(String(framesProcessed))
         cols.append(groundTruth)
-        cols.append("") // placement_error_cm — ruler (TESTING Run C)
+        cols.append("") // placement_error_cm — ruler-measured column, per ADR-016; not populated on the live path
         cols.append(gid.map(String.init) ?? "")
         cols.append(pinchRatioAtBegan.map { String(format: "%.4f", $0) } ?? "")
         cols.append(scaleFactor.map { String(format: "%.4f", $0) } ?? "")
@@ -140,7 +140,7 @@ final class MetricsLogger {
         cols.append(mode)
         cols.append(overshootCount)
         cols.append(finalError)
-        cols.append(yawWristAxis.map { String(format: "%.4f", $0) } ?? "")
+        cols.append(horizontalSlide.map { String(format: "%.4f", $0) } ?? "")
 
         let row = cols.joined(separator: ",") + "\n"
         if let data = row.data(using: String.Encoding.utf8) {
@@ -173,7 +173,7 @@ final class MetricsLogger {
         "mode",
         "overshoot_count",
         "final_error",
-        "yaw_wrist_axis",
+        "horizontal_slide",
     ]
 
     private static func fileStamp() -> String {

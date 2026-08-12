@@ -2,11 +2,7 @@ import Foundation
 import XCTest
 @testable import HandProbe
 
-/// Carry is a toggle-latch over `PinchStateMachine`'s own event stream — these
-/// feed it synthetic `PinchGestureEvent` sequences with hand-picked
-/// timestamps, `MoveTriggerTests`' pure-timestamp style, rather than
-/// re-deriving pinch detection from raw ratios (already covered by
-/// `PinchStateMachineTests`).
+/// Carry toggle-latch over synthetic PinchGestureEvent timestamps — see GESTURES.md §2.8.
 final class CarryStateMachineTests: XCTestCase {
     private let targetA = EntityID(NSObject())
     private let targetB = EntityID(NSObject())
@@ -27,7 +23,7 @@ final class CarryStateMachineTests: XCTestCase {
     func testLongCycleDoesNothing() {
         var machine = makeMachine()
         _ = machine.process(CarryObservation(timestamp: 0.0, pinchEvent: .began(ratio: 1.0), target: targetA))
-        // Over tuning.carryToggleMaxDuration (0.5s) — a grab-and-drag, not a toggle.
+        // Over tuning.carryToggleMaxDuration (0.7s) — a grab-and-drag, not a toggle.
         let events = machine.process(CarryObservation(timestamp: 0.8, pinchEvent: .ended(ratio: 3.0), target: nil))
 
         XCTAssertEqual(events, [])
@@ -40,8 +36,7 @@ final class CarryStateMachineTests: XCTestCase {
         _ = machine.process(CarryObservation(timestamp: 0.2, pinchEvent: .ended(ratio: 3.0), target: nil))
         XCTAssertEqual(machine.carried, targetA)
 
-        // Second toggle's own hit-test target (targetB, or none) doesn't
-        // matter — a put-down always targets whatever is currently carried.
+        // Put-down always targets the carried entity, ignoring this toggle's hit-test target.
         _ = machine.process(CarryObservation(timestamp: 1.0, pinchEvent: .began(ratio: 1.0), target: targetB))
         let events = machine.process(CarryObservation(timestamp: 1.2, pinchEvent: .ended(ratio: 3.0), target: nil))
 
@@ -57,8 +52,7 @@ final class CarryStateMachineTests: XCTestCase {
         XCTAssertEqual(events, [])
         XCTAssertNil(machine.carried)
 
-        // The cancelled pinch must not leave a stale in-flight start time
-        // behind either — the next pinch is a fresh toggle candidate.
+        // Cancelled pinch must clear in-flight start — next pinch is a fresh toggle candidate.
         _ = machine.process(CarryObservation(timestamp: 5.0, pinchEvent: .began(ratio: 1.0), target: targetA))
         let nextEvents = machine.process(CarryObservation(timestamp: 5.2, pinchEvent: .ended(ratio: 3.0), target: nil))
         XCTAssertEqual(nextEvents, [.pickedUp(targetA)])
@@ -74,8 +68,7 @@ final class CarryStateMachineTests: XCTestCase {
     }
 
     func testSecondObjectDoesNotInheritFirstsState() {
-        // GESTURE_LOG.md guard: picking up a second object after putting the
-        // first one down must not carry any residue from the first cycle.
+        // Regression: second pickup after put-down must not inherit residue from the first cycle.
         var machine = makeMachine()
         _ = machine.process(CarryObservation(timestamp: 0.0, pinchEvent: .began(ratio: 1.0), target: targetA))
         _ = machine.process(CarryObservation(timestamp: 0.2, pinchEvent: .ended(ratio: 3.0), target: nil))
@@ -90,8 +83,7 @@ final class CarryStateMachineTests: XCTestCase {
         XCTAssertEqual(machine.carried, targetB)
     }
 
-    /// Prompt D: never-placed → Carry; after a `.putDown` → rotate on re-pinch
-    /// when `allowRotate` is true (the `.carry` demo mode).
+    /// Re-grab: never-placed→Carry; after putDown→rotate if allowRotate (`.carry`). GESTURES.md §1.
     func testRegrabRoutesToRotateAfterPutDown() {
         XCTAssertEqual(
             routeCarryPinch(target: targetA, previouslyPlaced: [], isCarrying: false, allowRotate: true),
@@ -109,8 +101,7 @@ final class CarryStateMachineTests: XCTestCase {
         XCTAssertNil(routeCarryPinch(target: nil, previouslyPlaced: [targetA], isCarrying: false, allowRotate: true))
     }
 
-    /// `.sim` (O2/O3 stand-in) passes `allowRotate: false` — a re-grab on a
-    /// previously-placed entity must stay `.carry`, never become `.rotate`.
+    /// `.sim` sets allowRotate:false — re-grab stays `.carry`, never `.rotate`. GESTURES.md §1.
     func testRegrabStaysCarryWhenRotateDisallowed() {
         XCTAssertEqual(
             routeCarryPinch(target: targetA, previouslyPlaced: [targetA], isCarrying: false, allowRotate: false),

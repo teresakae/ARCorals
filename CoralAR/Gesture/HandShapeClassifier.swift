@@ -2,11 +2,7 @@ import CoreGraphics
 import Foundation
 import Vision
 
-/// OK-sign detector. Geometrically, an OK sign's thumb-index pinch is
-/// identical to a normal pinch/grab (both read as a low pinchRatio) — what
-/// distinguishes it is the other three fingers held extended rather than
-/// curled. Used as a pause/stop override for an active manipulation
-/// (see ARSessionCoordinator.handleVision / ManipulationTracker.forceCommit).
+/// `isOKSign` dead live; `isPointing` gates point-and-dwell. docs/ARCHITECTURE.md
 enum HandShapeClassifier {
     static func isOKSign(
         joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample],
@@ -20,15 +16,12 @@ enum HandShapeClassifier {
             pinch / palmWidth < tuning.pinchThreshold
         else { return false }
 
-        return isExtended(joints, tip: .middleTip, mcp: .middleMCP, palmWidth: palmWidth, gate: confidenceGate, tuning: tuning)
-            && isExtended(joints, tip: .ringTip, mcp: .ringMCP, palmWidth: palmWidth, gate: confidenceGate, tuning: tuning)
-            && isExtended(joints, tip: .littleTip, mcp: .littleMCP, palmWidth: palmWidth, gate: confidenceGate, tuning: tuning)
+        return isExtended(joints, tip: .middleTip, mcp: .middleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.okSignFingerExtendedRatio)
+            && isExtended(joints, tip: .ringTip, mcp: .ringMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.okSignFingerExtendedRatio)
+            && isExtended(joints, tip: .littleTip, mcp: .littleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.okSignFingerExtendedRatio)
     }
 
-    /// Pointing detector: index extended, middle/ring/little not, thumb
-    /// clearly away from index (not just outside the pinch band — a mid-pinch
-    /// hand must never misread as pointing). Used to gate the point-and-dwell
-    /// target lookup (see ARSessionCoordinator+Point.swift).
+    /// Index out, others in, thumb clearly open — blocks mid-pinch false points. docs/GESTURES.md §2.9
     static func isPointing(
         joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample],
         confidenceGate: Float = GestureTuning.default.confidenceGate,
@@ -39,18 +32,16 @@ enum HandShapeClassifier {
             palmWidth > 1e-6
         else { return false }
 
-        guard isExtended(joints, tip: .indexTip, mcp: .indexMCP, palmWidth: palmWidth, gate: confidenceGate, tuning: tuning)
+        guard isExtended(joints, tip: .indexTip, mcp: .indexMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio)
         else { return false }
 
         guard
-            !isExtended(joints, tip: .middleTip, mcp: .middleMCP, palmWidth: palmWidth, gate: confidenceGate, tuning: tuning),
-            !isExtended(joints, tip: .ringTip, mcp: .ringMCP, palmWidth: palmWidth, gate: confidenceGate, tuning: tuning),
-            !isExtended(joints, tip: .littleTip, mcp: .littleMCP, palmWidth: palmWidth, gate: confidenceGate, tuning: tuning)
+            !isExtended(joints, tip: .middleTip, mcp: .middleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio),
+            !isExtended(joints, tip: .ringTip, mcp: .ringMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio),
+            !isExtended(joints, tip: .littleTip, mcp: .littleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio)
         else { return false }
 
-        // Reuse PinchRatioCalculator's palmWidth ratio rather than re-deriving
-        // thumb-index distance here. Pointing requires being clearly above
-        // pinchEnterThreshold, not just below the pinch/carry band.
+        // Thumb-index via `PinchRatioCalculator`; must clear `pinchEnterThreshold`.
         guard
             let ratio = PinchRatioCalculator.ratios(from: joints, confidenceGate: confidenceGate).palmWidth,
             ratio > tuning.pinchEnterThreshold
@@ -65,10 +56,10 @@ enum HandShapeClassifier {
         mcp: HumanHandPoseObservation.JointName,
         palmWidth: Double,
         gate: Float,
-        tuning: GestureTuning
+        threshold: Double
     ) -> Bool {
         guard let d = distance(joints, tip, mcp, gate: gate) else { return false }
-        return d / palmWidth > tuning.okSignFingerExtendedRatio
+        return d / palmWidth > threshold
     }
 
     private static func distance(

@@ -1,8 +1,6 @@
 import Foundation
 
-/// Identifies one annotation hotspot. Opaque wrapper so `Gesture/` stays free
-/// of RealityKit — `SceneController` maps its own entity identities onto this
-/// (see `SceneController.selectAnnotation(at:)`).
+/// Opaque annotation id — Gesture/ RealityKit-free. See `SceneController.selectAnnotation(at:)`.
 struct AnnotationID: Hashable, Sendable {
     let rawValue: String
 
@@ -20,12 +18,9 @@ enum PointEvent: Equatable, Sendable {
 /// One sample from the point-target stream.
 struct PointObservation: Equatable, Sendable {
     let timestamp: TimeInterval
-    /// Annotation the index fingertip is currently over. Nil if not pointing,
-    /// pointing at nothing, or gated out by confidence.
+    /// Annotation under index tip, or nil if not pointing / gated.
     let target: AnnotationID?
-    /// True while a pinch is active (began/changed). A pinch beginning
-    /// cancels any in-progress dwell outright — point and carry never run
-    /// together on the same target.
+    /// Pinch active cancels dwell — point/carry never share a target. docs/GESTURES.md §2.9
     let pinchActive: Bool
 }
 
@@ -41,9 +36,7 @@ struct PointStateMachine: Sendable {
 
     private var state: State = .idle
 
-    /// 0–1 fill for a dwell-in-progress ring UI affordance. 1 once hovering,
-    /// 0 when idle. Held steady (not recomputed) through a dropped-frame
-    /// grace window, same as the state itself.
+    /// 0–1 dwell ring fill; held through grace like state. 1 when hovering.
     private(set) var dwellProgress: Double = 0
 
     init(tuning: GestureTuning = .default) {
@@ -60,9 +53,7 @@ struct PointStateMachine: Sendable {
         let now = observation.timestamp
 
         if observation.pinchActive {
-            // Point and carry never run together on the same target — a
-            // pinch beginning cancels any in-progress dwell outright, with
-            // no event unless a hover popup was already showing.
+            // Pinch cancels dwell; emit `.hoverEnded` only if already hovering.
             var events: [PointEvent] = []
             switch state {
             case .idle, .dwelling:
@@ -102,8 +93,7 @@ struct PointStateMachine: Sendable {
                     dwellProgress = 0
                 }
             } else if now - lastSeenAt <= tuning.gracePeriod {
-                // Dropped frame within grace — hold the dwell in progress,
-                // same pattern as PinchStateMachine's lastValidAt.
+                // Grace hold on dropped frame (same idea as PinchStateMachine.lastValidAt).
                 break
             } else {
                 state = .idle

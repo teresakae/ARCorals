@@ -23,12 +23,24 @@ targets:
       - path: HandProbe
       # Shared with CoralAR so HandProbeTests can cover Phase 5 mode-lock math.
       - path: CoralAR/Gesture/ManipulationTracker.swift
-      # Shared so HandProbeTests can cover the Prompt 11 move-vs-adjust trigger decision.
+      # Shared so HandProbeTests can cover the pick-up-and-move mechanic's move-vs-adjust trigger decision.
       - path: CoralAR/Gesture/MoveController.swift
-      # Shared so HandProbeTests can cover the Point/Carry/Wave gesture scaffolds (GESTURE_BUILD_PROMPTS.md Prompt A).
+      # Shared so HandProbeTests cover the shipping GestureTuning (1.98 pinch band),
+      # not a stale HandProbe fork that still claimed ADR-015's 5.9.
+      - path: CoralAR/Gesture/GestureTuning.swift
+      # Shared so HandProbeTests can cover the Point/Carry/Wave gesture scaffolds (added in the initial gesture-track setup commit).
       - path: CoralAR/Gesture/PointStateMachine.swift
       - path: CoralAR/Gesture/CarryStateMachine.swift
       - path: CoralAR/Gesture/WaveDetector.swift
+      # Shared so HandProbe's own JointSample/PinchStateMachine/HandShapeClassifier/
+      # PinchRatioCalculator forks don't drift from the shipping CoralAR versions —
+      # HandProbe's local copies of these were deleted in favor of these. Also shared
+      # since HandShapeClassifier/PinchRatioCalculator key on LandmarkFrame.JointSample,
+      # so HandProbe uses the same joint type instead of its own parallel struct.
+      - path: CoralAR/Vision/LandmarkFrame.swift
+      - path: CoralAR/Gesture/PinchStateMachine.swift
+      - path: CoralAR/Gesture/HandShapeClassifier.swift
+      - path: CoralAR/Gesture/PinchRatioCalculator.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ada.ch5b.HandProbe

@@ -38,8 +38,7 @@ final class ManipulationTrackerDwellTests: XCTestCase {
         XCTAssertTrue(last.committed)
         XCTAssertEqual(last.scale, committedScale)
 
-        // A subsequent frame with a very different ratio must not move the
-        // frozen value — commit only lifts on reset().
+        // After commit, big ratio changes must not move frozen scale — only reset() lifts it.
         last = mt.update(ratio: exp(1.0), yaw: 0.0, now: t + 0.1)
         XCTAssertTrue(last.committed)
         XCTAssertEqual(last.scale, committedScale)

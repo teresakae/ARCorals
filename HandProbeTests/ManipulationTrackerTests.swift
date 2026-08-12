@@ -68,26 +68,14 @@ final class ManipulationTrackerTests: XCTestCase {
         XCTAssertNotNil(last.appliedYaw)
     }
 
-    // MARK: - Linear slide signal (current generation) accumulates without aliasing
-    //
-    // The production `yaw:` input is horizontalSlide (screen-position fraction
-    // × gain 12.0) — bounded, not periodic, not an angle. This replaces a
-    // prior test that fed a genuinely periodic angle wrapping across ±π
-    // (generation-2 signal, thumb/index or wrist/middleMCP angle — see
-    // GESTURE_LOG.md §3). That signal isn't what production sends anymore;
-    // asserting periodic unwrap behavior against it was pinning dead code.
-    // This test instead proves the thing that actually matters for the
-    // current signal: large per-frame deltas (well over π, which the old
-    // atan2 unwrap would have aliased) must still accumulate exactly, with
-    // no sign flips and no wrap-related jumps.
+    // MARK: - Linear slide (horizontalSlide) accumulates without aliasing — GESTURES.md Rotate history
 
     func testYawAccumulatesLinearSlideWithoutAliasing() {
         var mt = makeTracker()
         mt.begin(entityScale: 1.0, entityYaw: 0.0)
         establishBaseline(&mt, ratio: 1.0, yaw: 0.0)
 
-        // Steps of 2.0 rad-equivalent units per frame — comfortably over π,
-        // the exact magnitude the old periodic unwrap would have aliased.
+        // Steps of 2.0/frame — over π, where the old atan2 unwrap would have aliased.
         var applied: [Float] = []
         var slide = 0.0
         for _ in 0..<10 {

@@ -4,17 +4,16 @@ import XCTest
 @testable import HandProbe
 
 final class HandShapeClassifierTests: XCTestCase {
-    /// palmWidth (indexMCP–littleMCP) is fixed at 1.0 so per-finger ratios
-    /// below match the tuning constants directly.
+    /// palmWidth fixed at 1.0 so tip/MCP ratios match GestureTuning constants directly.
     private func makeJoints(
         pinchDist: Double,
         fingerExtendedRatio: Double
-    ) -> [HumanHandPoseObservation.JointName: JointSample] {
-        func j(_ name: HumanHandPoseObservation.JointName, _ x: CGFloat, _ y: CGFloat) -> JointSample {
-            JointSample(name: name, x: x, y: y, confidence: 1.0)
+    ) -> [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample] {
+        func j(_ name: HumanHandPoseObservation.JointName, _ x: CGFloat, _ y: CGFloat) -> LandmarkFrame.JointSample {
+            LandmarkFrame.JointSample(name: name, x: x, y: y, confidence: 1.0)
         }
 
-        var joints: [HumanHandPoseObservation.JointName: JointSample] = [
+        var joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample] = [
             .indexMCP: j(.indexMCP, 0, 0),
             .littleMCP: j(.littleMCP, 1, 0),
             .thumbTip: j(.thumbTip, 0, 0),
@@ -29,8 +28,7 @@ final class HandShapeClassifierTests: XCTestCase {
     }
 
     func testTightPinchWithCurledFingersIsNormalPinchNotOKSign() {
-        // pinchDist 0.05 -> ratio 0.05 (well under pinchThreshold 5.9).
-        // finger tip/MCP distance 0.3 -> ratio 0.3 (well under 1.2 extended cutoff).
+        // pinchDist 0.05 → ratio 0.05 (<1.98); tip/MCP 0.3 → 0.3 (<1.2 extended cutoff).
         let joints = makeJoints(pinchDist: 0.05, fingerExtendedRatio: 0.3)
         XCTAssertFalse(HandShapeClassifier.isOKSign(joints: joints))
     }
@@ -42,7 +40,7 @@ final class HandShapeClassifierTests: XCTestCase {
     }
 
     func testOpenHandWithExtendedFingersIsNotOKSign() {
-        // pinchDist 7.0 -> ratio 7.0, above pinchThreshold 5.9: not pinching at all.
+        // pinchDist 7.0 -> ratio 7.0, above pinchThreshold 1.98: not pinching at all.
         let joints = makeJoints(pinchDist: 7.0, fingerExtendedRatio: 2.0)
         XCTAssertFalse(HandShapeClassifier.isOKSign(joints: joints))
     }

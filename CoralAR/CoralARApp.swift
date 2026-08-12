@@ -33,8 +33,7 @@ struct CoralARApp: App {
     }
 }
 
-/// Placeholder text popup for point-and-dwell (Gesture Build Prompt B) — just
-/// enough content to exercise the gesture, not a real annotation system.
+/// Placeholder popup for point-and-dwell — scaffold, not real annotations. GESTURES.md §2.9.
 private struct AnnotationPopup: View {
     let annotationID: AnnotationID?
 
@@ -63,7 +62,6 @@ private struct ARViewContainer: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: ARView, context: Context) {
-        // Viewport size comes from .onGeometryChange in CoralARApp — updateUIView
-        // fires before the view is laid out on first call, so uiView.bounds is .zero then.
+        // ⚠️ Viewport via CoralARApp.onGeometryChange — updateUIView first call has bounds == .zero.
     }
 }

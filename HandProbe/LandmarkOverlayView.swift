@@ -2,7 +2,7 @@ import SwiftUI
 import Vision
 
 struct LandmarkOverlayView: View {
-    let joints: [JointSample]
+    let joints: [LandmarkFrame.JointSample]
     let orientedImageSize: CGSize
 
     var body: some View {

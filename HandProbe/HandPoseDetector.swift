@@ -55,10 +55,10 @@ actor HandPoseDetector {
                 )
             }
 
-            var joints: [HumanHandPoseObservation.JointName: JointSample] = [:]
-            for name in JointSample.allNames {
+            var joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample] = [:]
+            for name in LandmarkFrame.jointNames {
                 if let joint = hand.joint(for: name) {
-                    joints[name] = JointSample(
+                    joints[name] = LandmarkFrame.JointSample(
                         name: name,
                         x: joint.location.x,
                         y: joint.location.y,
@@ -89,29 +89,12 @@ actor HandPoseDetector {
     }
 }
 
-struct JointSample: Sendable {
-    let name: HumanHandPoseObservation.JointName
-    /// Vision-normalized, origin bottom-left, in the *oriented* image after `.right`.
-    let x: CGFloat
-    let y: CGFloat
-    let confidence: Float
-
-    static let allNames: [HumanHandPoseObservation.JointName] = [
-        .wrist,
-        .thumbCMC, .thumbMP, .thumbIP, .thumbTip,
-        .indexMCP, .indexPIP, .indexDIP, .indexTip,
-        .middleMCP, .middlePIP, .middleDIP, .middleTip,
-        .ringMCP, .ringPIP, .ringDIP, .ringTip,
-        .littleMCP, .littlePIP, .littleDIP, .littleTip,
-    ]
-}
-
 struct HandPoseResult: Sendable {
     /// True when throttle/in-flight dropped this frame (do not log or update HUD rate).
     let skipped: Bool
     let observationCount: Int
     let observationConfidence: Float
-    let joints: [HumanHandPoseObservation.JointName: JointSample]
+    let joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample]
     let chirality: HumanHandPoseObservation.Chirality?
     let inferenceHz: Double
     let timestamp: Date

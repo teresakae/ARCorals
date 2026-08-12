@@ -1,22 +1,13 @@
 import Foundation
 import simd
 
-/// Which mode a grab (`.began` on an already-placed entity) enters. Decided
-/// purely by elapsed time since the last gesture ended — never by racing
-/// Move against Adjust's signals. See docs/DECISIONS.md ADR-018 follow-ups:
-/// Yaw's horizontal-slide is a projection of Move's own position, so any
-/// real move would trigger Yaw's deadzone by construction if the two ever
-/// read the same frame's signals.
+/// Move vs Adjust by re-grab timing only — never race signals. docs/GESTURES.md §2.8
 enum GrabTrigger: Equatable, Sendable {
     case move
     case adjust
 }
 
-/// Pure trigger decision, extracted for testing. No prior gesture, or one
-/// that ended `regrabWindow` or more ago, means a fresh grab — treated as
-/// intent to move. A quick re-pinch inside the window means the user is
-/// still working the object they just released — treated as intent to
-/// adjust (scale/yaw).
+/// Fresh grab (≥`regrabWindow`) → move; quick re-pinch → adjust. Dead live. docs/GESTURES.md §2.8
 func moveOrAdjustTrigger(
     now: TimeInterval,
     lastGestureEnd: TimeInterval?,
@@ -26,12 +17,7 @@ func moveOrAdjustTrigger(
     return (now - lastGestureEnd) < regrabWindow ? .adjust : .move
 }
 
-/// Move-mode state: absolute-from-grab positioning (not accumulated deltas,
-/// so per-frame raycast noise doesn't compound). Reads only the pinch
-/// point's raycast hit, already computed each frame by
-/// ARSessionCoordinator.updateOverlay's live placement-preview line — this
-/// costs zero new raycasts. ManipulationTracker is untouched; Move is
-/// structurally separate, not a mode case there.
+/// Absolute-from-grab via placement-preview raycast; separate from ManipulationTracker.
 struct MoveController {
     var tuning: GestureTuning
 
@@ -52,9 +38,7 @@ struct MoveController {
         target = modelWorld
     }
 
-    /// Next target = model's position at grab + how far the raycast hit has
-    /// moved since grab, EMA-smoothed. `hit == nil` (raycast miss this
-    /// frame) holds the last target rather than dropping the grab.
+    /// `model0 + (hit - hit0)`, EMA; nil hit holds last target.
     @discardableResult
     mutating func update(hit: SIMD3<Float>?) -> SIMD3<Float> {
         guard isActive, let hit else { return target }

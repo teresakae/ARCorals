@@ -151,11 +151,7 @@ struct ARStatusHUD: View {
         .controlSize(.small)
     }
 
-    /// Demo control — pins what a pinch means, for showing one capability at
-    /// a time. Individual buttons, not a segmented Picker (kept from the
-    /// Prompt 11 placeholder era, when Move needed a disabled per-item
-    /// state segmented controls can't express — no longer load-bearing now
-    /// that Place/Adjust/Move/Point/Carry/Sim are live, but no reason to churn it).
+    /// Demo-mode pin: what a pinch means. Buttons (not Picker) — GESTURES.md §1.
     private var demoModePicker: some View {
         HStack(spacing: 6) {
             ForEach(ARSessionCoordinator.DemoMode.allCases, id: \.self) { mode in
@@ -168,9 +164,7 @@ struct ARStatusHUD: View {
                 .controlSize(.small)
             }
 
-            // Place mode now accumulates objects instead of replacing —
-            // this is the reset affordance so a demo can clear without
-            // restarting the app.
+            // Clear All — reset for Place mode's multi-object accumulate (GESTURES.md §1).
             Button("Clear All") {
                 session.scene.clearAll()
             }

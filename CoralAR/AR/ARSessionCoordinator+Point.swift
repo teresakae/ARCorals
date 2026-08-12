@@ -1,17 +1,9 @@
 import CoreGraphics
 import Foundation
 
-/// Point-and-dwell dispatch. Feeds the index fingertip through
-/// `HandShapeClassifier.isPointing` + `SceneController.selectAnnotation(at:)`
-/// into `PointStateMachine`, and mirrors its events into the annotation
-/// popup state.
-///
-/// Gated to `demoMode.allowsPoint` (Prompt F / plan §1 Showcase+Quiz). When
-/// gated off, still fed a nil-target observation so an in-flight dwell ends
-/// cleanly instead of hanging across a mode switch.
+/// Point-and-dwell → popup; allowsPoint; nil target when off ends dwell (docs/GESTURES.md §2.9).
 extension ARSessionCoordinator {
-    /// Called from `handleVision`, after carry/rotate routing. `frame` is nil on the
-    /// dropped/nil-Vision-frame path — must still be fed so an in-flight dwell can time out.
+    /// After carry/rotate; nil frame still fed so dwell times out (docs/ARCHITECTURE.md §5 seam 5).
     func handlePoint(frame: LandmarkFrame?, packet: FramePacket) {
         var target: AnnotationID?
 

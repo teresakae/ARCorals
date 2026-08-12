@@ -1,8 +1,7 @@
 import ARKit
 import Foundation
 
-/// Drives the "move your phone to scan the surface" prompt until the first confirmed plane.
-/// Non-optional without LiDAR — planes come from sparse visual features.
+/// Scan-prompt until first confirmed plane — required without LiDAR (AGENTS.md).
 @MainActor
 final class PlaneScanCoordinator {
     private(set) var sessionStart: Date?

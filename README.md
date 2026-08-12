@@ -2,20 +2,18 @@
 
 ## Project
 
-An experimental iOS AR app in which the rear camera watches the user's hands while the phone sits on a desk stand, and hand gestures place, scale, and yaw-rotate a 3D coral model on a real detected flat surface. Target device: iPhone 17 base (non-LiDAR). Stack: native Swift with ARKit, RealityKit, and Vision Framework for hand pose detection. This is a de-risking experiment to measure feasibility, not a product; the goal is a defensible yes/no answer reached in the first two weekends.
+An experimental iOS AR app for **roaming handheld use**: the user walks with the phone, the rear camera watches the free hand, and hand gestures place, scale, yaw-rotate and carry a 3D object on a real detected flat surface. (Early de-risking and pinch calibration used a desk/tripod stand; that rig is not how the app is used. Same binary, no code fork.) Target device: iPhone 17 base (non-LiDAR). Stack: native Swift with ARKit, RealityKit and the Vision framework for hand pose detection. This is a de-risking experiment to measure feasibility, not a product — the goal is a defensible yes/no answer.
 
-**Current phase:** 0
+**Status:** the original build phases 0–5 are complete and verified. Phase 6 (swapping the cube placeholder for a real `coral.usdz`) was never built; work moved instead to a gesture track — Point, Carry, Rotate and Wave — built on the cube prototype. The content layer has not started. See [`PROJECT.md`](docs/PROJECT.md) for scope and [`GESTURES.md`](docs/GESTURES.md) for per-gesture state.
 
 ## Documentation
 
 | Document | Purpose | When to read |
 |---|---|---|
-| [`RESEARCH.md`](docs/RESEARCH.md) | Hardware facts, feasibility analysis, and evidence | Start here if evaluating whether this is possible |
-| [`PRD.md`](docs/PRD.md) | What the experiment is, what success looks like, pass thresholds | Before building; defines the end state |
-| [`STEPS.md`](docs/STEPS.md) | Six build phases with acceptance criteria for each | Reference during development; phases are sequential |
-| [`AGENTS.md`](docs/AGENTS.md) | Stack, versions, coding rules, and phase constraints | Before writing code |
-| [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Intended system design and data flow | After understanding the scope; reference when structuring classes |
-| [`DECISIONS.md`](docs/DECISIONS.md) | ADR-style log of all technical decisions with status | When evaluating trade-offs or reconsidering design choices |
-| [`TESTING.md`](docs/TESTING.md) | How to validate each phase, test procedures, and pass criteria | At the start of each phase; defines what "done" means |
-| [`PROMPTS.md`](docs/PROMPTS.md) | Ready-to-send prompts, one per phase, plus analysis and recurring prompts | Every time you start a phase; copy the matching prompt |
-| [`GESTURE_LOG.md`](docs/GESTURE_LOG.md) | Living log of every gesture tried, current status, and known limits | Update every test session; check before testing to see what's already known |
+| [`PROJECT.md`](docs/PROJECT.md) | What the experiment is, what it answered, non-goals, prior art, live risks | Start here — scope and why this is built the way it is |
+| [`AGENTS.md`](docs/AGENTS.md) | Stack, hard constraints, coordinate gotchas, known traps, performance rules | Before writing any code |
+| [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Module breakdown, data flow, concurrency model, fragile seams | When structuring or changing code |
+| [`GESTURES.md`](docs/GESTURES.md) | Per-gesture status and history, tuning constants with provenance, on-device checklists | Every test session — check before re-tuning anything |
+| [`DECISIONS.md`](docs/DECISIONS.md) | ADR log of every technical decision, including the rejected options | Before reconsidering a design choice or proposing an alternative |
+
+`Measurements/` holds the CSV logs pulled off the device. They are the evidence behind the calibrated constants — ADRs cite them by filename.

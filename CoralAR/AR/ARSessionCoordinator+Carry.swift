@@ -1,18 +1,9 @@
 import Foundation
 import RealityKit
 
-/// Carry (pinch-toggle pick up/place) + rotate re-grab routing dispatch.
-/// Carry itself is Prompt C; re-grab → ManipulationTracker yaw is Prompt D.
+/// Carry pinch-toggle; re-grab→rotate via +Rotate (docs/GESTURES.md §1 / ARCHITECTURE.md §4).
 extension ARSessionCoordinator {
-    /// Called from `handleVision`, right after existing pinch processing. `frame` is nil on the
-    /// dropped/nil-Vision-frame path — must still be fed so an in-flight carry can time out.
-    ///
-    /// Only runs when `demoMode.allowsCarry` (`.carry` / `.sim`). Adjust/Move keep the legacy
-    /// `handleGestureEvent` path untouched; running both on the same pinch raced Carry's
-    /// pickup against `finishManipulation()` (Prompt D finding from Prompt C).
-    ///
-    /// `pinchEvents` is this frame's output from the shared `PinchStateMachine` — Carry does
-    /// not re-derive pinch detection.
+    /// allowsCarry route; nil-frame still fed (§5 seam 5). Leave-carry cleanup is demoMode.didSet.
     func handleCarryRouting(frame: LandmarkFrame?, packet: FramePacket, pinchEvents: [PinchGestureEvent]) {
         guard demoMode.allowsCarry else { return }
 
@@ -30,12 +21,10 @@ extension ARSessionCoordinator {
                     target: target,
                     previouslyPlaced: previouslyPlacedEntities,
                     isCarrying: carriedEntity != nil,
-                    allowRotate: demoMode == .carry
+                    allowRotate: demoMode.allowsRotate
                 ) {
                 case .rotate:
-                    guard let model = scene.activeModel else { break }
-                    manipulation.begin(entityScale: model.scale.x, entityYaw: scene.modelYaw)
-                    scene.setHighlighted(true)
+                    beginRotate()
 
                 case .carry:
                     let observation = CarryObservation(
@@ -51,14 +40,7 @@ extension ARSessionCoordinator {
 
             case .changed(let ratio):
                 if manipulation.isActive {
-                    let horizontalSlide: Double? = pinchViewportPoint.map { point in
-                        Double(point.x / max(cachedViewportSize.width, 1)) * tuning.horizontalSlideGain
-                    }
-                    let result = manipulation.update(ratio: ratio, yaw: horizontalSlide, now: machineTime)
-                    applyManipulation(result)
-                    if result.didLock {
-                        stateMachine.exitThresholdOverride = tuning.scaleModeExitThreshold
-                    }
+                    updateRotate(ratio: ratio)
                 } else {
                     let observation = CarryObservation(
                         timestamp: machineTime,
@@ -70,10 +52,7 @@ extension ARSessionCoordinator {
 
             case .ended, .cancelled:
                 if manipulation.isActive {
-                    if case .ended = pinchEvent, manipulation.mode == .scale {
-                        scene.regenerateCollisionShapes()
-                    }
-                    finishManipulation()
+                    endRotate(pinchEvent: pinchEvent)
                 } else {
                     let observation = CarryObservation(
                         timestamp: machineTime,
@@ -92,6 +71,19 @@ extension ARSessionCoordinator {
             let newTarget = moveController.update(hit: previewWorldHit)
             scene.moveModel(toWorld: newTarget)
         }
+    }
+
+    /// Drop stranded carry on leaving Carry/Sim; does not mark previously-placed.
+    /// Not `private` — `demoMode.didSet` calls this on the allow-carry → not edge.
+    func endCarryIfActive() {
+        if manipulation.isActive {
+            finishManipulation()
+        }
+        guard carriedEntity != nil || carryMachine.carried != nil else { return }
+        carryMachine.reset()
+        carriedEntity = nil
+        moveController.reset()
+        scene.setHighlighted(false)
     }
 
     private func applyCarryEvents(_ events: [CarryEvent]) {

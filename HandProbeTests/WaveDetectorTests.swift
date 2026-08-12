@@ -2,8 +2,7 @@ import Foundation
 import XCTest
 @testable import HandProbe
 
-/// Wave / stationary-hold — explicit-clock style, matching
-/// ManipulationTrackerSettlingTests (`frame = 1.0/15.0`).
+/// Wave / stationary-hold — explicit clock, frame=1/15 like ManipulationTrackerSettlingTests.
 final class WaveDetectorTests: XCTestCase {
     private let frame: TimeInterval = 1.0 / 15.0
 
@@ -11,14 +10,12 @@ final class WaveDetectorTests: XCTestCase {
         WaveDetector(tuning: .default)
     }
 
-    /// Oscillating wrist position: enough reversals + amplitude inside
-    /// `waveWindow` to read as "waving".
+    /// Oscillating wrist x: enough reversals + amplitude inside waveWindow ⇒ waving.
     private func waveX(at t: TimeInterval, center: Double = 0.5, amplitude: Double = 0.08, period: TimeInterval = 0.25) -> Double {
         center + amplitude * sin(2 * .pi * t / period)
     }
 
-    /// Feed `seconds` of wave motion starting at `startTime`; returns all
-    /// events fired and the elapsed clock at the end.
+    /// Feed seconds of wave from startTime; returns events fired + end clock.
     @discardableResult
     private func feedWave(
         _ detector: inout WaveDetector,
@@ -48,9 +45,7 @@ final class WaveDetectorTests: XCTestCase {
         XCTAssertTrue(events.isEmpty, "1s of wave motion is under the 2.0s hold duration")
     }
 
-    /// A brief nil-x gap decays progress but must not hard-reset it — the
-    /// wave resumes and still reaches the 2.0s hold within a window a hard
-    /// reset could not have completed in.
+    /// Brief nil-x gap decays progress, must not hard-reset — GESTURES.md §2.10.
     func testGapOfTwoFramesStillFires() {
         var detector = makeDetector()
         var t: TimeInterval = 0
@@ -69,9 +64,7 @@ final class WaveDetectorTests: XCTestCase {
             t += frame
         }
 
-        // Resume for another 1.0s — a hard reset could not reach 2.0s of
-        // fresh accumulated progress in only 1.0s; the decay model can,
-        // since it only lost the ~0.13s gap's worth of progress.
+        // Resume 1.0s: hard-reset couldn't hit 2.0s hold; decay only lost ~0.13s gap.
         let postGapEnd = t + 1.0
         while t < postGapEnd {
             events += detector.process(WaveObservation(timestamp: t, x: waveX(at: t)))
@@ -81,9 +74,7 @@ final class WaveDetectorTests: XCTestCase {
         XCTAssertEqual(events.filter { $0 == .waved }.count, 1, "a short gap must decay progress, not hard-reset it")
     }
 
-    /// Slow, steady drift: per-frame amplitude/reversal criteria never
-    /// qualify (monotonic, no reversals), and it walks away from the
-    /// stationary anchor rather than orbiting it — so it must never fire.
+    /// Slow monotonic drift: no reversals, leaves stationary anchor — must never fire.
     func testSlowDriftNeverFires() {
         var detector = makeDetector()
         var events: [WaveEvent] = []
@@ -98,9 +89,7 @@ final class WaveDetectorTests: XCTestCase {
         XCTAssertTrue(events.isEmpty, "monotonic drift is neither a wave nor a stationary hold")
     }
 
-    /// Fast, monotonic lateral translation — the carrying/dragging motion —
-    /// must never be mistaken for a wave (no reversals) or a hold (moves
-    /// well past the stationary radius every frame).
+    /// Fast lateral carry/drag: no reversals, past stationary radius — never wave/hold.
     func testCarryingSpeedTranslationNeverFires() {
         var detector = makeDetector()
         var events: [WaveEvent] = []
@@ -114,8 +103,7 @@ final class WaveDetectorTests: XCTestCase {
         XCTAssertTrue(events.isEmpty, "fast one-directional motion must not trigger the wave path")
     }
 
-    /// Stationary-hold fallback: holding still (tiny jitter under the
-    /// radius) for the hold duration fires `.waved` via the same timer.
+    /// Stationary-hold fallback: still (jitter < radius) for hold duration → .waved.
     func testStationaryHoldFallbackFires() {
         var detector = makeDetector()
         var events: [WaveEvent] = []
@@ -141,5 +129,13 @@ final class WaveDetectorTests: XCTestCase {
         // Immediately keep waving right after the first fire — still inside cooldown.
         let (secondRun, _) = feedWave(&detector, seconds: 1.0, startTime: endTime)
         XCTAssertTrue(secondRun.filter { $0 == .waved }.isEmpty, "cooldown should block an immediate re-fire")
+    }
+
+    func testResetClearsProgress() {
+        var detector = makeDetector()
+        _ = feedWave(&detector, seconds: 1.0, startTime: 0)
+        XCTAssertGreaterThan(detector.progress, 0)
+        detector.reset()
+        XCTAssertEqual(detector.progress, 0)
     }
 }

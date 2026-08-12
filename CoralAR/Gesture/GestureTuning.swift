@@ -4,76 +4,38 @@ import Foundation
 struct GestureTuning: Sendable, Equatable {
     static let `default` = GestureTuning()
 
-    /// palmWidth pinchRatio below this (minus band) → pinch intent.
-    /// Source: ADR-017. The HandProbe/ADR-015 value (5.9) did NOT transfer —
-    /// ARFrame's 4:3 buffer vs AVCaptureSession's 16:9 shifted the whole
-    /// distribution ~46% (phase4_join_20260809_174233.csv: pinched mean 0.823,
-    /// open mean 5.490 — at the old 5.9 threshold, 58.9% of open-hand frames
-    /// misfired as "pinch began"). Re-derived from that CSV's calibration rows.
+    /// palmWidth pinchRatio below this → pinch intent. Re-derived per ADR-017; see docs/GESTURES.md §3.
     var pinchThreshold: Double = 1.98
 
-    /// Provisional — carried over from ADR-015, NOT re-derived from a clean
-    /// static hold on ARFrame (this run was live self-toggled labeling, no
-    /// isolated pinch/open hold like HandProbe's b2/b3). Open-hand noise looked
-    /// higher here (sd ≈73% of its own mean vs HandProbe's cleaner hold) —
-    /// revisit with a real static-hold CSV before trusting this band.
+    /// Pinch hysteresis band. Measured — ADR-017 addendum static hold; see docs/GESTURES.md §3.
     var hysteresisBand: Double = 1.0
     var hysteresisDuration: TimeInterval = 0.100
     var gracePeriod: TimeInterval = 0.200
     var confidenceGate: Float = 0.3
     var inferenceInterval: TimeInterval = 0.066
 
-    // Phase 5 — provisional; set by targeting runs (TESTING.md Run F).
+    // Phase 5 mode-lock tuning — provisional; see docs/GESTURES.md §3 for provenance.
     /// log(|ratio/baseline|) must reach this before scale can lock.
     var scaleDeadzoneLog: Double = 0.18
-    /// |accumulatedYaw| (rad) must reach this before yaw can lock.
-    /// Was 0.21 (~12°) — too low, got beaten by incidental wrist rotation
-    /// that naturally happens while spreading fingers to scale, so yaw won
-    /// the lock almost every time regardless of intent. ~20° gives scale a
-    /// fair shot at winning a genuine widen/narrow motion.
+    /// |accumulatedYaw| (rad) to lock yaw. Raised from 0.21 — wrist rotation was winning the race; see docs/GESTURES.md §3.
     var yawDeadzoneRad: Double = 0.35
-    /// Was 1.0 — mapped the ~40x range of real finger motion onto the 16x
-    /// scale range almost 1:1, so one real movement slammed the clamp
-    /// (measured: lock to 0.25x floor in 130ms on device). 0.5 spreads that
-    /// same motion across the usable range instead of a two-position switch.
+    /// Scale gain, lowered from 1.0 — was slamming the clamp at ~130ms; see docs/GESTURES.md §2.2.
     var scaleSensitivity: Double = 0.5
-    /// Opening-side travel (settled pinch ≈0.64 up to the 3.5 scale-mode exit,
-    /// ~1.7 in log) dwarfs closing-side travel (≈0.64 down to a ~0.31 physical
-    /// floor, and users stop around 0.4 in log — measured over 87 gestures in
-    /// phase5_manip_20260809_23*.csv). At a single sensitivity the deadzone
-    /// eats most of the closing budget and "shrink" tops out near 0.9x.
-    /// Provisional: 1.75 puts shrink near 0.5x for the same physical motion
-    /// that grows ~2x, i.e. roughly symmetric in log-scale. Retune with
-    /// scaleSensitivity/scaleDeadzoneLog.
+    /// Asymmetric shrink gain — closing hits a physical floor sooner; see docs/GESTURES.md §2.2.
     var scaleShrinkSensitivity: Double = 1.75
     var yawSensitivity: Double = 1.0
-    /// Yaw driving signal switched from hand-rotation angle to horizontal
-    /// slide of the pinch point (normalized screen-width fraction), per user
-    /// call — rotation-by-angle from a short landmark vector kept losing to
-    /// scale/noise no matter which vector pair or tuning; a slide is a
-    /// position signal, same family as placement's raycast point, robust and
-    /// structurally independent from the aperture-based scale signal (shares
-    /// no landmarks). Provisional: comfortably slides across ~15-20% of
-    /// screen width for a full-range gesture; retune alongside yawDeadzoneRad.
+    /// Gain for horizontal-slide yaw signal. Ad-hoc, shipped/tuned; see docs/GESTURES.md §2.3.
     var horizontalSlideGain: Double = 12.0
     /// Raised exit threshold while scale mode is locked (opening fingers is the scale signal).
     var scaleModeExitThreshold: Double = 3.5
 
-    // Settling window — the grab is one continuous closure and `.began` fires
-    // part-way through it, so ManipulationTracker ignores everything (baseline,
-    // yaw accumulation, mode-lock race) until the pinch stops moving.
-    // Provisional, derived from phase5_manip_20260809_23*.csv (87 gestures,
-    // ~15Hz): median per-frame |Δlog(ratio)| runs 0.25 → 0.12 over the first
-    // ~150ms after Began, then drops to 0.02–0.03 by ~200–300ms.
-    /// Per-frame |Δlog(ratio)| at or under this counts as "quiet"; three
-    /// consecutive quiet samples arm the gesture (≈200ms at 15Hz).
+    // Settling window — ignores signal until the pinch stops moving; see docs/GESTURES.md §3.
+    /// Per-frame |Δlog(ratio)| ≤ this counts as quiet; 3 consecutive quiet frames arm the gesture (~200ms).
     var settleQuietLogDelta: Double = 0.06
     /// Arm anyway after this long if the hand never goes quiet.
     var settleTimeout: TimeInterval = 0.6
 
-    // Dwell-to-commit — hold the control signal ~still this long to freeze
-    // the gesture (Fix 3). Provisional, same order of magnitude as the
-    // deadzones above; retune alongside them once on-device data exists.
+    // Dwell-to-commit — hold signal still to freeze the gesture; see docs/GESTURES.md §2.5.
     /// log(ratio/dwellAnchor) must stay under this to count as "still" while scaling.
     var dwellLogThreshold: Double = 0.05
     /// |accumulatedYaw - dwellAnchor| (rad) must stay under this to count as "still" while yawing.
@@ -84,89 +46,43 @@ struct GestureTuning: Sendable, Equatable {
     var pinchEnterThreshold: Double { pinchThreshold - hysteresisBand / 2 }
     var pinchExitThreshold: Double { pinchThreshold + hysteresisBand / 2 }
 
-    // OK-sign (pause/stop) detection — HandShapeClassifier. Reuses
-    // `pinchThreshold` for the thumb-index tightness check (an OK sign's
-    // thumb-index geometry is indistinguishable from a normal pinch), so
-    // only the finger-extension side needs its own knob.
-    /// dist(fingerTip, fingerMCP) / palmWidth above this → finger counted as
-    /// "extended". Provisional — picked as a reasonable midpoint (curled
-    /// fingers should sit well under 1.0, genuinely extended fingers well
-    /// over); no clean on-device calibration data for this specific ratio
-    /// exists yet (phase0_detection_sweep_*.csv only logs pinch ratios, not
-    /// per-finger tip/MCP distances). Retune once real OK-sign vs.
-    /// pinch/grab hold data exists.
+    // OK-sign detection reuses pinchThreshold for thumb-index tightness; see docs/GESTURES.md §2.6.
+    /// Extension ratio (tip/MCP ÷ palmWidth) for OK-sign. Placeholder, unused; see docs/GESTURES.md §2.6.
     var okSignFingerExtendedRatio: Double = 1.2
 
-    // Move (Prompt 11) — grab-timing trigger, not a signal race against Adjust.
-    /// A re-grab within this long of the previous gesture ending is treated
-    /// as "still working the object" → Adjust. Longer than this (or no prior
-    /// gesture) → Move. Provisional — needs an on-device pass: log
-    /// gesture-end-to-next-gesture-start intervals (the CSV already has
-    /// timestamps) and pick the value that separates "deliberate quick
-    /// re-grab" from "just moved, grabbing again to move more". At ~15Hz
-    /// inference (ADR-011), 0.4s is only ~6 frames of margin either side of
-    /// the boundary — worth widening once real intervals exist rather than
-    /// trusting this guess.
+    // Move — pinch-drag moves a placed object; grab-timing trigger, not a signal race (§2.8).
+    /// Re-grab window, dead-path Adjust/Move trigger. Placeholder; see docs/GESTURES.md §2.8, §3.
     var regrabWindow: TimeInterval = 0.4
-    /// EMA factor for Move's per-frame target position (1.0 = no smoothing,
-    /// snaps straight to the raw raycast delta). Was 0.5; raised to 1.0 for
-    /// Carry's decided 1:1 follow (GESTURE_BUILD_PROMPTS.md Prompt C) — also
-    /// affects the existing Move demo mode, since both share this controller
-    /// and this tuning value. Unverified on device whether 1:1 reads as
-    /// jittery; if it does, this is the first knob to revisit.
+    /// EMA factor for Move/Carry follow (1.0=no smoothing), raised from 0.5; see docs/GESTURES.md §3.
     var moveSmoothing: Float = 1.0
 
     // MARK: - Point
 
-    /// How long the index fingertip has to hold on one annotation target
-    /// before it counts as a hover (not a glance-through) and the popup
-    /// shows. ~400ms per the plan's §2 — provisional, same order of
-    /// magnitude as `dwellDuration` above; retune once real on-device
-    /// annotation passes exist (Prompt G).
+    /// Dwell time before an annotation popup fires. Placeholder; see docs/GESTURES.md §2.9, §3.
     var pointDwellDuration: TimeInterval = 0.4
+    /// Extension ratio for pointing. Same start value as okSign's, separate knob; see docs/GESTURES.md §3.
+    var pointFingerExtendedRatio: Double = 1.2
 
     // MARK: - Carry
 
-    /// A pinch that began→ended in under this long is the pick-up/place
-    /// toggle; longer is a grab-and-drag (today's existing Adjust/Move flow,
-    /// ADR-019), not a toggle. Provisional ~0.7s (loosened from the plan's original 0.5s —
-    /// on-device testing found 0.5s too tight for a deliberate pick-up pinch) — still
-    /// not re-derived from a real on-device toggle-vs-drag interval sweep; Prompt G is
-    /// where that happens properly.
+    /// Pinch began→ended under this = toggle; longer = grab-drag. 0.7s ad-hoc; see docs/GESTURES.md §2.8, §3.
     var carryToggleMaxDuration: TimeInterval = 0.7
 
     // MARK: - Wave
 
-    /// Rolling window for reversal/amplitude detection. Source: the plan's
-    /// §2 (Wave), "~1.0s" — not yet re-derived from device data.
+    /// Rolling window for reversal/amplitude detection. Placeholder ~1.0s; see docs/GESTURES.md §3.
     var waveWindow: TimeInterval = 1.0
-    /// Direction reversals required inside `waveWindow` to count as
-    /// "waving". Source: the plan's §2, "~3" — untested against real wave
-    /// cadence on this rig.
+    /// Direction reversals within waveWindow to count as waving. Placeholder; see docs/GESTURES.md §3.
     var waveMinReversals: Int = 3
-    /// Peak-to-peak horizontal travel (normalized, image-width fraction)
-    /// required to count as "waving". Source: the plan's §2, "~4-6cm-
-    /// equivalent in normalized units" — picked a value in that band
-    /// assuming a ~30-40cm working distance; needs a real on-device
-    /// hand-span measurement to firm up (Prompt G).
+    /// Peak-to-peak horizontal travel (norm. width) to count as waving. Placeholder; see docs/GESTURES.md §3.
     var waveMinAmplitude: Double = 0.05
-    /// Continuous qualifying time (wave motion or stationary hold) required
-    /// to fire `.waved`. Decided at 2.0s (not the plan's original 3.0s) —
-    /// GESTURE_BUILD_PROMPTS.md Prompt E.
+    /// Continuous qualifying time to fire `.waved`. Decided at 2.0s, down from an
+    /// original 3.0s design spec (undocumented elsewhere); see docs/GESTURES.md §3.
     var waveHoldDuration: TimeInterval = 2.0
-    /// Seconds of non-qualifying time for a full `waveHoldDuration` of
-    /// accumulated progress to decay back to zero. Source: the plan's §2,
-    /// "2-3s" — picked the middle of that band.
+    /// Seconds of non-qualifying time to decay full progress to zero. Mid-band pick; see docs/GESTURES.md §3.
     var waveProgressDecay: TimeInterval = 2.5
-    /// Stationary-hold fallback: the wrist must stay within this
-    /// normalized-x radius of one point to count as "held still". No
-    /// explicit number in the plan — set to less than half of
-    /// `waveMinAmplitude` so ordinary wave motion can't also read as a
-    /// stationary hold. Provisional, retune on device.
+    /// Stationary-hold radius (norm-x), half of waveMinAmplitude; see docs/GESTURES.md §3.
     var waveStationaryRadius: Double = 0.02
-    /// Cooldown after a fire before another `.waved` can trigger. Not named
-    /// in the plan; picked equal to `waveHoldDuration` so a second wave
-    /// needs a deliberate fresh gesture rather than the trailing edge of
-    /// the first one.
+    /// Cooldown after `.waved` fires. Equals waveHoldDuration so a re-wave needs a fresh gesture; see docs/GESTURES.md §3.
     var waveCooldownDuration: TimeInterval = 2.0
 }
