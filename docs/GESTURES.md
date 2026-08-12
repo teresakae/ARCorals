@@ -113,7 +113,8 @@ Two different mechanics that both end in "the object follows your hand," built a
 | **Motion** | Point mode only. Extend the index finger (others curled, thumb clearly away from index — `HandShapeClassifier.isPointing`) and hold over an annotation marker for `pointDwellDuration` (0.4s) → popup fires. |
 | **Status** | ✅ Working — one test annotation exists on the first-ever placed cube (`SceneController.addAnnotation`, cube-prototype scaffolding, not a real content system). |
 | **Design** | A pinch beginning cancels any in-progress dwell outright — point and pinch/carry never run on the same target at once (`PointStateMachine`). Annotation hit: `entity(at:)` on `hitRadius = 0.035m` (Ø7cm) collision, then same `screenGrabRadiusPt` (220pt) nearest-marker fallback as Adjust. World `hitRadius` 0.022→0.035 after HIG floor was too tight at 30–40cm. |
-| **Known limits** | `pointDwellDuration` (0.4s) and `pointFingerExtendedRatio` (1.2) are both unmeasured — see §3. Shape gate still drops dwell independently of hit radius. |
+| **Bug found & fixed — marker on +Z face** | `relativePosition` was `[0, 0, halfHeight]` (side of cube). Overhead / roaming view saw nothing; walking around or relaunching from another angle looked like "first place has no yellow." Now `[0, halfHeight, 0]` (top face, Y-up — same convention as wave's top-face target). Still only the first cube per Clear All / session gets a marker. |
+| **Known limits** | `pointDwellDuration` (0.4s) and `pointFingerExtendedRatio` (1.2) are both unmeasured — see §3. Shape gate still drops dwell independently of hit radius. Only the first cube in a clear-cycle gets the yellow; Clear All (or relaunch) to get another. |
 | **Tests** | `PointStateMachineTests` (dwell completion, early abandon, 2-frame grace survival, 10-frame timeout, pinch-cancels-dwell). |
 
 ### 2.10 Wave / stationary-hold (Sim mode only)

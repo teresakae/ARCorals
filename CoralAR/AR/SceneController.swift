@@ -52,7 +52,8 @@ final class SceneController {
         unhighlightedMaterials = nil
 
         if !didPlaceTestAnnotation {
-            addAnnotation(Self.testAnnotationID, on: model, relativePosition: [0, 0, ModelProvider.halfHeight])
+            // Top face (Y-up) — [0,0,halfHeight] was +Z side, invisible from overhead.
+            addAnnotation(Self.testAnnotationID, on: model, relativePosition: [0, ModelProvider.halfHeight, 0])
             didPlaceTestAnnotation = true
         }
     }
