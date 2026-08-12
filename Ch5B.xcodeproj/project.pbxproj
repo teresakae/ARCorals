@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		06ECB4FF5BC5A0D71708769D /* ARSessionCoordinator+Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CC590BE4A6A2DF2A8D83BF /* ARSessionCoordinator+Wave.swift */; };
 		094B3D4CF568CB5B1FFCEA5C /* PointStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F40918D454B596CB6C4DFB /* PointStateMachine.swift */; };
+		103B0501B4A244944A0E4635 /* PestDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C3E0494C2A5D16A754AA9F /* PestDrop.swift */; };
 		18EF6925FE630A7CD4E0E6CD /* HandDebugOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D521B81126C6C857A1697 /* HandDebugOverlay.swift */; };
 		1BE7A10ED0B698776CF6591A /* ProbeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190794F9D91B49DEF7CDCBE /* ProbeController.swift */; };
 		2B4A6F7C2F93A19B56EC4D27 /* WaveDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7501DF558FF4AB1AC0BC4449 /* WaveDetector.swift */; };
@@ -29,6 +30,7 @@
 		6FBB994F4FAADDB0A2B452B8 /* ModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677315E9C3CB89FE311E93D2 /* ModelProvider.swift */; };
 		7BCBAB05E725BBCAB53D62CA /* HandShapeClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D629D52B1C792CF6E8F614 /* HandShapeClassifier.swift */; };
 		816BFC8B733E769414D09C1D /* PinchRatioCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D1B4F0B125A6D427ED92B /* PinchRatioCalculator.swift */; };
+		82FBA48D2A2D5A2F8EBFC3E2 /* PestDropTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06776BF4BCAA1858D289D8 /* PestDropTests.swift */; };
 		8AE1BB9F969B76066D3BF21A /* SceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFE6978DF5DFAC0049F65DC /* SceneController.swift */; };
 		8B60CE9ABDA6D2A6C9242CD7 /* PinchStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6057526DC0B001F18C0DB87 /* PinchStateMachine.swift */; };
 		8C574DBBBB79A61EDCD91772 /* WaveDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE2821B761120522C71C81B /* WaveDetectorTests.swift */; };
@@ -46,15 +48,19 @@
 		B77BE792420E6ADE1C0A1514 /* ManipulationTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A906992C9187A84917C378 /* ManipulationTracker.swift */; };
 		BA4D6E89097C78475EB47D42 /* ManipulationTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A906992C9187A84917C378 /* ManipulationTracker.swift */; };
 		BB2FAC1C047AD74D2525D2ED /* ManipulationTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEED7A54CC9E92EAFFD8C4C5 /* ManipulationTrackerTests.swift */; };
+		BD73824BB28F0C37C4809F4D /* PestDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C3E0494C2A5D16A754AA9F /* PestDrop.swift */; };
 		C386619D9C963F61426A2429 /* ARSessionCoordinator+Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3309D50EB7861208A8C3BEF9 /* ARSessionCoordinator+Point.swift */; };
 		C5C709E254814C0341C6FE50 /* ManipulationTrackerDwellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440D51449395B7458D0D2F2 /* ManipulationTrackerDwellTests.swift */; };
 		CE77DC1F5CF5D490183AEA09 /* GestureTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17451767C305AEEB24027F8 /* GestureTuning.swift */; };
 		D6D53343198A5A2D417A5C51 /* PlaneScanCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F122CC403B5416221E64C51 /* PlaneScanCoordinator.swift */; };
 		D7559BF9707898C616504186 /* PointStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72668F3E87BF44CE4F99F001 /* PointStateMachineTests.swift */; };
+		D886F9F5FECDBD5E4160CD03 /* ARSessionCoordinator+AdjustSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC236CCD8E6BDB49E449C6E7 /* ARSessionCoordinator+AdjustSlide.swift */; };
 		D88D62281183A9C68B06A4EB /* MoveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5559E4B90E606A5C44DB35DD /* MoveController.swift */; };
 		DDC84C08F1D5F82E78E57469 /* ManipulationTrackerSettlingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D07EA451BDE77BBA073379 /* ManipulationTrackerSettlingTests.swift */; };
 		E111B523A49DD3509370FB04 /* CameraFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE2AA80D487DBA232E7CBDD /* CameraFeed.swift */; };
+		ED9FAC4711B46E99E75A503F /* VerticalSlideScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5B78CD7541ED484A74F1BF /* VerticalSlideScale.swift */; };
 		EDB110C1FAE8C434C4AD9861 /* MetricsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F2BDBA1A01F76A217701EE /* MetricsLogger.swift */; };
+		EE7C1140610CC56CE314440C /* PinchProgressOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C3E654FB157AD4D5ECFFA3 /* PinchProgressOverlay.swift */; };
 		F1541D86B351FCE74CD4D219 /* LandmarkFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9293FA2C3E5FDFBCEFEA867 /* LandmarkFrame.swift */; };
 		F3A1110B40216DF676004C71 /* CoralARApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3402AC91A154B23B20C2BA73 /* CoralARApp.swift */; };
 		F3FAC3E3F52A17FB3CCC3E52 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1551CAB3635FF2460F1F335 /* CameraPreviewView.swift */; };
@@ -81,6 +87,7 @@
 		12D07EA451BDE77BBA073379 /* ManipulationTrackerSettlingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManipulationTrackerSettlingTests.swift; sourceTree = "<group>"; };
 		1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsLogger.swift; sourceTree = "<group>"; };
 		318BF3EAC4C996E4CC87CAEF /* MoveTriggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveTriggerTests.swift; sourceTree = "<group>"; };
+		32C3E654FB157AD4D5ECFFA3 /* PinchProgressOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchProgressOverlay.swift; sourceTree = "<group>"; };
 		3309D50EB7861208A8C3BEF9 /* ARSessionCoordinator+Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSessionCoordinator+Point.swift"; sourceTree = "<group>"; };
 		33524DCB4B2B1CF1ACD804C6 /* ARSessionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARSessionCoordinator.swift; sourceTree = "<group>"; };
 		3402AC91A154B23B20C2BA73 /* CoralARApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoralARApp.swift; sourceTree = "<group>"; };
@@ -90,6 +97,7 @@
 		54A906992C9187A84917C378 /* ManipulationTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManipulationTracker.swift; sourceTree = "<group>"; };
 		5559E4B90E606A5C44DB35DD /* MoveController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveController.swift; sourceTree = "<group>"; };
 		58F4BF7ADB2BCFD035264798 /* HandShapeClassifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandShapeClassifierTests.swift; sourceTree = "<group>"; };
+		5C5B78CD7541ED484A74F1BF /* VerticalSlideScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalSlideScale.swift; sourceTree = "<group>"; };
 		5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseDetector.swift; sourceTree = "<group>"; };
 		5F122CC403B5416221E64C51 /* PlaneScanCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneScanCoordinator.swift; sourceTree = "<group>"; };
 		677315E9C3CB89FE311E93D2 /* ModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelProvider.swift; sourceTree = "<group>"; };
@@ -105,12 +113,14 @@
 		A29AA39A0469CF4AFBF7B5A5 /* CarryStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarryStateMachine.swift; sourceTree = "<group>"; };
 		A2F40918D454B596CB6C4DFB /* PointStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointStateMachine.swift; sourceTree = "<group>"; };
 		A6057526DC0B001F18C0DB87 /* PinchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchStateMachine.swift; sourceTree = "<group>"; };
+		AE06776BF4BCAA1858D289D8 /* PestDropTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PestDropTests.swift; sourceTree = "<group>"; };
 		AEED7A54CC9E92EAFFD8C4C5 /* ManipulationTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManipulationTrackerTests.swift; sourceTree = "<group>"; };
 		AF16E2AAF676BE1BA0B97585 /* CarryStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarryStateMachineTests.swift; sourceTree = "<group>"; };
 		B4057E07A22BD4AA9307A5F8 /* PlacementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacementService.swift; sourceTree = "<group>"; };
 		B85806F85EBAC753D687CFDE /* HandProbeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = HandProbeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C17451767C305AEEB24027F8 /* GestureTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureTuning.swift; sourceTree = "<group>"; };
 		C190794F9D91B49DEF7CDCBE /* ProbeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProbeController.swift; sourceTree = "<group>"; };
+		C2C3E0494C2A5D16A754AA9F /* PestDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PestDrop.swift; sourceTree = "<group>"; };
 		C440D51449395B7458D0D2F2 /* ManipulationTrackerDwellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManipulationTrackerDwellTests.swift; sourceTree = "<group>"; };
 		CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveReadoutView.swift; sourceTree = "<group>"; };
 		CBEC0210C94D631C6AB7501B /* HandProbeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandProbeApp.swift; sourceTree = "<group>"; };
@@ -121,6 +131,7 @@
 		F18D521B81126C6C857A1697 /* HandDebugOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandDebugOverlay.swift; sourceTree = "<group>"; };
 		F3D629D52B1C792CF6E8F614 /* HandShapeClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandShapeClassifier.swift; sourceTree = "<group>"; };
 		F7063B66E60770028FD9ECBD /* FrameTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameTap.swift; sourceTree = "<group>"; };
+		FC236CCD8E6BDB49E449C6E7 /* ARSessionCoordinator+AdjustSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSessionCoordinator+AdjustSlide.swift"; sourceTree = "<group>"; };
 		FF3660D74BC1117359540FE4 /* CoralAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoralAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -132,6 +143,7 @@
 				17A42D796AC8C4C52E43D86D /* Debug */,
 				737A1D8C0848E020DB32090F /* Gesture */,
 				B3A3536D6F5638F89DBDE955 /* Resources */,
+				DDEE13100DB820F1243C8780 /* UI */,
 				5A225279337E7E1BAD8CC4B0 /* Vision */,
 				3402AC91A154B23B20C2BA73 /* CoralARApp.swift */,
 			);
@@ -152,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				33524DCB4B2B1CF1ACD804C6 /* ARSessionCoordinator.swift */,
+				FC236CCD8E6BDB49E449C6E7 /* ARSessionCoordinator+AdjustSlide.swift */,
 				0C1C5F7663F5184CC8CCD488 /* ARSessionCoordinator+Carry.swift */,
 				3309D50EB7861208A8C3BEF9 /* ARSessionCoordinator+Point.swift */,
 				49BE0DD26D1266DA2D3B4526 /* ARSessionCoordinator+Rotate.swift */,
@@ -183,9 +196,11 @@
 				F3D629D52B1C792CF6E8F614 /* HandShapeClassifier.swift */,
 				54A906992C9187A84917C378 /* ManipulationTracker.swift */,
 				5559E4B90E606A5C44DB35DD /* MoveController.swift */,
+				C2C3E0494C2A5D16A754AA9F /* PestDrop.swift */,
 				EC2D1B4F0B125A6D427ED92B /* PinchRatioCalculator.swift */,
 				A6057526DC0B001F18C0DB87 /* PinchStateMachine.swift */,
 				A2F40918D454B596CB6C4DFB /* PointStateMachine.swift */,
+				5C5B78CD7541ED484A74F1BF /* VerticalSlideScale.swift */,
 				7501DF558FF4AB1AC0BC4449 /* WaveDetector.swift */,
 				6783DFBC66FAF1C8A7ACA219 /* YawAngleCalculator.swift */,
 			);
@@ -234,11 +249,20 @@
 				12D07EA451BDE77BBA073379 /* ManipulationTrackerSettlingTests.swift */,
 				AEED7A54CC9E92EAFFD8C4C5 /* ManipulationTrackerTests.swift */,
 				318BF3EAC4C996E4CC87CAEF /* MoveTriggerTests.swift */,
+				AE06776BF4BCAA1858D289D8 /* PestDropTests.swift */,
 				6BE875B2CFBA73FD13E2CC8C /* PinchStateMachineTests.swift */,
 				72668F3E87BF44CE4F99F001 /* PointStateMachineTests.swift */,
 				6FE2821B761120522C71C81B /* WaveDetectorTests.swift */,
 			);
 			path = HandProbeTests;
+			sourceTree = "<group>";
+		};
+		DDEE13100DB820F1243C8780 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				32C3E654FB157AD4D5ECFFA3 /* PinchProgressOverlay.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		E95D56D59BBDC78EAA9FF75F /* Products */ = {
@@ -355,6 +379,7 @@
 				DDC84C08F1D5F82E78E57469 /* ManipulationTrackerSettlingTests.swift in Sources */,
 				BB2FAC1C047AD74D2525D2ED /* ManipulationTrackerTests.swift in Sources */,
 				B2AEDB191C2681E100644ABA /* MoveTriggerTests.swift in Sources */,
+				82FBA48D2A2D5A2F8EBFC3E2 /* PestDropTests.swift in Sources */,
 				3A6B303B6B87CFE3377DA8BA /* PinchStateMachineTests.swift in Sources */,
 				D7559BF9707898C616504186 /* PointStateMachineTests.swift in Sources */,
 				8C574DBBBB79A61EDCD91772 /* WaveDetectorTests.swift in Sources */,
@@ -365,6 +390,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D886F9F5FECDBD5E4160CD03 /* ARSessionCoordinator+AdjustSlide.swift in Sources */,
 				95128090D46499D6C7EAC50B /* ARSessionCoordinator+Carry.swift in Sources */,
 				C386619D9C963F61426A2429 /* ARSessionCoordinator+Point.swift in Sources */,
 				401F59803A42A5F421B9C48A /* ARSessionCoordinator+Rotate.swift in Sources */,
@@ -384,12 +410,15 @@
 				EDB110C1FAE8C434C4AD9861 /* MetricsLogger.swift in Sources */,
 				6FBB994F4FAADDB0A2B452B8 /* ModelProvider.swift in Sources */,
 				D88D62281183A9C68B06A4EB /* MoveController.swift in Sources */,
+				BD73824BB28F0C37C4809F4D /* PestDrop.swift in Sources */,
+				EE7C1140610CC56CE314440C /* PinchProgressOverlay.swift in Sources */,
 				816BFC8B733E769414D09C1D /* PinchRatioCalculator.swift in Sources */,
 				90513C509E2668EAACBE334C /* PinchStateMachine.swift in Sources */,
 				A16B4AC8AF851136B0A74801 /* PlacementService.swift in Sources */,
 				D6D53343198A5A2D417A5C51 /* PlaneScanCoordinator.swift in Sources */,
 				4A7B514AA089D2F2C9764683 /* PointStateMachine.swift in Sources */,
 				8AE1BB9F969B76066D3BF21A /* SceneController.swift in Sources */,
+				ED9FAC4711B46E99E75A503F /* VerticalSlideScale.swift in Sources */,
 				9B4FB496FC77F569635DC417 /* WaveDetector.swift in Sources */,
 				56B1A7AB014D58B167314D1E /* YawAngleCalculator.swift in Sources */,
 			);
@@ -412,6 +441,7 @@
 				B77BE792420E6ADE1C0A1514 /* ManipulationTracker.swift in Sources */,
 				F4CA67E825DD442DFF97D72C /* MetricsLogger.swift in Sources */,
 				F8B2E9594B9B17213E787DC2 /* MoveController.swift in Sources */,
+				103B0501B4A244944A0E4635 /* PestDrop.swift in Sources */,
 				FD67A9E3EB0106D0925E80A5 /* PinchRatioCalculator.swift in Sources */,
 				8B60CE9ABDA6D2A6C9242CD7 /* PinchStateMachine.swift in Sources */,
 				094B3D4CF568CB5B1FFCEA5C /* PointStateMachine.swift in Sources */,

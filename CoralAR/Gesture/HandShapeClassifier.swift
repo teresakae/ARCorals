@@ -21,7 +21,12 @@ enum HandShapeClassifier {
             && isExtended(joints, tip: .littleTip, mcp: .littleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.okSignFingerExtendedRatio)
     }
 
-    /// Index out, others in, thumb clearly open — blocks mid-pinch false points. docs/GESTURES.md §2.9
+    /// Index out, thumb clearly open, and at least 2 of {middle, ring, little} read curled —
+    /// relaxed from "all 3" because those three tips are this project's least-reliable landmarks
+    /// (7.9-11.7% confidence dropout / jitter misreads vs. 2.1-2.3% for thumb/index, Phase 0 data).
+    /// Tolerating one ambiguous reading stops a single weak-landmark misread from killing the
+    /// whole gate. Stays pure/stateless — no history; temporal smoothing lives in
+    /// `PointStateMachine`, not here. docs/GESTURES.md §2.9
     static func isPointing(
         joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample],
         confidenceGate: Float = GestureTuning.default.confidenceGate,
@@ -35,11 +40,11 @@ enum HandShapeClassifier {
         guard isExtended(joints, tip: .indexTip, mcp: .indexMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio)
         else { return false }
 
-        guard
-            !isExtended(joints, tip: .middleTip, mcp: .middleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio),
-            !isExtended(joints, tip: .ringTip, mcp: .ringMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio),
-            !isExtended(joints, tip: .littleTip, mcp: .littleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio)
-        else { return false }
+        let middleCurled = !isExtended(joints, tip: .middleTip, mcp: .middleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio)
+        let ringCurled = !isExtended(joints, tip: .ringTip, mcp: .ringMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio)
+        let littleCurled = !isExtended(joints, tip: .littleTip, mcp: .littleMCP, palmWidth: palmWidth, gate: confidenceGate, threshold: tuning.pointFingerExtendedRatio)
+        let curledCount = [middleCurled, ringCurled, littleCurled].filter { $0 }.count
+        guard curledCount >= 2 else { return false }
 
         // Thumb-index via `PinchRatioCalculator`; must clear `pinchEnterThreshold`.
         guard

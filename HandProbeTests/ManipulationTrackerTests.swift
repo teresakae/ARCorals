@@ -47,6 +47,63 @@ final class ManipulationTrackerTests: XCTestCase {
         XCTAssertEqual(mt.mode, .scale)
     }
 
+    // MARK: - yawOnly: never enters .scale, even on a pure-scale input that would normally win
+
+    func testYawOnlyNeverLocksScaleOnPureScaleInput() {
+        var mt = makeTracker()
+        mt.begin(entityScale: 1.0, entityYaw: 0.25, yawOnly: true)
+
+        // yawOnly commits to .yaw the instant arming completes — unlike the raced path
+        // (`establishBaseline`), which stays .ambiguous through 3 quiet samples because
+        // no real scale/yaw delta has arrived yet. Here the 3rd quiet sample both arms
+        // *and* locks in the same call, by design (no deadzone race to wait out).
+        _ = mt.update(ratio: 1.0, yaw: 0.0)
+        _ = mt.update(ratio: 1.0, yaw: 0.0)
+        let armed = mt.update(ratio: 1.0, yaw: 0.0)
+        XCTAssertEqual(armed.mode, .yaw)
+        XCTAssertTrue(armed.didLock)
+        XCTAssertNil(armed.scale)
+
+        // Identical scale-provoking input to testPureScaleLocksScaleAndYieldsZeroYaw
+        // (ratio e^0.25, zero yaw delta) — would lock .scale there.
+        var last = mt.update(ratio: exp(0.25), yaw: 0.0)
+        XCTAssertEqual(last.mode, .yaw)
+        XCTAssertNil(last.scale, "scale channel must never write under yawOnly")
+
+        last = mt.update(ratio: exp(0.40), yaw: 0.5)
+        XCTAssertEqual(last.mode, .yaw)
+        XCTAssertNil(last.scale)
+        XCTAssertNotNil(last.appliedYaw)
+        XCTAssertEqual(mt.mode, .yaw)
+    }
+
+    // MARK: - scaleOnly: never enters .yaw, even on a pure-yaw input that would normally win
+
+    func testScaleOnlyNeverLocksYawOnPureYawInput() {
+        var mt = makeTracker()
+        mt.begin(entityScale: 1.0, entityYaw: 0.25, scaleOnly: true)
+
+        // scaleOnly commits to .scale the instant arming completes — mirror of
+        // testYawOnlyNeverLocksScaleOnPureScaleInput with the roles swapped.
+        _ = mt.update(ratio: 1.0, yaw: 0.0)
+        _ = mt.update(ratio: 1.0, yaw: 0.0)
+        let armed = mt.update(ratio: 1.0, yaw: 0.0)
+        XCTAssertEqual(armed.mode, .scale)
+        XCTAssertTrue(armed.didLock)
+        XCTAssertNil(armed.appliedYaw)
+
+        // Large yaw delta, zero scale delta — would lock .yaw in the raced path.
+        var last = mt.update(ratio: 1.0, yaw: 0.5)
+        XCTAssertEqual(last.mode, .scale)
+        XCTAssertNil(last.appliedYaw, "yaw channel must never write under scaleOnly")
+
+        last = mt.update(ratio: 1.0, yaw: 1.0)
+        XCTAssertEqual(last.mode, .scale)
+        XCTAssertNil(last.appliedYaw)
+        XCTAssertNotNil(last.scale)
+        XCTAssertEqual(mt.mode, .scale)
+    }
+
     // MARK: - Pure yaw → locks yaw, zero scale applied
 
     func testPureYawLocksYawAndYieldsZeroScale() {

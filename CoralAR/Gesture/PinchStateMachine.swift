@@ -34,9 +34,13 @@ struct PinchStateMachine: Sendable {
     /// When set (scale-mode lock), consulted instead of `tuning.pinchExitThreshold`.
     var exitThresholdOverride: Double?
 
+    /// 0–1 fill during the pendingBegan hysteresis window; 1 once committed (active/pendingEnd), 0 when idle.
+    /// Same pattern as `PointStateMachine.dwellProgress` — user-facing pinch-commit affordance.
+    private(set) var pendingProgress: Double = 0
+
     private enum Internal: Equatable {
         case idle
-        case pendingBegan(start: TimeInterval)
+        case pendingBegan(start: TimeInterval, lastValidAt: TimeInterval)
         case active(beganAt: TimeInterval, lastValidAt: TimeInterval)
         case pendingEnd(start: TimeInterval, beganAt: TimeInterval, lastValidAt: TimeInterval)
     }
@@ -55,6 +59,7 @@ struct PinchStateMachine: Sendable {
         internalState = .idle
         phase = .possible
         exitThresholdOverride = nil
+        pendingProgress = 0
     }
 
     @discardableResult
@@ -65,18 +70,25 @@ struct PinchStateMachine: Sendable {
         switch internalState {
         case .idle:
             if let ratio = usable, ratio < tuning.pinchEnterThreshold {
-                internalState = .pendingBegan(start: observation.timestamp)
+                internalState = .pendingBegan(start: observation.timestamp, lastValidAt: observation.timestamp)
             }
 
-        case .pendingBegan(let start):
-            if usable == nil {
-                internalState = .idle
-            } else if let ratio = usable, ratio < tuning.pinchEnterThreshold {
+        case .pendingBegan(let start, let lastValidAt):
+            if let ratio = usable, ratio < tuning.pinchEnterThreshold {
                 if observation.timestamp - start >= tuning.hysteresisDuration {
                     internalState = .active(beganAt: observation.timestamp, lastValidAt: observation.timestamp)
                     let began = PinchGestureEvent.began(ratio: ratio)
                     phase = began
                     events.append(began)
+                } else {
+                    internalState = .pendingBegan(start: start, lastValidAt: observation.timestamp)
+                }
+            } else if usable == nil {
+                // Unusable (dropped/low-confidence) frame — same grace-period tolerance `.active` gets,
+                // not a real release signal. A genuine valid ratio back above threshold (below) still
+                // resets immediately: that's real motion, not sensor dropout.
+                if observation.timestamp - lastValidAt > tuning.gracePeriod {
+                    internalState = .idle
                 }
             } else {
                 internalState = .idle
@@ -137,6 +149,15 @@ struct PinchStateMachine: Sendable {
                 phase = changed
                 events.append(changed)
             }
+        }
+
+        switch internalState {
+        case .idle:
+            pendingProgress = 0
+        case .pendingBegan(let start, _):
+            pendingProgress = min(1, max(0, (observation.timestamp - start) / tuning.hysteresisDuration))
+        case .active, .pendingEnd:
+            pendingProgress = 1
         }
 
         return events

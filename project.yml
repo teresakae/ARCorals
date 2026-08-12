@@ -25,6 +25,8 @@ targets:
       - path: CoralAR/Gesture/ManipulationTracker.swift
       # Shared so HandProbeTests can cover the pick-up-and-move mechanic's move-vs-adjust trigger decision.
       - path: CoralAR/Gesture/MoveController.swift
+      # Shared so HandProbeTests can cover the pest pick-up-and-throw release-distance check.
+      - path: CoralAR/Gesture/PestDrop.swift
       # Shared so HandProbeTests cover the shipping GestureTuning (1.98 pinch band),
       # not a stale HandProbe fork that still claimed ADR-015's 5.9.
       - path: CoralAR/Gesture/GestureTuning.swift

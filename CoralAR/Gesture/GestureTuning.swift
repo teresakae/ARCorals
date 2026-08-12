@@ -26,6 +26,13 @@ struct GestureTuning: Sendable, Equatable {
     var yawSensitivity: Double = 1.0
     /// Gain for horizontal-slide yaw signal. Ad-hoc, shipped/tuned; see docs/GESTURES.md §2.3.
     var horizontalSlideGain: Double = 12.0
+    /// Gain for the vertical-slide scale signal (Adjust B test mode) — screen-height fraction ×
+    /// gain, fed as a plain linear delta the same shape as `horizontalSlideGain`'s yaw signal
+    /// (not log-wrapped — a linear screen slide isn't a multiplicative distance ratio; see
+    /// docs/GESTURES.md §1/§2.2). Provisional — guessed starting value (a full top-to-bottom
+    /// slide should span most of the [0.25, 4.0] scale clamp), pending real device calibration;
+    /// no CSV behind this number yet.
+    var verticalSlideGain: Double = 3.0
     /// Raised exit threshold while scale mode is locked (opening fingers is the scale signal).
     var scaleModeExitThreshold: Double = 3.5
 
@@ -62,11 +69,25 @@ struct GestureTuning: Sendable, Equatable {
     var pointDwellDuration: TimeInterval = 0.4
     /// Extension ratio for pointing. Same start value as okSign's, separate knob; see docs/GESTURES.md §3.
     var pointFingerExtendedRatio: Double = 1.2
+    /// Rolling window of raw `isPointing` readings PointStateMachine majority-votes over before
+    /// accumulating dwell — tolerates a single usable-but-misclassified frame (weak middle/ring/
+    /// little landmark) without conflating it with the grace period's dropped-frame tolerance.
+    /// Sized to this project's existing median-of-3 / quiet-run-of-2 smoothing conventions
+    /// (`ManipulationTracker.settleWindow`). ad-hoc.
+    var pointingWindowSize: Int = 5
 
     // MARK: - Carry
 
     /// Pinch began→ended under this = toggle; longer = grab-drag. 0.7s ad-hoc; see docs/GESTURES.md §2.8, §3.
     var carryToggleMaxDuration: TimeInterval = 0.7
+
+    // MARK: - Sim / pest pick-up-and-throw
+
+    /// World-space distance (m) from O1's centre beyond which a released pest fades and is
+    /// deleted; within it counts as an accidental near-drop and the pest just stays placed.
+    /// Provisional — guessed starting value (~3x the 5cm placeholder cube), pending real
+    /// device calibration. Content-layer constant, not yet measured on this rig.
+    var pestDiscardDistance: Float = 0.15
 
     // MARK: - Wave
 
@@ -85,4 +106,13 @@ struct GestureTuning: Sendable, Equatable {
     var waveStationaryRadius: Double = 0.02
     /// Cooldown after `.waved` fires. Equals waveHoldDuration so a re-wave needs a fresh gesture; see docs/GESTURES.md §3.
     var waveCooldownDuration: TimeInterval = 2.0
+
+    // MARK: - Bystander-hand rejection (ADR-021)
+
+    /// handCoveragePct() floor — below this, treat as no hand (too small/far, likely background). Placeholder, uncalibrated.
+    var handCoverageMin: Double = 0.5
+    /// handCoveragePct() ceiling — above this, treat as no hand (implausibly close/large, likely not the tracked hand). Placeholder, uncalibrated.
+    var handCoverageMax: Double = 60.0
+    /// Max normalized centroid travel accepted between consecutive frames; larger = reject as a different hand. Placeholder, uncalibrated.
+    var handJumpRejectRadius: Double = 0.35
 }

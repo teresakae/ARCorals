@@ -21,6 +21,13 @@ struct CoralARApp: App {
                 )
                 .ignoresSafeArea()
 
+                // Always-on user-facing pinch feedback — not gated by showLandmarks/debug toggles.
+                PinchProgressOverlay(
+                    pinchViewportPoint: session.pinchViewportPoint,
+                    progress: session.pinchProgress
+                )
+                .ignoresSafeArea()
+
                 ARStatusHUD(session: session)
 
                 AnnotationPopup(annotationID: session.activeAnnotationID)
