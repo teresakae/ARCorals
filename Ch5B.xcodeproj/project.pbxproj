@@ -12,12 +12,12 @@
 		094B3D4CF568CB5B1FFCEA5C /* PointStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F40918D454B596CB6C4DFB /* PointStateMachine.swift */; };
 		0C7F7ACEF7F465A40E4114E5 /* RoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381173C3CCBC24BE7EEC0825 /* RoomState.swift */; };
 		103B0501B4A244944A0E4635 /* PestDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C3E0494C2A5D16A754AA9F /* PestDrop.swift */; };
-		110B871AC7437F9ED415CE2E /* DiscoveryStatusSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ABF35F4EF4DC4940351C0D /* DiscoveryStatusSection.swift */; };
 		18EF6925FE630A7CD4E0E6CD /* HandDebugOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D521B81126C6C857A1697 /* HandDebugOverlay.swift */; };
 		1A0D4D112C9B4AFACE2BC686 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F9F0666E6D7F3A5509AB8 /* RoomService.swift */; };
 		1BC622260B302367B2E409D3 /* RoomBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C49A04ACCCD833D070746E1 /* RoomBrowser.swift */; };
 		1BE7A10ED0B698776CF6591A /* ProbeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190794F9D91B49DEF7CDCBE /* ProbeController.swift */; };
 		2B4A6F7C2F93A19B56EC4D27 /* WaveDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7501DF558FF4AB1AC0BC4449 /* WaveDetector.swift */; };
+		2E0D91E8E3F0F3C88067904B /* OrientationLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B2699C6D3D496BF195A81D /* OrientationLock.swift */; };
 		2F6496DB2178823C8E76C193 /* GestureTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17451767C305AEEB24027F8 /* GestureTuning.swift */; };
 		31D74E464F94B1CDCFD62F8B /* HandShapeClassifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4BF7ADB2BCFD035264798 /* HandShapeClassifierTests.swift */; };
 		328A87E01A0459C01849E731 /* CoralARApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F1DD5BF382985037666A06 /* CoralARApp.swift */; };
@@ -54,6 +54,7 @@
 		95128090D46499D6C7EAC50B /* ARSessionCoordinator+Carry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1C5F7663F5184CC8CCD488 /* ARSessionCoordinator+Carry.swift */; };
 		95766F97EE1EAD2CB1C1485F /* FrameTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7063B66E60770028FD9ECBD /* FrameTap.swift */; };
 		96966D60A144EFB83E89B7A9 /* RoomLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5C64783A9D01E84FD4A798 /* RoomLog.swift */; };
+		99649D63CC1BB45294BF77DA /* PointTestButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16425308CD95E07EB24F2605 /* PointTestButton.swift */; };
 		9B4FB496FC77F569635DC417 /* WaveDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7501DF558FF4AB1AC0BC4449 /* WaveDetector.swift */; };
 		9E9CE12DFEB9395E12AF42F1 /* LiveReadoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */; };
 		A16B4AC8AF851136B0A74801 /* PlacementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4057E07A22BD4AA9307A5F8 /* PlacementService.swift */; };
@@ -107,6 +108,7 @@
 		0C1C5F7663F5184CC8CCD488 /* ARSessionCoordinator+Carry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSessionCoordinator+Carry.swift"; sourceTree = "<group>"; };
 		10F2BDBA1A01F76A217701EE /* MetricsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsLogger.swift; sourceTree = "<group>"; };
 		12D07EA451BDE77BBA073379 /* ManipulationTrackerSettlingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManipulationTrackerSettlingTests.swift; sourceTree = "<group>"; };
+		16425308CD95E07EB24F2605 /* PointTestButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointTestButton.swift; sourceTree = "<group>"; };
 		18F1DD5BF382985037666A06 /* CoralARApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoralARApp.swift; sourceTree = "<group>"; };
 		1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsLogger.swift; sourceTree = "<group>"; };
 		210B86A94B1F20074B28A3CF /* PeerTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerTransport.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		5C5C64783A9D01E84FD4A798 /* RoomLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomLog.swift; sourceTree = "<group>"; };
 		5EE3D3956D02FE859703FDE6 /* HandPoseDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseDetector.swift; sourceTree = "<group>"; };
 		5F122CC403B5416221E64C51 /* PlaneScanCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneScanCoordinator.swift; sourceTree = "<group>"; };
+		65B2699C6D3D496BF195A81D /* OrientationLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationLock.swift; sourceTree = "<group>"; };
 		677315E9C3CB89FE311E93D2 /* ModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelProvider.swift; sourceTree = "<group>"; };
 		6783DFBC66FAF1C8A7ACA219 /* YawAngleCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YawAngleCalculator.swift; sourceTree = "<group>"; };
 		6A4079AF9B8E82F46AEE4213 /* RoomFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFlowView.swift; sourceTree = "<group>"; };
@@ -139,7 +142,7 @@
 		6FE2821B761120522C71C81B /* WaveDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveDetectorTests.swift; sourceTree = "<group>"; };
 		71CC590BE4A6A2DF2A8D83BF /* ARSessionCoordinator+Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSessionCoordinator+Wave.swift"; sourceTree = "<group>"; };
 		72668F3E87BF44CE4F99F001 /* PointStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointStateMachineTests.swift; sourceTree = "<group>"; };
-		746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		746C3A3D5DD2A23E9FA9DBB2 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		7501DF558FF4AB1AC0BC4449 /* WaveDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveDetector.swift; sourceTree = "<group>"; };
 		80EC5936D4EF7EEC866090A3 /* LandmarkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkSpace.swift; sourceTree = "<group>"; };
 		949BE6199325D0AFCBECFD6B /* PeerName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerName.swift; sourceTree = "<group>"; };
@@ -156,7 +159,6 @@
 		BED32D6E57724C2138781CD8 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		C17451767C305AEEB24027F8 /* GestureTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureTuning.swift; sourceTree = "<group>"; };
 		C190794F9D91B49DEF7CDCBE /* ProbeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProbeController.swift; sourceTree = "<group>"; };
-		C2ABF35F4EF4DC4940351C0D /* DiscoveryStatusSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryStatusSection.swift; sourceTree = "<group>"; };
 		C2C3E0494C2A5D16A754AA9F /* PestDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PestDrop.swift; sourceTree = "<group>"; };
 		C440D51449395B7458D0D2F2 /* ManipulationTrackerDwellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManipulationTrackerDwellTests.swift; sourceTree = "<group>"; };
 		CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveReadoutView.swift; sourceTree = "<group>"; };
@@ -172,7 +174,7 @@
 		F7063B66E60770028FD9ECBD /* FrameTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameTap.swift; sourceTree = "<group>"; };
 		F7EFBA6218362362A3BAE620 /* RoomCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCode.swift; sourceTree = "<group>"; };
 		FC236CCD8E6BDB49E449C6E7 /* ARSessionCoordinator+AdjustSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSessionCoordinator+AdjustSlide.swift"; sourceTree = "<group>"; };
-		FF3660D74BC1117359540FE4 /* CoralAR.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CoralAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3660D74BC1117359540FE4 /* CoralAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoralAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -293,10 +295,10 @@
 		98917011BB3037E59CF9CEE7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C2ABF35F4EF4DC4940351C0D /* DiscoveryStatusSection.swift */,
 				BED32D6E57724C2138781CD8 /* HomeView.swift */,
 				06BD59999EADA890E3A7790B /* InSessionView.swift */,
 				A11A4853627CEF4710681756 /* LobbyView.swift */,
+				65B2699C6D3D496BF195A81D /* OrientationLock.swift */,
 				6A4079AF9B8E82F46AEE4213 /* RoomFlowView.swift */,
 				5827F4585666DB500681B1FD /* RosterSection.swift */,
 			);
@@ -425,7 +427,6 @@
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					504647463DA18237A0E89036 = {
-						DevelopmentTeam = P23A73L3J8;
 						ProvisioningStyle = Automatic;
 					};
 					D176DCF505A2B4D46FA81BC6 = {
@@ -487,7 +488,6 @@
 				93D4EE6D3BC232FD522AA045 /* ARStatusHUD.swift in Sources */,
 				941DCFF37C5FB1F348B473F8 /* CarryStateMachine.swift in Sources */,
 				328A87E01A0459C01849E731 /* CoralARApp.swift in Sources */,
-				110B871AC7437F9ED415CE2E /* DiscoveryStatusSection.swift in Sources */,
 				95766F97EE1EAD2CB1C1485F /* FrameTap.swift in Sources */,
 				2F6496DB2178823C8E76C193 /* GestureTuning.swift in Sources */,
 				18EF6925FE630A7CD4E0E6CD /* HandDebugOverlay.swift in Sources */,
@@ -502,6 +502,7 @@
 				EDB110C1FAE8C434C4AD9861 /* MetricsLogger.swift in Sources */,
 				6FBB994F4FAADDB0A2B452B8 /* ModelProvider.swift in Sources */,
 				D88D62281183A9C68B06A4EB /* MoveController.swift in Sources */,
+				2E0D91E8E3F0F3C88067904B /* OrientationLock.swift in Sources */,
 				AAC06CF8FCB195566D0C25DD /* Packet.swift in Sources */,
 				0203094FD863EE9887F0F24D /* PeerName.swift in Sources */,
 				75847E2C34AD904E042D6D64 /* PeerTransport.swift in Sources */,
@@ -512,6 +513,8 @@
 				A16B4AC8AF851136B0A74801 /* PlacementService.swift in Sources */,
 				D6D53343198A5A2D417A5C51 /* PlaneScanCoordinator.swift in Sources */,
 				4A7B514AA089D2F2C9764683 /* PointStateMachine.swift in Sources */,
+				99649D63CC1BB45294BF77DA /* PointTestButton.swift in Sources */,
+				FC34335E71B41C688B751347 /* PointerSmoother.swift in Sources */,
 				B074D0EBC61C7CD1D6C2E733 /* RoomAdvertiser.swift in Sources */,
 				1BC622260B302367B2E409D3 /* RoomBrowser.swift in Sources */,
 				E1542F9401E1BDBB2B0FCDED /* RoomCode.swift in Sources */,
@@ -665,14 +668,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P23A73L3J8;
+				DEVELOPMENT_TEAM = Q68SKPB652;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b.CoralAR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b;
 				PRODUCT_NAME = CoralAR;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -703,14 +706,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P23A73L3J8;
+				DEVELOPMENT_TEAM = Q68SKPB652;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b.CoralAR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.ch5b;
 				PRODUCT_NAME = CoralAR;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;

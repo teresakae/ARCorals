@@ -29,14 +29,9 @@ struct HomeView: View {
                         Button("Cancel", role: .cancel) { room.cancelJoin() }
                     }
                 }
-
-                DiscoveryStatusSection(discovery: room.discovery)
-
-                if let status = room.status {
-                    Section("Status") { Text(status) }
-                }
             }
             .navigationTitle("Coral Rooms")
         }
+        .orientationLock(.portrait)
     }
 }

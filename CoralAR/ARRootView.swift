@@ -1,5 +1,6 @@
 import RealityKit
 import SwiftUI
+import UIKit
 
 /// The AR screen. Was `CoralARApp`'s scene body until the room flow and the AR flow were
 /// merged into one target — the contents are unchanged, only the wrapper is now a `View` so
@@ -11,11 +12,26 @@ import SwiftUI
 struct ARRootView: View {
     @StateObject private var session = ARSessionCoordinator()
 
+    /// Falls back to the orientation AR is locked to, so a miss can only ever restate the default.
+    private static func currentInterfaceOrientation() -> UIInterfaceOrientation {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first { $0.activationState == .foregroundActive }?
+            .effectiveGeometry.interfaceOrientation ?? .landscapeRight
+    }
+
     var body: some View {
         ZStack {
             ARViewContainer(session: session)
                 .ignoresSafeArea()
-                .onGeometryChange(for: CGSize.self) { $0.size } action: { session.updateViewportSize($0) }
+                .onGeometryChange(for: CGSize.self) { $0.size } action: {
+                    session.updateViewportSize($0)
+                    // A rotation always resizes the viewport, so this doubles as the rotation
+                    // signal — there is no SwiftUI environment value for interface orientation.
+                    // Without it `cachedInterfaceOrientation` keeps its `.landscapeRight` default,
+                    // which is right only for as long as AR is locked to exactly that.
+                    session.updateInterfaceOrientation(Self.currentInterfaceOrientation())
+                }
 
             LandmarkDotsOverlay(viewportJoints: session.viewportJoints)
                 .ignoresSafeArea()
@@ -39,7 +55,10 @@ struct ARRootView: View {
                 .ignoresSafeArea()
         }
         .statusBarHidden()
-        .onAppear { session.start() }
+        .onAppear {
+            session.start()
+            session.updateInterfaceOrientation(Self.currentInterfaceOrientation())
+        }
         .onDisappear { session.stop() }
     }
 }

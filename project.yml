@@ -110,10 +110,12 @@ targets:
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
-        # Landscape-only, unchanged from the AR-only build. The room screens are stock Forms
-        # and render fine sideways; letting the app rotate would change AR's orientation
-        # assumptions, which is not this change's business.
+        # Both regimes: the room screens are portrait, AR is landscape. This list is only the
+        # outer bound — it does not let a screen rotate, it lets `OrientationLock` choose. The
+        # per-screen mask is narrowed there and nothing in the app is ever free to rotate.
+        # Portrait is first so the app launches into the room flow's regime.
         UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationLandscapeRight
         NSCameraUsageDescription: Camera is used for AR world tracking and hand-gesture placement of the coral model.
         NSLocalNetworkUsageDescription: Nearby players are discovered over the local network to join a coral room.

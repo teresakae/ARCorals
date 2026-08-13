@@ -13,12 +13,6 @@ struct LobbyView: View {
 
                 RosterSection(players: room.players, localPlayerID: room.localPlayerID)
 
-                DiscoveryStatusSection(discovery: room.discovery)
-
-                if let status = room.status {
-                    Section("Status") { Text(status) }
-                }
-
                 Section {
                     if room.isHost {
                         Button("Start Session") { room.startSession() }
@@ -28,5 +22,8 @@ struct LobbyView: View {
             }
             .navigationTitle("Lobby")
         }
+        // Also the landing point when a session ends, which is the transition that arrives
+        // straight out of AR's landscape.
+        .orientationLock(.portrait)
     }
 }
