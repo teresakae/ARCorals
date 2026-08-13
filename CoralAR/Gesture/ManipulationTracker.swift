@@ -52,6 +52,13 @@ struct ManipulationTracker: Sendable {
     private var entityYaw0: Float = 0
     private var pendingScale: Float = 1
     private var pendingYaw: Float = 0
+    /// True → skip the scale-vs-yaw race entirely and commit straight to `.yaw` after arming.
+    /// Used by the re-grab-rotate path when scale must never win (docs/GESTURES.md §1).
+    private var yawOnly = false
+    /// True → skip the scale-vs-yaw race entirely and commit straight to `.scale` after arming.
+    /// Mirror of `yawOnly`, opposite mode. Used by Adjust A (finger-spread scale test mode) so
+    /// yaw can never win now that yaw lives entirely in `.rotate` (docs/GESTURES.md §1).
+    private var scaleOnly = false
 
     // Dwell-to-commit: hold control signal still for `dwellDuration` → freeze. docs/GESTURES.md §2.5
     private(set) var committed = false
@@ -64,13 +71,15 @@ struct ManipulationTracker: Sendable {
         self.tuning = tuning
     }
 
-    mutating func begin(entityScale: Float, entityYaw: Float) {
+    mutating func begin(entityScale: Float, entityYaw: Float, yawOnly: Bool = false, scaleOnly: Bool = false) {
         reset()
         isActive = true
         pendingScale = entityScale
         pendingYaw = entityYaw
         entityScale0 = entityScale
         entityYaw0 = entityYaw
+        self.yawOnly = yawOnly
+        self.scaleOnly = scaleOnly
     }
 
     mutating func reset() {
@@ -96,6 +105,8 @@ struct ManipulationTracker: Sendable {
         dwellStartTime = nil
         committedScale = nil
         committedYaw = nil
+        yawOnly = false
+        scaleOnly = false
     }
 
     /// Prefer ARFrame timestamps for dwell; wall clock default for tests.
@@ -177,9 +188,15 @@ struct ManipulationTracker: Sendable {
             let scaleProgress = abs(log(ratio / baselineRatio)) / max(tuning.scaleDeadzoneLog, 1e-6)
             let yawProgress = abs(accumulatedYaw) / max(tuning.yawDeadzoneRad, 1e-6)
 
-            if scaleProgress >= 1 || yawProgress >= 1 {
-                // Tie-break: higher progress wins; equal → scale.
-                if scaleProgress >= yawProgress {
+            // yawOnly/scaleOnly: no race — commit straight to the forced mode the instant
+            // arming is done, the opposing channel never wins (docs/GESTURES.md §1).
+            if yawOnly || scaleOnly || scaleProgress >= 1 || yawProgress >= 1 {
+                if yawOnly {
+                    mode = .yaw
+                } else if scaleOnly {
+                    mode = .scale
+                } else if scaleProgress >= yawProgress {
+                    // Tie-break: higher progress wins; equal → scale.
                     mode = .scale
                 } else {
                     mode = .yaw

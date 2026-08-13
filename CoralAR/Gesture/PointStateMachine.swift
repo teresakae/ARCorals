@@ -18,8 +18,13 @@ enum PointEvent: Equatable, Sendable {
 /// One sample from the point-target stream.
 struct PointObservation: Equatable, Sendable {
     let timestamp: TimeInterval
-    /// Annotation under index tip, or nil if not pointing / gated.
+    /// Annotation under the index tip (hit-test only — NOT gated on `isPointing`; that gate is
+    /// applied downstream via the smoothed majority vote, so a single misclassified frame doesn't
+    /// blank the target outright).
     let target: AnnotationID?
+    /// Raw per-frame `HandShapeClassifier.isPointing` result for this observation. Smoothed over
+    /// a rolling window inside `PointStateMachine` before it's allowed to gate dwell.
+    let isPointing: Bool
     /// Pinch active cancels dwell — point/carry never share a target. docs/GESTURES.md §2.9
     let pinchActive: Bool
 }
@@ -39,6 +44,13 @@ struct PointStateMachine: Sendable {
     /// 0–1 dwell ring fill; held through grace like state. 1 when hovering.
     private(set) var dwellProgress: Double = 0
 
+    /// Rolling window of raw `isPointing` readings, most recent last — majority-vote smoothing
+    /// for "usable but wrong" shape-gate misreads. Separate mechanism from the per-state
+    /// `lastSeenAt` grace period below, which tolerates genuinely unusable (nil/dropped) frames.
+    /// Don't conflate the two: this one decides whether a *present* frame's classification is
+    /// trustworthy; the grace period decides how long to wait through *absent* frames.
+    private var pointingWindow: [Bool] = []
+
     init(tuning: GestureTuning = .default) {
         self.tuning = tuning
     }
@@ -46,6 +58,7 @@ struct PointStateMachine: Sendable {
     mutating func reset() {
         state = .idle
         dwellProgress = 0
+        pointingWindow = []
     }
 
     @discardableResult
@@ -63,20 +76,29 @@ struct PointStateMachine: Sendable {
             }
             state = .idle
             dwellProgress = 0
+            pointingWindow = []
             return events
         }
+
+        // Majority-vote smoothing: a single misclassified frame (weak middle/ring/little
+        // landmark) doesn't flip the vote as long as most of the recent window still agrees.
+        pointingWindow.append(observation.isPointing)
+        if pointingWindow.count > tuning.pointingWindowSize { pointingWindow.removeFirst() }
+        let trueCount = pointingWindow.filter { $0 }.count
+        let pointingSmoothed = trueCount * 2 > pointingWindow.count
+        let effectiveTarget = pointingSmoothed ? observation.target : nil
 
         var events: [PointEvent] = []
 
         switch state {
         case .idle:
-            if let target = observation.target {
+            if let target = effectiveTarget {
                 state = .dwelling(target: target, since: now, lastSeenAt: now)
                 dwellProgress = 0
             }
 
         case .dwelling(let target, let since, let lastSeenAt):
-            if let seen = observation.target {
+            if let seen = effectiveTarget {
                 if seen == target {
                     let elapsed = now - since
                     if elapsed >= tuning.pointDwellDuration {
@@ -101,7 +123,7 @@ struct PointStateMachine: Sendable {
             }
 
         case .hovering(let target, let lastSeenAt):
-            if let seen = observation.target {
+            if let seen = effectiveTarget {
                 if seen == target {
                     state = .hovering(target: target, lastSeenAt: now)
                 } else {

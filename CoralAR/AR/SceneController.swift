@@ -17,8 +17,9 @@ final class SceneController {
         let q = model.transform.rotation.vector
         return 2 * atan2(q.y, q.w)
     }
-    /// Saved materials before setHighlighted(true); nil when not highlighted.
-    private var unhighlightedMaterials: [Material]?
+    /// Saved materials before setHighlighted(true), keyed per-entity so O1 and a pest
+    /// can be highlighted independently without corrupting each other's restore state.
+    private var unhighlightedMaterials: [ObjectIdentifier: [Material]] = [:]
 
     /// Annotation markers for selectAnnotation(at:) — parallel to placedModels / selectModel.
     private var annotationEntities: [ObjectIdentifier: AnnotationID] = [:]
@@ -28,6 +29,13 @@ final class SceneController {
     static let testAnnotationID = AnnotationID("Test annotation — coral fact goes here.")
     /// ⚠️ Screen-pt fat grab after `entity(at:)` miss. Same unit class as `waveProximityRadiusPt`. Ad-hoc; docs/GESTURES.md §2.1 / §3.
     static let screenGrabRadiusPt: CGFloat = 220
+
+    /// Pest markers for selectPest(at:) — parallel to annotationEntities / selectAnnotation.
+    private var pestEntities: Set<ObjectIdentifier> = []
+    private var pestMarkers: [ModelEntity] = []
+    /// Sim-mode pest content: pests spawn once, on the first placed cube (O1 stand-in).
+    private var didPlacePests = false
+    static let pestCount = 3
 
     var hasPlacedEntity: Bool { activeModel != nil }
 
@@ -49,12 +57,85 @@ final class SceneController {
         placedAnchors.append(anchor)
         placedModels.append(model)
         activeModel = model
-        unhighlightedMaterials = nil
 
         if !didPlaceTestAnnotation {
             // Top face (Y-up) — [0,0,halfHeight] was +Z side, invisible from overhead.
             addAnnotation(Self.testAnnotationID, on: model, relativePosition: [0, ModelProvider.halfHeight, 0])
             didPlaceTestAnnotation = true
+        }
+
+        if !didPlacePests {
+            spawnPests(on: model)
+            didPlacePests = true
+        }
+    }
+
+    /// Spawns pest markers as pinchable children of O1 (docs/GESTURES.md pest content).
+    /// Same shape as `addAnnotation`: small visible mesh + oversized invisible collision.
+    @discardableResult
+    func spawnPests(on model: ModelEntity, count: Int = SceneController.pestCount) -> [ModelEntity] {
+        let markerRadius: Float = 0.006
+        // Same ad-hoc hitRadius as annotations (docs/GESTURES.md §3) — well past the visual size.
+        let hitRadius: Float = 0.035
+        // A few distinct points around the cube's surface so each pest is individually pinchable.
+        let positions: [SIMD3<Float>] = [
+            [ModelProvider.halfHeight, 0, 0],
+            [0, 0, ModelProvider.halfHeight],
+            [-ModelProvider.halfHeight, 0, 0]
+        ]
+        var material = SimpleMaterial()
+        material.color = .init(tint: .systemRed, texture: nil)
+
+        var pests: [ModelEntity] = []
+        for i in 0..<min(count, positions.count) {
+            let pest = ModelEntity(mesh: .generateSphere(radius: markerRadius), materials: [material])
+            pest.name = "pest-\(i)"
+            pest.position = positions[i]
+            pest.collision = CollisionComponent(shapes: [.generateSphere(radius: hitRadius)])
+            model.addChild(pest)
+            pestEntities.insert(ObjectIdentifier(pest))
+            pestMarkers.append(pest)
+            pests.append(pest)
+        }
+        return pests
+    }
+
+    /// `entity(at:)` then nearest projected pest within `screenGrabRadiusPt` — pest-only registry,
+    /// so a pinch that lands on a pest never resolves to O1 via the parent-walk (docs/GESTURES.md pest content).
+    func selectPest(at viewportPoint: CGPoint) -> ModelEntity? {
+        if let hit = arView.entity(at: viewportPoint) {
+            var candidate: Entity? = hit
+            while let entity = candidate {
+                if let model = entity as? ModelEntity, pestEntities.contains(ObjectIdentifier(model)) {
+                    return model
+                }
+                candidate = entity.parent
+            }
+        }
+        return nearestEntity(to: viewportPoint, in: pestMarkers)
+    }
+
+    /// Write pest world position through its parent — same no-re-anchor pattern as `moveModel` (ADR-019).
+    func movePest(_ pest: ModelEntity, toWorld world: SIMD3<Float>) {
+        guard let parent = pest.parent else { return }
+        pest.position = parent.convert(position: world, from: nil)
+    }
+
+    /// Fade to transparent, then remove. Opacity animation verified available on this SDK
+    /// (`OpacityComponent` + `FromToByAnimation<Float>` bound to `.opacity`, iOS 18+).
+    func removePest(_ pest: ModelEntity, fadeDuration: TimeInterval = 0.5) {
+        pestEntities.remove(ObjectIdentifier(pest))
+        pestMarkers.removeAll { $0 === pest }
+
+        pest.components.set(OpacityComponent(opacity: 1))
+        let fade = FromToByAnimation<Float>(from: 1, to: 0, duration: fadeDuration, bindTarget: .opacity)
+        if let resource = try? AnimationResource.generate(with: fade) {
+            pest.playAnimation(resource)
+        }
+        // DispatchQueue, not Task — a plain closure has no Sendable requirement, so capturing
+        // this non-Sendable Entity across the delay needs no workaround.
+        DispatchQueue.main.asyncAfter(deadline: .now() + fadeDuration) {
+            pest.removeFromParent()
         }
     }
 
@@ -123,19 +204,24 @@ final class SceneController {
         return best?.entity
     }
 
-    /// Material grab highlight — HoverEffectComponent never fires here (docs/GESTURES.md §2.7).
+    /// Material grab highlight on activeModel — HoverEffectComponent never fires here (docs/GESTURES.md §2.7).
     func setHighlighted(_ on: Bool) {
         guard let model = activeModel else { return }
+        setHighlighted(on, for: model)
+    }
+
+    /// Same highlight, targeted at any entity (e.g. a dragged pest) rather than activeModel.
+    func setHighlighted(_ on: Bool, for model: ModelEntity) {
+        let key = ObjectIdentifier(model)
         if on {
-            guard unhighlightedMaterials == nil else { return }
-            unhighlightedMaterials = model.model?.materials
+            guard unhighlightedMaterials[key] == nil else { return }
+            unhighlightedMaterials[key] = model.model?.materials
             var highlight = SimpleMaterial()
             highlight.color = .init(tint: .systemYellow, texture: nil)
             model.model?.materials = [highlight]
         } else {
-            guard let saved = unhighlightedMaterials else { return }
+            guard let saved = unhighlightedMaterials.removeValue(forKey: key) else { return }
             model.model?.materials = saved
-            unhighlightedMaterials = nil
         }
     }
 
@@ -178,9 +264,12 @@ final class SceneController {
         placedAnchors.removeAll()
         placedModels.removeAll()
         activeModel = nil
-        unhighlightedMaterials = nil
+        unhighlightedMaterials.removeAll()
         annotationEntities.removeAll()
         annotationMarkers.removeAll()
         didPlaceTestAnnotation = false
+        pestEntities.removeAll()
+        pestMarkers.removeAll()
+        didPlacePests = false
     }
 }

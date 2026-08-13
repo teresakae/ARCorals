@@ -34,36 +34,56 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     @Published private(set) var pinchViewportPoint: CGPoint?
     @Published private(set) var raycastViewportPoint: CGPoint?
     @Published private(set) var viewportJoints: [(point: CGPoint, confidence: Float)] = []
-    @Published private(set) var manipulationModeName = "—"
+    /// Not `private(set)` — +AdjustSlide.swift writes this directly the same way applyManipulation() does.
+    @Published var manipulationModeName = "—"
     /// Mirrors `CarryStateMachine.carried`; all carry-related UI derives from this. Written by +Carry.swift.
     @Published var carriedEntity: EntityID?
 
     /// Demo control — hard override for what a pinch/point/wave means; six cases, no auto-switch. See docs/GESTURES.md §1.
     enum DemoMode: String, CaseIterable, Sendable {
         case place = "Place"
-        case adjust = "Adjust"
+        /// Adjust A — scale via the finger-spread pinch ratio (today's Adjust scale math,
+        /// unchanged, yaw removed — routes through the legacy pinch path with
+        /// `ManipulationTracker.begin(scaleOnly: true)`; docs/GESTURES.md §1).
+        case adjustSpread = "Adjust A"
+        /// Adjust B — scale via vertical hand slide (new signal; standalone `VerticalSlideScale`,
+        /// its own routing below, never touches `ManipulationTracker`; docs/GESTURES.md §1).
+        case adjustSlide = "Adjust B"
         case move = "Move"
+        /// Explicit rotate-only mode: any pinch on a placed object rotates it, yaw-only, no
+        /// move capability, no history-based inference (docs/GESTURES.md §1).
+        case rotate = "Rotate"
         /// Showcase / quiz stand-in — Point/dwell only.
         case point = "Point"
-        /// Sim "place O1" stand-in — Carry only; after put-down, re-grab rotates. Point/wave stay dead.
-        case carry = "Carry"
         /// Sim brush-phase stand-in — Carry + Wave only, never rotate; O2/O3 tools are carried, not spun (§2.3).
         case sim = "Sim"
 
         var allowsPoint: Bool { self == .point }
-        var allowsCarry: Bool { self == .carry || self == .sim }
-        /// Re-grab rotate after first placement — O1 / `.carry` only. Sim (O2/O3) never rotates.
-        var allowsRotate: Bool { self == .carry }
+        var allowsCarry: Bool { self == .sim }
+        /// Carry's own re-grab-rotate stand-in (routeCarryPinch's `allowRotate`) — the mode that
+        /// had it (`.carry`) is gone, and `.sim` never rotates on re-grab, so this is always false.
+        var allowsRotate: Bool { false }
         var allowsWave: Bool { self == .sim }
+        /// `.rotate`'s own routing — any pinch on a placed object rotates it (docs/GESTURES.md §1).
+        var allowsRotateMode: Bool { self == .rotate }
+        /// `.adjustSlide`'s own routing — vertical-slide scale-only mechanism, bypasses the
+        /// legacy pinch path entirely (docs/GESTURES.md §1).
+        var allowsAdjustSlide: Bool { self == .adjustSlide }
         var allowsLegacyPinch: Bool {
-            self == .place || self == .adjust || self == .move
+            self == .place || self == .adjustSpread || self == .move
         }
     }
-    @Published var demoMode: DemoMode = .adjust {
+    @Published var demoMode: DemoMode = .adjustSpread {
         didSet {
             // Edge only: per-frame endCarryIfActive() also killed Adjust's shared ManipulationTracker.
             if oldValue.allowsCarry, !demoMode.allowsCarry {
                 endCarryIfActive()
+            }
+            if oldValue.allowsRotateMode, !demoMode.allowsRotateMode {
+                endRotateModeIfActive()
+            }
+            if oldValue.allowsAdjustSlide, !demoMode.allowsAdjustSlide {
+                endAdjustSlideIfActive()
             }
         }
     }
@@ -97,15 +117,24 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// Live point-and-dwell fill, for a future ring affordance. Written by
     /// ARSessionCoordinator+Point.swift.
     @Published var dwellProgress: Double = 0
+    /// Live pinch-commit fill (0–1 during the pendingBegan hysteresis window, 1 once
+    /// committed) — drives the user-facing pinch progress ring. See `PinchProgressOverlay`.
+    @Published private(set) var pinchProgress: Double = 0
 
     /// Not `private` — +Rotate.swift sets `exitThresholdOverride` when re-grab rotate locks scale mode.
     var stateMachine = PinchStateMachine(tuning: .default)
-    /// Not `private` — +Rotate.swift drives this for re-grab rotate under `.carry` demo mode.
+    /// Not `private` — +Rotate.swift drives this for `.rotate` demo mode.
     var manipulation = ManipulationTracker(tuning: .default)
     /// Not `private` — also driven from +Carry.swift's `.pickedUp`/`.putDown` (carry reuses Move's follow controller).
     var moveController = MoveController(tuning: .default)
+    /// Not `private` — +AdjustSlide.swift drives this for `.adjustSlide` demo mode (Adjust B).
+    var adjustSlideScale = VerticalSlideScale(tuning: .default)
     /// Entities Carry has put down at least once; a re-pinch on one routes to ManipulationTracker (yaw) instead of a new carry.
     var previouslyPlacedEntities: Set<EntityID> = []
+    /// Pest currently being dragged (Sim mode pick-up-and-throw); nil when none. Not `private` — +Carry.swift drives this.
+    var draggedPest: ModelEntity?
+    /// Separate from `moveController` — a pest drag and an O1 carry never share one follow state. Not `private` — +Carry.swift drives this.
+    var pestMoveController = MoveController(tuning: .default)
     /// Not `private` — mutated only from +Point.swift's `handlePoint` outside `start()`.
     var pointStateMachine = PointStateMachine(tuning: .default)
     /// Not `private` — mutated only from +Wave.swift's `handleWave` outside `start()`.
@@ -120,6 +149,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// `private(set)`, not `private` — +Carry.swift reads it the same way.
     private(set) var previewWorldHit: SIMD3<Float>?
     private var rollPalm = RollingMinMax()
+    /// Last accepted hand centroid, normalized coords — continuity gate for bystander rejection (ADR-021).
+    private var lastHandCentroid: CGPoint?
     /// Median-of-5 on pinchRatio, the chokepoint every consumer reads through — not EMA, since raw noise is
     /// outlier spikes (up to 20x in one frame; ~35% of consecutive frames jump enough to blow the deadzone).
     private var ratioFilterBuffer: [Double] = []
@@ -175,6 +206,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         stateMachine.reset()
         manipulation.reset()
         moveController.reset()
+        adjustSlideScale.reset()
         pointStateMachine.reset()
         waveDetector.tuning = tuning
         waveDetector.reset()
@@ -182,13 +214,17 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         carryMachine.reset()
         carriedEntity = nil
         previouslyPlacedEntities = []
+        draggedPest = nil
+        pestMoveController.reset()
         activeAnnotationID = nil
         dwellProgress = 0
+        pinchProgress = 0
         lastGestureEndTime = nil
         manipulationModeName = "—"
         publishScanState()
         resetHandUI()
         framesReceivedCounter = 0
+        lastHandCentroid = nil
         isRunning = true
 
         metrics.startNewFile()
@@ -239,13 +275,24 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
                 PinchObservation(timestamp: machineTime, pinchRatio: nil, confidence: nil)
             )
             gesturePhaseName = stateMachine.phase.name
+            pinchProgress = stateMachine.pendingProgress
             if events.contains(.cancelled) {
                 lastGestureEndTime = machineTime
                 finishManipulation()
             }
             handleCarryRouting(frame: nil, packet: packet, pinchEvents: events)
+            handleRotateModeRouting(frame: nil, packet: packet, pinchEvents: events)
+            handleAdjustSlideRouting(frame: nil, packet: packet, pinchEvents: events)
             handlePoint(frame: nil, packet: packet)
             handleWave(frame: nil, packet: packet)
+            return
+        }
+
+        // Bystander-hand rejection (ADR-021): size + frame-to-frame continuity, before this
+        // frame's hand gets treated as ours by anything downstream.
+        let coverage = handCoveragePct(frame)
+        guard passesHandGate(frame, coverage: coverage) else {
+            handleVision(frame: nil, packet: packet)
             return
         }
 
@@ -260,7 +307,6 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         palmWidthMin = rollPalm.min
         palmWidthMax = rollPalm.max
 
-        let coverage = handCoveragePct(frame)
         // Order: ratio→overlay→pinch→carry/rotate→point→wave; legacy after, gated (ARCHITECTURE.md §4).
         updateOverlay(frame: frame, packet: packet)
 
@@ -271,8 +317,11 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         )
         let events = stateMachine.process(observation)
         gesturePhaseName = stateMachine.phase.name
+        pinchProgress = stateMachine.pendingProgress
 
         handleCarryRouting(frame: frame, packet: packet, pinchEvents: events)
+        handleRotateModeRouting(frame: frame, packet: packet, pinchEvents: events)
+        handleAdjustSlideRouting(frame: frame, packet: packet, pinchEvents: events)
         handlePoint(frame: frame, packet: packet)
         handleWave(frame: frame, packet: packet)
 
@@ -343,9 +392,13 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
 
                 switch trigger {
                 case .adjust:
+                    // Legacy Adjust path is now exclusively Adjust A (finger-spread scale);
+                    // `.adjustSlide` (Adjust B) never reaches here — routed separately via
+                    // handleAdjustSlideRouting. scaleOnly: true — yaw lives entirely in
+                    // `.rotate` now (docs/GESTURES.md §1).
                     metrics.beginGesture()
                     let scale = model.scale.x
-                    beginManipulation(entityScale: scale, entityYaw: scene.modelYaw)
+                    beginManipulation(entityScale: scale, entityYaw: scene.modelYaw, scaleOnly: true)
                     metrics.log(
                         event: .manipulation,
                         secondsSinceStart: planeScan.secondsSinceStart,
@@ -459,9 +512,12 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         }
     }
 
-    /// Shared Adjust / re-grab-rotate start. Not `private` — `+Rotate.swift` calls this.
-    func beginManipulation(entityScale: Float, entityYaw: Float) {
-        manipulation.begin(entityScale: entityScale, entityYaw: entityYaw)
+    /// Shared Adjust A / re-grab-rotate start. Not `private` — `+Rotate.swift` calls this.
+    /// `yawOnly` defaults false; `.rotate` mode passes true via `beginRotate(yawOnly:)`.
+    /// `scaleOnly` defaults false; `.adjustSpread` (Adjust A) passes true — see the legacy
+    /// `.began` case below.
+    func beginManipulation(entityScale: Float, entityYaw: Float, yawOnly: Bool = false, scaleOnly: Bool = false) {
+        manipulation.begin(entityScale: entityScale, entityYaw: entityYaw, yawOnly: yawOnly, scaleOnly: scaleOnly)
         scene.setHighlighted(true)
         manipulationModeName = "—"
         manipulationCommitted = false
@@ -507,7 +563,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         metrics.endGesture()
     }
 
-    private func placeFromHand(frame: LandmarkFrame, packet: FramePacket) {
+    /// Not `private` — +AdjustSlide.swift's `.began` case places the same way legacy Adjust/Move do.
+    func placeFromHand(frame: LandmarkFrame, packet: FramePacket) {
         guard let visionPinch = frame.pinchPoint(confidenceGate: tuning.confidenceGate) else {
             lastRaycastTier = .none
             return
@@ -596,6 +653,32 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         return min(100, area * 100)
     }
 
+    /// Bystander-hand rejection (ADR-021). Vision hands us at most one hand already
+    /// picked by its own size heuristic — this is the only place we get to say no to it.
+    /// Size: implausibly small (background) or large (shoved at the lens) → reject.
+    /// Continuity: jumped too far from the last accepted hand in one frame → likely a
+    /// different hand, reject and keep tracking the old position rather than snapping to it.
+    private func passesHandGate(_ frame: LandmarkFrame, coverage: Double?) -> Bool {
+        if let coverage, !(tuning.handCoverageMin...tuning.handCoverageMax).contains(coverage) {
+            return false
+        }
+        guard let centroid = handCentroid(frame) else { return true }
+        if let last = lastHandCentroid,
+           hypot(centroid.x - last.x, centroid.y - last.y) > tuning.handJumpRejectRadius {
+            return false
+        }
+        lastHandCentroid = centroid
+        return true
+    }
+
+    private func handCentroid(_ frame: LandmarkFrame) -> CGPoint? {
+        let pts = frame.jointList.filter { $0.confidence >= tuning.confidenceGate }
+        guard !pts.isEmpty else { return nil }
+        let x = pts.map(\.x).reduce(0, +) / CGFloat(pts.count)
+        let y = pts.map(\.y).reduce(0, +) / CGFloat(pts.count)
+        return CGPoint(x: x, y: y)
+    }
+
     private func clearOverlay() {
         viewportJoints = []
         pinchViewportPoint = nil
@@ -626,6 +709,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         ratioFilterBuffer = []
         manipulation.reset()
         moveController.reset()
+        adjustSlideScale.reset()
         manipulationModeName = "—"
         clearOverlay()
     }

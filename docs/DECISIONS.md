@@ -26,6 +26,7 @@ ADR-style log. One entry per decision. All evidence traces to [`AR-hand-gesture-
 | [018](#adr-018--mode-disambiguation-resolved--dominant-axis-lock-at-first-deadzone-crossing-implemented) | Mode disambiguation resolved — dominant-axis lock at first deadzone crossing, implemented | Accepted |
 | [019](#adr-019--pick-up-and-move-multi-object-placement-and-real-object-selection--built-two-bugs-found-and-fixed-testing-them) | Pick up and move, multi-object placement, and real object selection — built, two bugs found and fixed testing them | Accepted |
 | [020](#adr-020--roaming-handheld-not-desk-stand) | Roaming handheld use; desk-stand was calibration/de-risking only | Accepted |
+| [021](#adr-021--bystander-hand-rejection-size--continuity-gate-not-chirality) | Bystander-hand rejection: size + continuity gate, not chirality | Accepted (revisit — thresholds uncalibrated) |
 
 ---
 
@@ -498,3 +499,26 @@ ADR-004 listed handheld as the fallback and cited Nomtek's ergonomic awkwardness
 - Pinch threshold 1.98 and wave `waveProximityRadiusPt` 220pt were measured/tuned at a fixed desk distance. Roaming varies working distance; cross-distance stability (already open in ADR-015) is now the live risk, not a hypothetical.
 - Purdue arm-fatigue mitigation (free hand resting on the table) does not apply while roaming. Expected, not a tracking bug.
 - Do not "fix" the app back onto a stand. Do not add a second capture path or orientation-from-`UIDevice` because the user is walking.
+
+---
+
+## ADR-021 — Bystander-hand rejection: size + continuity gate, not chirality
+
+**Date:** 2026-08-12 · **Status:** Accepted (revisit — thresholds uncalibrated)
+
+**Context.** Roaming handheld use (ADR-020) puts the rear camera in public/shared spaces where a hand that isn't the user's can enter frame. `HandPoseDetector` requests `maximumHandCount = 1` and Vision hands back at most one `HumanHandPoseObservation`. Per Apple's own account of the underlying selection (WWDC20 session 10653), when the requested count is below what's detected, Vision keeps **the largest hand(s) in frame** — there is no documented confidence-based ranking (`observation.confidence` is reported to sit near 1.0 regardless), no ordering guarantee on the array, and no `boundingBox` property (must be derived from joint extents, which `handCoveragePct()` already does). Net effect: a bystander's hand that is bigger or closer to the lens than the user's own **silently replaces it** before any app code runs — nothing today rejects that swap.
+
+`chirality` was considered as a filter and rejected: no `boundingBox`-equivalent reliability data exists for handheld rear-camera egocentric framing specifically, and multiple dev reports describe it flipping/misreporting due to image mirroring, independent of the project's own use case. Not a usable signal here.
+
+No Apple API and no third-party prior art (checked: WWDC 2020/2021/2024 sessions, Vision docs, dev-forum and blog write-ups) implements bystander-vs-owner hand disambiguation by position or cross-frame identity — `DetectHumanHandPoseRequest` has no persistent hand ID. This is DIY territory with no reference implementation to copy.
+
+**Decision.**
+1. **Size gate.** Reject a frame (route it through the existing nil-frame/no-hand path, same grace/timeout handling already in place) if `handCoveragePct()` falls outside `tuning.handCoverageMin...handCoverageMax`. Catches a bystander's hand looming large near the lens, and a bystander hand small in the background.
+2. **Continuity gate.** Track the last accepted hand's centroid (mean of confidence-gated joints, normalized coords). Reject a frame if the new centroid jumps further than `tuning.handJumpRejectRadius` in one frame — a same-hand frame-to-frame move should be small at 15–20Hz (ADR-011); a large jump is more likely Vision having switched which hand it's reporting.
+3. **No chirality filter, no `maximumHandCount` bump.** Raising the count to compare two candidates ourselves would cost latency (Apple: pose is generated per detected hand, "will have a latency impact") for a ranking signal Vision doesn't document either — not worth it unless the two gates above prove insufficient in practice.
+4. **Thresholds are placeholders**, not measured: `handCoverageMin = 0.5`, `handCoverageMax = 60.0`, `handJumpRejectRadius = 0.35`. Same status as this file's other un-derived constants (`regrabWindow`, `waveMinReversals`, etc.) — needs a real measurement pass, ideally against an actual second-hand-in-frame test, before trusting it in the field.
+
+**Consequences.**
+- A fast, large motion of the user's *own* hand (e.g. a big reach) can trip the continuity gate and get treated as "no hand" for a frame — same failure mode as any other single-frame gate, recoverable next frame since the gate re-locks on the first accepted centroid.
+- Gate lives entirely in `handleVision()` (`ARSessionCoordinator.swift`) — no new files, no new dependency, reuses `handCoveragePct()`.
+- Still no true depth/distance measurement (ADR-003 stands) — "size" here means apparent size in the 2D frame, same caveat as everywhere else in this project.

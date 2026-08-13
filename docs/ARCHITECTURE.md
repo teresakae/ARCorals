@@ -8,11 +8,11 @@
 
 ## 1. The shape of the thing
 
-The pipeline is still one unidirectional flow, camera to pixels, with **one queue hop** (into and back out of Vision, via a Swift actor). What is no longer true is "exactly one stateful node." There are **six**, each owning one concern: `PinchStateMachine` (pinch lifecycle), `ManipulationTracker` (scale/yaw mode-lock + dwell-commit), `MoveController` (absolute-from-grab position), `CarryStateMachine` (pick-up/put-down toggle), `PointStateMachine` (dwell-to-hover), `WaveDetector` (reversal/stationary-hold). None know about each other directly — `ARSessionCoordinator` and its four `+Point`/`+Carry`/`+Rotate`/`+Wave` extensions are the only code that reads one machine's output and feeds another.
+The pipeline is still one unidirectional flow, camera to pixels, with **one queue hop** (into and back out of Vision, via a Swift actor). What is no longer true is "exactly one stateful node." There are **seven**, each owning one concern: `PinchStateMachine` (pinch lifecycle), `ManipulationTracker` (scale-only/yaw-only mode-lock + dwell-commit, shared by Adjust A and Rotate), `MoveController` (absolute-from-grab position), `CarryStateMachine` (pick-up/put-down toggle), `PointStateMachine` (dwell-to-hover), `WaveDetector` (reversal/stationary-hold), `VerticalSlideScale` (Adjust B's standalone vertical-slide-to-scale accumulator — deliberately not part of `ManipulationTracker`, its log-ratio math doesn't transfer to a linear screen slide). None know about each other directly — `ARSessionCoordinator` and its five `+Point`/`+Carry`/`+Rotate`/`+Wave`/`+AdjustSlide` extensions are the only code that reads one machine's output and feeds another.
 
 The 2D/3D seam from the original design still holds, just relocated: `Gesture/` imports no RealityKit. `PinchGestureEvent`, `AnnotationID`, and `EntityID` (a bare `ObjectIdentifier` typealias) are the only things that cross from Gesture into AR, and `SceneController` is the only place an `ObjectIdentifier(ModelEntity)` gets minted into an `EntityID`.
 
-What decides which of the six machines is even listening this frame is `DemoMode` — six cases (`place`, `adjust`, `move`, `point`, `carry`, `sim`), a **hard override** set from the HUD. Exactly one mode is live at a time; there is no timing-based auto-switching on the live path (ADR-019 deleted the one that existed — see §4).
+What decides which of the seven machines is even listening this frame is `DemoMode` — seven cases (`place`, `adjustSpread`, `adjustSlide`, `move`, `rotate`, `point`, `sim`), a **hard override** set from the HUD. Exactly one mode is live at a time; there is no timing-based auto-switching on the live path (ADR-019 deleted the one that existed — see §4). `adjustSpread`/`adjustSlide` are the "Adjust A"/"Adjust B" scale-only A/B test modes — yaw no longer lives in Adjust at all, it's exclusively `rotate`'s.
 
 ```mermaid
 flowchart TD
@@ -25,11 +25,13 @@ flowchart TD
     E --> G["PinchStateMachine<br/>Possible→Began→Changed→Ended/Cancelled"]
     G -->|"PinchGestureEvent"| H{"DemoMode gate"}
     H -->|"allowsLegacyPinch"| I["handleGestureEvent<br/>ManipulationTracker + MoveController"]
-    H -->|"allowsCarry"| J["+Carry → CarryStateMachine<br/>or handoff to +Rotate"]
+    H -->|"allowsCarry"| J["+Carry → CarryStateMachine"]
+    H -->|"allowsRotateMode"| R["+Rotate → ManipulationTracker<br/>yawOnly, any pinch on a placed object"]
     H -->|"allowsPoint"| K["+Point → PointStateMachine<br/>via SceneController.selectAnnotation"]
     H -->|"allowsWave"| L["+Wave → WaveDetector<br/>proximity-gated wrist x"]
     I --> M["SceneController<br/>N AnchorEntity/ModelEntity pairs<br/>selectModel(at:) hit-test"]
     J --> M
+    R --> M
     K -.->|"popup text only"| N["AnnotationPopup"]
     M --> P["RealityKit render<br/>ARView on phone screen"]
 ```
@@ -45,7 +47,8 @@ ARSession
           -> PinchStateMachine (hysteresis + grace period) -> PinchGestureEvent
             -> DemoMode gate (hard override; not a race between modes)
               -> place/adjust/move -> ManipulationTracker (scale/yaw lock) + MoveController (grab-relative)
-              -> carry/sim         -> CarryStateMachine (toggle) -> may hand off to Rotate's ManipulationTracker
+              -> sim (carry)       -> CarryStateMachine (toggle)
+              -> rotate            -> ManipulationTracker (yawOnly, any pinch on a placed object)
               -> point             -> HandShapeClassifier.isPointing -> PointStateMachine (dwell)
               -> sim (wave)        -> WaveDetector (reversal or stationary-hold)
                 -> SceneController (scale/yaw/position on the child ModelEntity; selectModel(at:) hit-test)
@@ -92,10 +95,11 @@ Each type has one responsibility. If a type needs two sentences to describe, it'
 | Type | File | Single responsibility |
 |---|---|---|
 | `CoralARApp` | `CoralARApp.swift` | SwiftUI entry point. Composes the `ARView` container, `LandmarkDotsOverlay`, `HandDebugOverlay`, `ARStatusHUD`, and an inline `AnnotationPopup` (placeholder text popup — enough to exercise point-and-dwell, not a real annotation UI). |
-| `ARSessionCoordinator` | `AR/ARSessionCoordinator.swift` | Owns `ARView`/`ARSession`, is the `ARSessionDelegate`, and is the dispatcher: `handleVision` runs on every processed frame in a fixed order — *ratio → overlay → pinch → carry/rotate → point → wave* (named explicitly in the source) — then runs the legacy Adjust/Move handler gated by `demoMode.allowsLegacyPinch`. At ~800 lines this is the largest file in the codebase and does not fit the one-sentence rule; the four extensions below exist specifically so it isn't one 1500-line file. |
+| `ARSessionCoordinator` | `AR/ARSessionCoordinator.swift` | Owns `ARView`/`ARSession`, is the `ARSessionDelegate`, and is the dispatcher: `handleVision` runs on every processed frame in a fixed order — *ratio → overlay → pinch → carry/rotate/adjustSlide → point → wave* (named explicitly in the source) — then runs the legacy Place/Adjust A/Move handler gated by `demoMode.allowsLegacyPinch`. At ~800 lines this is the largest file in the codebase and does not fit the one-sentence rule; the five extensions below exist specifically so it isn't one 1500-line file. |
 | `ARSessionCoordinator+Point.swift` | same dir | Point-and-dwell dispatch: index fingertip + `HandShapeClassifier.isPointing` → `SceneController.selectAnnotation(at:)` → `PointStateMachine`. Live only under `demoMode.allowsPoint` (`.point`); fed a nil target otherwise so an in-flight dwell can still time out. |
-| `ARSessionCoordinator+Carry.swift` | same dir | Pinch-toggle pick-up/put-down dispatch: routes each `PinchGestureEvent` through `routeCarryPinch` to either `CarryStateMachine` or, for a re-grab on an already-put-down entity, off to `+Rotate`. Live under `demoMode.allowsCarry` (`.carry`/`.sim`). |
-| `ARSessionCoordinator+Rotate.swift` | same dir | The smallest extension — begins/updates/ends a re-grab rotate using the same `ManipulationTracker` Adjust already uses. Only reachable via `+Carry`'s routing, and only when `demoMode.allowsRotate` (`.carry` only). |
+| `ARSessionCoordinator+Carry.swift` | same dir | Pinch-toggle pick-up/put-down dispatch: routes each `PinchGestureEvent` through `routeCarryPinch` to `CarryStateMachine`. Live under `demoMode.allowsCarry` (`.sim` only — the standalone `.carry` mode was removed 2026-08-12; `routeCarryPinch`'s re-grab-rotate branch is unreachable now that `allowsRotate` is always `false`, left in place untouched). |
+| `ARSessionCoordinator+Rotate.swift` | same dir | Begins/updates/ends a rotate using the same `ManipulationTracker` Adjust A uses, `yawOnly: true`. Two callers: Adjust A's shared `beginManipulation`/`applyManipulation`/`finishManipulation` primitives, and its own top-level `.rotate` mode routing (`handleRotateModeRouting`) — any pinch on a placed object rotates it, gated on `demoMode.allowsRotateMode` (`.rotate` only). |
+| `ARSessionCoordinator+AdjustSlide.swift` | same dir | Adjust B (vertical-slide scale) dispatch: begins/updates/ends a standalone `VerticalSlideScale` (never touches `ManipulationTracker` — its log-ratio math doesn't transfer to a linear screen slide). Gated on `demoMode.allowsAdjustSlide` (`.adjustSlide` only); first pinch on an empty scene places, same as legacy Place/Adjust A/Move. |
 | `ARSessionCoordinator+Wave.swift` | same dir | Wrist-position wave/stationary-hold dispatch: gates a live wrist x to `WaveDetector` only inside a screen-radius (`waveProximityRadiusPt`, 220pt — a content-layer placeholder, not a `GestureTuning` constant) of a marker on the active cube's top face. Live under `demoMode.allowsWave` (`.sim`). |
 | `PlacementService` | `AR/PlacementService.swift` | Unchanged: `.existingPlaneGeometry` → `.existingPlaneInfinite` → `.estimatedPlane` raycast fallback chain. |
 | `SceneController` | `AR/SceneController.swift` | **Owns every placed entity, not one.** `place()` appends a new `AnchorEntity`/`ModelEntity` pair — multi-object since ADR-019 — with a position-only, identity-rotation anchor (gravity-aligned regardless of raycast tier). `selectModel(at:)` / `selectAnnotation(at:)` try `ARView.entity(at:)` first (parent-walk so a hit on child geometry, e.g. an annotation marker, resolves to the placed model), then nearest projected candidate within `screenGrabRadiusPt` (220pt). A miss outside that radius leaves `activeModel` untouched. Also owns per-model yaw (decoded from the entity's own quaternion each time, not a stored field — a stored field leaked rotation between objects), scale with vertical compensation (so the base doesn't sink/float as it grows/shrinks), highlight-by-material-swap, and annotation registration. |
@@ -106,7 +110,7 @@ Each type has one responsibility. If a type needs two sentences to describe, it'
 
 | Type | File | Single responsibility |
 |---|---|---|
-| `ARStatusHUD` | `Debug/ARStatusHUD.swift` | The on-screen HUD: plane/gesture/mode status card, the six-way `DemoMode` picker, plane/landmark-dot toggles, torch control, and the Open/Pinched buttons used to label ground truth into the CSV. |
+| `ARStatusHUD` | `Debug/ARStatusHUD.swift` | The on-screen HUD: plane/gesture/mode status card, the seven-way `DemoMode` picker, plane/landmark-dot toggles, torch control, and the Open/Pinched buttons used to label ground truth into the CSV. |
 | `HandDebugOverlay` | `Debug/HandDebugOverlay.swift` | Two views, one file. `HandDebugOverlay` draws the pinch-point/raycast-hit crosshair pair (misalignment = visible gap). `LandmarkDotsOverlay` — also in this file — draws the 21 confidence-colored joint dots. **CoralAR has no `LandmarkOverlayView.swift` or `LiveReadoutView.swift`; those names exist only under `HandProbe/`.** |
 | `MetricsLogger` | `Debug/MetricsLogger.swift` | Appends CSV rows to `Documents/`, one file per session (`phase5_manip_*.csv` — the filename is a holdover from when this schema was introduced, not a live phase gate). Logs plane, placement, gesture, manipulation, and calibration events. |
 
@@ -222,28 +226,41 @@ LandmarkFrame.joints
 ```
 handleVision(frame:, packet:)                 [main actor, every processed frame]
   ├─ ratio -> overlay update -> PinchStateMachine.process -> [PinchGestureEvent]
-  ├─ handleCarryRouting(pinchEvents:)          +Carry.swift  — gated: demoMode.allowsCarry
-  ├─ handlePoint(frame:)                       +Point.swift  — gated: demoMode.allowsPoint
-  ├─ handleWave(frame:)                        +Wave.swift   — gated: demoMode.allowsWave
-  └─ for event in pinchEvents: handleGestureEvent(event)     legacy Place/Adjust/Move — gated: demoMode.allowsLegacyPinch
+  ├─ handleCarryRouting(pinchEvents:)          +Carry.swift       — gated: demoMode.allowsCarry
+  ├─ handleRotateModeRouting(pinchEvents:)     +Rotate.swift      — gated: demoMode.allowsRotateMode
+  ├─ handleAdjustSlideRouting(pinchEvents:)    +AdjustSlide.swift — gated: demoMode.allowsAdjustSlide
+  ├─ handlePoint(frame:)                       +Point.swift       — gated: demoMode.allowsPoint
+  ├─ handleWave(frame:)                        +Wave.swift        — gated: demoMode.allowsWave
+  └─ for event in pinchEvents: handleGestureEvent(event)          legacy Place/Adjust A/Move — gated: demoMode.allowsLegacyPinch
 ```
 
-Only one of the four branches is ever live — `DemoMode` is a hard override, not a race. A dropped/nil Vision frame still runs the whole chain with an empty observation, so no in-flight gesture in any of the four hangs past its grace period (a real bug that existed before this was fixed — see ADR-019).
+Only one of the six branches is ever live — `DemoMode` is a hard override, not a race. A dropped/nil Vision frame still runs the whole chain with an empty observation, so no in-flight gesture in any of the six hangs past its grace period (a real bug that existed before this was fixed — see ADR-019).
 
-### Carry ⟷ Rotate handoff
+### Carry routing (Sim only) and Rotate mode
+
+There used to be a standalone `.carry` HUD mode where a re-grab on an already-put-down entity handed off to `+Rotate` via `routeCarryPinch`'s `allowRotate` branch. That mode was removed (2026-08-12) as redundant with Move for current testing purposes. `handleCarryRouting`/`CarryStateMachine`/`routeCarryPinch` are otherwise untouched — `.sim` still drives the exact same toggle machinery, confirmed working — but `demoMode.allowsRotate` is now always `false`, so `routeCarryPinch`'s `.rotate` branch is permanently unreachable dead code, left in place rather than pruned (out of scope for this change).
 
 ```
-PinchGestureEvent.began, demoMode.allowsCarry
+PinchGestureEvent.began, demoMode.allowsCarry (.sim only)
   |
   ├─ hit-test pinchViewportPoint -> SceneController.selectModel(at:) -> target: EntityID?
   |
-  └─ routeCarryPinch(target, previouslyPlaced, isCarrying, allowRotate)
-       ├─ isCarrying                                -> .carry   (put-down toggle never stolen mid-carry)
-       ├─ target ∈ previouslyPlaced && allowRotate  -> .rotate  -> beginRotate() (+Rotate.swift)
-       └─ else                                       -> .carry   -> CarryStateMachine.process(...)
+  └─ routeCarryPinch(target, previouslyPlaced, isCarrying, allowRotate: false)
+       ├─ isCarrying   -> .carry   (put-down toggle never stolen mid-carry)
+       └─ else         -> .carry   -> CarryStateMachine.process(...)   [.rotate branch unreachable]
 ```
 
-`allowRotate` is `demoMode.allowsRotate` (true only in `.carry`). `.sim` mode's stand-ins are picked up and follow the hand but never rotate in place — a re-grab there always re-enters carry.
+Rotate is now its own top-level mode instead, with its own routing (`handleRotateModeRouting`, +Rotate.swift):
+
+```
+PinchGestureEvent.began, demoMode.allowsRotateMode (.rotate only)
+  |
+  └─ hit-test pinchViewportPoint -> SceneController.selectModel(at:)
+       ├─ hit  -> beginRotate(yawOnly: true)   ANY pinch on a placed object rotates it, full stop
+       └─ miss -> no-op (nothing placed yet — same convention as Carry's routeCarryPinch(target: nil))
+```
+
+No history (`previouslyPlacedEntities`), no move capability in this mode — that ambiguity (first-ever drag already counted as "previously dragged," so every later grab defaulted to rotate) was the reason the old `.moveRotate` mode was replaced by this explicit one.
 
 ### Scale/yaw mode-lock (ADR-018, resolved) and dwell-to-commit
 
@@ -289,7 +306,7 @@ PinchGestureEvent.changed
 | 4 | ⚠️ **ARKit VIO ↔ hands filling the frame** | Large moving foreground occluders reduce trackable features, planes drift/merge | Not directly re-measured since the original research flagged it; still unresolved, not disproven |
 | 5 | **Six state machines ↔ dropped/nil Vision frames** | Any of the six left un-fed on a dropped frame stalls past its own grace period | Every one of `handleCarryRouting`/`handlePoint`/`handleWave`/`handleGestureEvent` is called on the nil-frame path too — a prior bug (fixed) shipped from missing exactly this |
 | 6 | ⚠️ **`YawAngleCalculator` candidates ↔ what's actually live** | A future change wires `thumbIndex`/`palmAxis` back in without updating `ManipulationTracker`'s caller, or reads an old CSV's `yaw_wrist_axis` column expecting the wrist angle | `horizontalSlide` is the only live signal (§4); logged as `horizontal_slide` (pre-rename CSVs used `yaw_wrist_axis` for the same value) |
-| 7 | **`DemoMode` switch mid-gesture ↔ stranded per-mode state** | Switching modes while carrying/rotating/pointing could leave `moveController`/`carriedEntity`/highlight stuck | Each of `+Point`/`+Carry`/`+Wave` explicitly clears its own state when its gate goes false — four separate call sites to remember if a mode is ever added |
+| 7 | **`DemoMode` switch mid-gesture ↔ stranded per-mode state** | Switching modes while carrying/rotating/pointing/adjust-B-scaling could leave `moveController`/`carriedEntity`/`adjustSlideScale`/highlight stuck | Each of `+Point`/`+Carry`/`+Rotate`/`+AdjustSlide` explicitly clears its own state when its gate goes false — five separate call sites to remember if a mode is ever added |
 | 8 | **Entity scale ↔ collision shape** | `generateCollisionShapes(recursive:)` doesn't track post-hoc scale (forum 733648) | Regenerated only on scale gesture Ended, never per frame |
 | 9 | **Raycast fallback chain ↔ surface quality** | `.estimatedPlane` normals can be wrong on featureless/reflective surfaces | Only falls through deliberately; raycast tier surfaced in the debug HUD |
 | 10 | **Multi-object `selectModel(at:)` ↔ missed / false grabs** | Pixel `entity(at:)` miss on a 5cm cube (roaming); fat 220pt nearest-fallback can grab the wrong cube when two sit close | `screenGrabRadiusPt` after `entity(at:)`; retune if false-grabs or still-misses. Screen-pt, not world cm — same caveat as wave |
@@ -311,4 +328,4 @@ PinchGestureEvent.changed
 
 ## 7. What is deliberately absent
 
-No dependency injection container, no coordinator pattern beyond `ARSessionCoordinator` and its four gesture extensions, no protocol abstraction over `ARView` "in case we switch to `RealityView`" (we're not — [`DECISIONS.md`](DECISIONS.md) ADR-002), no persistence layer, no networking, no analytics. No automatic mode-switching — `moveOrAdjustTrigger` shipped, is tested, and is deliberately not called; `DemoMode` is a hard HUD override instead (ADR-019). No real occlusion — the model renders over the hand; LiDAR-only, not attempted. No content layer — no dirt patches, no pests, no quiz, no real annotation copy; the one `AnnotationPopup`/`testAnnotationID` in the tree exists to exercise point-and-dwell, not to teach anything about coral. No `coral.usdz` — Phase 6 has not started, and nothing has been built against a real asset's scale, pivot, or poly count.
+No dependency injection container, no coordinator pattern beyond `ARSessionCoordinator` and its five gesture extensions, no protocol abstraction over `ARView` "in case we switch to `RealityView`" (we're not — [`DECISIONS.md`](DECISIONS.md) ADR-002), no persistence layer, no networking, no analytics. No automatic mode-switching — `moveOrAdjustTrigger` shipped, is tested, and is deliberately not called; `DemoMode` is a hard HUD override instead (ADR-019). No real occlusion — the model renders over the hand; LiDAR-only, not attempted. No content layer — no dirt patches, no pests, no quiz, no real annotation copy; the one `AnnotationPopup`/`testAnnotationID` in the tree exists to exercise point-and-dwell, not to teach anything about coral. No `coral.usdz` — Phase 6 has not started, and nothing has been built against a real asset's scale, pivot, or poly count.

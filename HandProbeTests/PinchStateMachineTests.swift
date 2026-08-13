@@ -107,6 +107,50 @@ final class PinchStateMachineTests: XCTestCase {
         XCTAssertTrue(names(events).contains("Possible"))
     }
 
+    // MARK: - Grace applies on the way in too (pendingBegan)
+
+    func testPendingBeganSurvivesOneMarginalFrame() {
+        var sm = machine()
+        var t: TimeInterval = 0
+
+        // Frame 1: enters pendingBegan (start = 0).
+        var events = sm.process(obs(t: t, ratio: 0.5))
+        XCTAssertTrue(events.isEmpty)
+        t += dt
+
+        // Frame 2: unusable (low confidence) — previously reset straight to idle.
+        events = sm.process(obs(t: t, ratio: 0.5, confidence: 0.0))
+        XCTAssertTrue(events.isEmpty, "a single marginal frame must not cancel pendingBegan")
+        t += dt
+
+        // Frame 3: resumes below threshold. t - originalStart (0) = 0.132 >= hysteresisDuration (0.1),
+        // so time accumulated before the dropped frame must still count toward Began.
+        events = sm.process(obs(t: t, ratio: 0.5))
+        XCTAssertTrue(names(events).contains("Began"), "earlier accumulated frames should still count toward hysteresis")
+    }
+
+    func testPendingBeganCancelsAfterLongDropout() {
+        var sm = machine()
+        var t: TimeInterval = 0
+
+        var events = sm.process(obs(t: t, ratio: 0.5))
+        XCTAssertTrue(events.isEmpty)
+        t += dt
+
+        // Drop for longer than gracePeriod (0.200s): 10 frames @ 66ms = 0.66s.
+        var allEvents: [PinchGestureEvent] = []
+        for _ in 0..<10 {
+            allEvents += sm.process(obs(t: t, ratio: nil))
+            t += dt
+        }
+        XCTAssertFalse(names(allEvents).contains("Began"), "a long dropout mid-approach must not silently begin a pinch")
+
+        // If state had truly reset to idle, one resumed frame is not enough to reach Began —
+        // it needs a fresh hysteresis window, not the stale start time.
+        events = sm.process(obs(t: t, ratio: 0.5))
+        XCTAssertFalse(names(events).contains("Began"), "state must have reset to idle, not silently preserved pendingBegan")
+    }
+
     // MARK: - Confidence collapse
 
     func testConfidenceCollapseTreatedAsDrop() {
@@ -131,5 +175,45 @@ final class PinchStateMachineTests: XCTestCase {
         events += sm.process(obs(t: t, ratio: 0.5, confidence: 0.9))
         XCTAssertFalse(names(events).contains("Cancelled"))
         XCTAssertTrue(names(events).contains("Changed"))
+    }
+
+    // MARK: - pendingProgress
+
+    func testPendingProgressBuildsThenCommitsToOne() {
+        var sm = machine()
+        var t: TimeInterval = 0
+        XCTAssertEqual(sm.pendingProgress, 0)
+
+        // First qualifying frame enters pendingBegan at elapsed 0.
+        _ = sm.process(obs(t: t, ratio: 0.5))
+        XCTAssertEqual(sm.pendingProgress, 0, accuracy: 0.001)
+
+        // Midway through the 100ms hysteresis window.
+        t += tuning.hysteresisDuration / 2
+        _ = sm.process(obs(t: t, ratio: 0.5))
+        XCTAssertEqual(sm.pendingProgress, 0.5, accuracy: 0.05)
+
+        // Past the window — commits to Began, progress saturates at 1.
+        t += tuning.hysteresisDuration
+        let events = sm.process(obs(t: t, ratio: 0.5))
+        XCTAssertTrue(names(events).contains("Began"))
+        XCTAssertEqual(sm.pendingProgress, 1)
+    }
+
+    func testPendingProgressResetsWhenAttemptDropsBeforeCommit() {
+        var sm = machine()
+        var t: TimeInterval = 0
+        _ = sm.process(obs(t: t, ratio: 0.5))
+        t += tuning.hysteresisDuration / 2
+        _ = sm.process(obs(t: t, ratio: 0.5))
+        XCTAssertGreaterThan(sm.pendingProgress, 0)
+
+        // Ratio stays out of the enter band well past gracePeriod — attempt dies silently, not
+        // just a single marginal frame (which is forgiven — see testPendingBeganSurvivesOneMarginalFrame).
+        for _ in 0..<10 {
+            t += dt
+            _ = sm.process(obs(t: t, ratio: 10))
+        }
+        XCTAssertEqual(sm.pendingProgress, 0)
     }
 }
