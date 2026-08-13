@@ -13,32 +13,36 @@ enum YawAngleCalculator {
         let wristMiddle: Double?
     }
 
-    /// ⚠️ Aspect-correct dy before atan2 (4:3). Hardcoded 1920×1440; thread size if format changes.
-    private static let bufferWidth: Double = 1920
-    private static let bufferHeight: Double = 1440
+    /// Same default as `PinchRatioCalculator.defaultDyAspectCorrection` — keep in sync. Caller
+    /// passes the value matching its live orientation (`LandmarkSpace.dyAspectCorrection(for:)`).
+    static let defaultDyAspectCorrection = PinchRatioCalculator.defaultDyAspectCorrection
 
     static func angles(
         from frame: LandmarkFrame,
-        confidenceGate: Float = GestureTuning.default.confidenceGate
+        confidenceGate: Float = GestureTuning.default.confidenceGate,
+        dyAspectCorrection: Double = defaultDyAspectCorrection
     ) -> Candidates {
         Candidates(
             thumbIndex: angle(
                 from: frame.joints,
                 a: .thumbTip,
                 b: .indexTip,
-                gate: confidenceGate
+                gate: confidenceGate,
+                dyAspectCorrection: dyAspectCorrection
             ),
             palmAxis: angle(
                 from: frame.joints,
                 a: .indexMCP,
                 b: .littleMCP,
-                gate: confidenceGate
+                gate: confidenceGate,
+                dyAspectCorrection: dyAspectCorrection
             ),
             wristMiddle: angle(
                 from: frame.joints,
                 a: .wrist,
                 b: .middleMCP,
-                gate: confidenceGate
+                gate: confidenceGate,
+                dyAspectCorrection: dyAspectCorrection
             )
         )
     }
@@ -47,15 +51,15 @@ enum YawAngleCalculator {
         from joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample],
         a: HumanHandPoseObservation.JointName,
         b: HumanHandPoseObservation.JointName,
-        gate: Float
+        gate: Float,
+        dyAspectCorrection: Double
     ) -> Double? {
         guard
             let ja = joints[a], ja.confidence >= gate,
             let jb = joints[b], jb.confidence >= gate
         else { return nil }
         let dx = Double(jb.x - ja.x)
-        // ⚠️ width/height (1.333) after `.right` swap — reciprocal crushed yaw (GESTURES.md §2.3).
-        let dy = Double(jb.y - ja.y) * (bufferWidth / bufferHeight)
+        let dy = Double(jb.y - ja.y) * dyAspectCorrection
         return atan2(dy, dx)
     }
 }

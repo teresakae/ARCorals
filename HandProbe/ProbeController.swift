@@ -134,7 +134,11 @@ final class ProbeController: ObservableObject {
         overlayJoints = LandmarkFrame.jointNames.compactMap { result.joints[$0] }
         orientedImageSize = orientedSize
 
-        let ratios = PinchRatioCalculator.ratios(from: result.joints)
+        // HandProbe is portrait-only (project.yml) — its own `HandPoseDetector` uses `.right`,
+        // whose upright buffer is 1440×1920, so the dy correction is the portrait factor, not
+        // PinchRatioCalculator's landscape default. Pre-existing skew fixed alongside CoralAR's
+        // orientation work (see chat: HandProbe ratios were off by ~1.78x before this).
+        let ratios = PinchRatioCalculator.ratios(from: result.joints, dyAspectCorrection: 1920.0 / 1440.0)
         latestRatios = ratios
 
         // Phase 2: palmWidth only (ADR-015). Nil ratio / low obs → drop into grace path.

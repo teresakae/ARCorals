@@ -4,6 +4,12 @@ import Vision
 
 /// Pure pinch-ratio math. Primary signal: `palmWidth` (ADR-015).
 enum PinchRatioCalculator {
+    /// dy in normalized coords needs this to compare fairly against dx — a horizontal and vertical
+    /// span of equal physical length otherwise measure unequal. Caller passes the value matching
+    /// its live orientation (`LandmarkSpace.dyAspectCorrection(for:)`); defaults to landscape
+    /// upright (1920×1440) for callers that don't have a live orientation (tests, HandProbe legacy).
+    static let defaultDyAspectCorrection = 1440.0 / 1920.0
+
     struct Ratios: Sendable {
         let wristMCP: Double?
         let bboxDiag: Double?
@@ -13,13 +19,14 @@ enum PinchRatioCalculator {
 
     static func ratios(
         from joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample],
-        confidenceGate: Float = GestureTuning.default.confidenceGate
+        confidenceGate: Float = GestureTuning.default.confidenceGate,
+        dyAspectCorrection: Double = defaultDyAspectCorrection
     ) -> Ratios {
-        let raw = distance(joints, .thumbTip, .indexTip, gate: confidenceGate)
+        let raw = distance(joints, .thumbTip, .indexTip, gate: confidenceGate, dyAspectCorrection: dyAspectCorrection)
         return Ratios(
-            wristMCP: ratio(numerator: raw, denominator: distance(joints, .wrist, .middleMCP, gate: confidenceGate)),
+            wristMCP: ratio(numerator: raw, denominator: distance(joints, .wrist, .middleMCP, gate: confidenceGate, dyAspectCorrection: dyAspectCorrection)),
             bboxDiag: ratio(numerator: raw, denominator: bboxDiagonal(joints, gate: confidenceGate)),
-            palmWidth: ratio(numerator: raw, denominator: distance(joints, .indexMCP, .littleMCP, gate: confidenceGate)),
+            palmWidth: ratio(numerator: raw, denominator: distance(joints, .indexMCP, .littleMCP, gate: confidenceGate, dyAspectCorrection: dyAspectCorrection)),
             rawThumbIndexDist: raw
         )
     }
@@ -33,15 +40,16 @@ enum PinchRatioCalculator {
         _ joints: [HumanHandPoseObservation.JointName: LandmarkFrame.JointSample],
         _ a: HumanHandPoseObservation.JointName,
         _ b: HumanHandPoseObservation.JointName,
-        gate: Float
+        gate: Float,
+        dyAspectCorrection: Double = defaultDyAspectCorrection
     ) -> Double? {
         guard
             let ja = joints[a], ja.confidence >= gate,
             let jb = joints[b], jb.confidence >= gate
         else { return nil }
-        let dx = ja.x - jb.x
-        let dy = ja.y - jb.y
-        return Double(sqrt(dx * dx + dy * dy))
+        let dx = Double(ja.x - jb.x)
+        let dy = Double(ja.y - jb.y) * dyAspectCorrection
+        return sqrt(dx * dx + dy * dy)
     }
 
     private static func bboxDiagonal(

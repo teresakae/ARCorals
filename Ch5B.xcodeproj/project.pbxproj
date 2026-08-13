@@ -39,6 +39,7 @@
 		941DCFF37C5FB1F348B473F8 /* CarryStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29AA39A0469CF4AFBF7B5A5 /* CarryStateMachine.swift */; };
 		95128090D46499D6C7EAC50B /* ARSessionCoordinator+Carry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1C5F7663F5184CC8CCD488 /* ARSessionCoordinator+Carry.swift */; };
 		95766F97EE1EAD2CB1C1485F /* FrameTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7063B66E60770028FD9ECBD /* FrameTap.swift */; };
+		99649D63CC1BB45294BF77DA /* PointTestButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16425308CD95E07EB24F2605 /* PointTestButton.swift */; };
 		9B4FB496FC77F569635DC417 /* WaveDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7501DF558FF4AB1AC0BC4449 /* WaveDetector.swift */; };
 		9E9CE12DFEB9395E12AF42F1 /* LiveReadoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB89B5E967CF8E5496F28B12 /* LiveReadoutView.swift */; };
 		A16B4AC8AF851136B0A74801 /* PlacementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4057E07A22BD4AA9307A5F8 /* PlacementService.swift */; };
@@ -66,6 +67,7 @@
 		F3FAC3E3F52A17FB3CCC3E52 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1551CAB3635FF2460F1F335 /* CameraPreviewView.swift */; };
 		F4CA67E825DD442DFF97D72C /* MetricsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */; };
 		F8B2E9594B9B17213E787DC2 /* MoveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5559E4B90E606A5C44DB35DD /* MoveController.swift */; };
+		FC34335E71B41C688B751347 /* PointerSmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA3032EB50D8A5804E6EBFE /* PointerSmoother.swift */; };
 		FD67A9E3EB0106D0925E80A5 /* PinchRatioCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D1B4F0B125A6D427ED92B /* PinchRatioCalculator.swift */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +87,7 @@
 		0C1C5F7663F5184CC8CCD488 /* ARSessionCoordinator+Carry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSessionCoordinator+Carry.swift"; sourceTree = "<group>"; };
 		10F2BDBA1A01F76A217701EE /* MetricsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsLogger.swift; sourceTree = "<group>"; };
 		12D07EA451BDE77BBA073379 /* ManipulationTrackerSettlingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManipulationTrackerSettlingTests.swift; sourceTree = "<group>"; };
+		16425308CD95E07EB24F2605 /* PointTestButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointTestButton.swift; sourceTree = "<group>"; };
 		1E5A05CC5E27DE64F76AABC1 /* MetricsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsLogger.swift; sourceTree = "<group>"; };
 		318BF3EAC4C996E4CC87CAEF /* MoveTriggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveTriggerTests.swift; sourceTree = "<group>"; };
 		32C3E654FB157AD4D5ECFFA3 /* PinchProgressOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchProgressOverlay.swift; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 		677315E9C3CB89FE311E93D2 /* ModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelProvider.swift; sourceTree = "<group>"; };
 		6783DFBC66FAF1C8A7ACA219 /* YawAngleCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YawAngleCalculator.swift; sourceTree = "<group>"; };
 		6BE875B2CFBA73FD13E2CC8C /* PinchStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchStateMachineTests.swift; sourceTree = "<group>"; };
+		6EA3032EB50D8A5804E6EBFE /* PointerSmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointerSmoother.swift; sourceTree = "<group>"; };
 		6FE2821B761120522C71C81B /* WaveDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveDetectorTests.swift; sourceTree = "<group>"; };
 		71CC590BE4A6A2DF2A8D83BF /* ARSessionCoordinator+Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSessionCoordinator+Wave.swift"; sourceTree = "<group>"; };
 		72668F3E87BF44CE4F99F001 /* PointStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointStateMachineTests.swift; sourceTree = "<group>"; };
@@ -156,6 +160,7 @@
 				3EBE394567805CD761080FE5 /* ARStatusHUD.swift */,
 				F18D521B81126C6C857A1697 /* HandDebugOverlay.swift */,
 				10F2BDBA1A01F76A217701EE /* MetricsLogger.swift */,
+				16425308CD95E07EB24F2605 /* PointTestButton.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -184,6 +189,7 @@
 				09F2E0EE41C4A03AB17FF9EB /* HandPoseDetector.swift */,
 				D9293FA2C3E5FDFBCEFEA867 /* LandmarkFrame.swift */,
 				80EC5936D4EF7EEC866090A3 /* LandmarkSpace.swift */,
+				6EA3032EB50D8A5804E6EBFE /* PointerSmoother.swift */,
 			);
 			path = Vision;
 			sourceTree = "<group>";
@@ -417,6 +423,8 @@
 				A16B4AC8AF851136B0A74801 /* PlacementService.swift in Sources */,
 				D6D53343198A5A2D417A5C51 /* PlaneScanCoordinator.swift in Sources */,
 				4A7B514AA089D2F2C9764683 /* PointStateMachine.swift in Sources */,
+				99649D63CC1BB45294BF77DA /* PointTestButton.swift in Sources */,
+				FC34335E71B41C688B751347 /* PointerSmoother.swift in Sources */,
 				8AE1BB9F969B76066D3BF21A /* SceneController.swift in Sources */,
 				ED9FAC4711B46E99E75A503F /* VerticalSlideScale.swift in Sources */,
 				9B4FB496FC77F569635DC417 /* WaveDetector.swift in Sources */,
@@ -566,7 +574,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used for AR world tracking and hand-gesture placement of the coral model.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -609,7 +617,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used for AR world tracking and hand-gesture placement of the coral model.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

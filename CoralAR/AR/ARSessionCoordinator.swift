@@ -33,6 +33,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
 
     @Published private(set) var pinchViewportPoint: CGPoint?
     @Published private(set) var raycastViewportPoint: CGPoint?
+    /// Index-fingertip point Point mode hit-tests against — distinct from `pinchViewportPoint`
+    /// (thumb+index midpoint) so the two can be visually compared. Written by +Point.swift.
+    @Published var pointViewportPoint: CGPoint?
     @Published private(set) var viewportJoints: [(point: CGPoint, confidence: Float)] = []
     /// Not `private(set)` — +AdjustSlide.swift writes this directly the same way applyManipulation() does.
     @Published var manipulationModeName = "—"
@@ -93,6 +96,15 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     }
     @Published var showLandmarks = true
     @Published var hudHidden = false
+    /// Layer-1 2D hit-test target for Point mode (posehandtest's `ControlPanelView` pattern) —
+    /// a fixed on-screen button, checked before the 3D annotation marker. Frame in the same
+    /// view space as `viewportPoint(_:packet:)` (SwiftUI `.global`, same window as `arView`).
+    /// Written by `PointTestButton`'s `.onGeometryChange`.
+    @Published var testButtonFrame: CGRect = .zero
+
+    func updateTestButtonFrame(_ rect: CGRect) {
+        testButtonFrame = rect
+    }
 
     /// Device-level property, not a second capture session — coexists with ARKit owning the camera;
     /// Control Center's toggle often can't reach the torch while another app holds it, this can.
@@ -117,6 +129,15 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// Live point-and-dwell fill, for a future ring affordance. Written by
     /// ARSessionCoordinator+Point.swift.
     @Published var dwellProgress: Double = 0
+    /// Debug readout for Point mode: raw per-frame `HandShapeClassifier.isPointing` and whether
+    /// the index tip hit an annotation this frame. Written by ARSessionCoordinator+Point.swift.
+    @Published var debugIsPointing = false
+    @Published var debugPointTarget = false
+    /// True the instant `viewportPoint`/`testButtonFrame.contains` says the fingertip is over the
+    /// test button, before dwell completes — drives its live progress ring. Written by
+    /// +Point.swift's `handlePoint`; distinct from `activeAnnotationID`, which only flips on
+    /// `.hoverBegan` (i.e. after dwell already fired).
+    @Published var isPointingAtTestButton = false
     /// Live pinch-commit fill (0–1 during the pendingBegan hysteresis window, 1 once
     /// committed) — drives the user-facing pinch progress ring. See `PinchProgressOverlay`.
     @Published private(set) var pinchProgress: Double = 0
@@ -137,6 +158,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     var pestMoveController = MoveController(tuning: .default)
     /// Not `private` — mutated only from +Point.swift's `handlePoint` outside `start()`.
     var pointStateMachine = PointStateMachine(tuning: .default)
+    /// Not `private` — +Point.swift's `handlePoint` drives this outside `start()`.
+    var pointSmoother = PointerSmoother()
     /// Not `private` — mutated only from +Wave.swift's `handleWave` outside `start()`.
     var waveDetector = WaveDetector(tuning: .default)
     /// Not `private` — fed only from +Carry.swift's `handleCarryRouting` outside `start()`.
@@ -151,6 +174,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     private var rollPalm = RollingMinMax()
     /// Last accepted hand centroid, normalized coords — continuity gate for bystander rejection (ADR-021).
     private var lastHandCentroid: CGPoint?
+    /// Consecutive continuity rejections — past this, drop the stale centroid so a hand that left
+    /// and came back elsewhere can re-acquire instead of being rejected forever (ADR-021 deadlock).
+    private var consecutiveHandGateRejections = 0
     /// Median-of-5 on pinchRatio, the chokepoint every consumer reads through — not EMA, since raw noise is
     /// outlier spikes (up to 20x in one frame; ~35% of consecutive frames jump enough to blow the deadzone).
     private var ratioFilterBuffer: [Double] = []
@@ -165,6 +191,10 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
 
     /// Written from main (layout); read on session queue for displayTransform snapshot.
     nonisolated(unsafe) var cachedViewportSize: CGSize = .zero
+    /// Written from main (CoralARApp reads `windowScene.interfaceOrientation` live); read on the
+    /// session queue for the Vision-orientation/displayTransform snapshot. All 4 orientations
+    /// supported — see `LandmarkSpace.visionOrientation(for:)`.
+    nonisolated(unsafe) var cachedInterfaceOrientation: UIInterfaceOrientation = .landscapeRight
     /// Frame gate mutated on the session queue under `frameTapLock`.
     nonisolated(unsafe) private var frameTap = FrameTap()
     private let frameTapLock = NSLock()
@@ -188,6 +218,11 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         cachedViewportSize = size
     }
 
+    func updateInterfaceOrientation(_ orientation: UIInterfaceOrientation) {
+        guard orientation != .unknown else { return }
+        cachedInterfaceOrientation = orientation
+    }
+
     func start() {
         guard !isRunning else { return }
         guard ARWorldTrackingConfiguration.isSupported else {
@@ -208,6 +243,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         moveController.reset()
         adjustSlideScale.reset()
         pointStateMachine.reset()
+        pointSmoother.reset()
         waveDetector.tuning = tuning
         waveDetector.reset()
         waveCount = 0
@@ -225,6 +261,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         resetHandUI()
         framesReceivedCounter = 0
         lastHandCentroid = nil
+        consecutiveHandGateRejections = 0
         isRunning = true
 
         metrics.startNewFile()
@@ -297,7 +334,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         }
 
         inferenceHz = frame.inferenceHz
-        let ratios = PinchRatioCalculator.ratios(from: frame.joints, confidenceGate: tuning.confidenceGate)
+        let ratios = PinchRatioCalculator.ratios(from: frame.joints, confidenceGate: tuning.confidenceGate, dyAspectCorrection: packet.dyAspectCorrection)
         let filteredRatio = filterRatio(ratios.palmWidth)
         pinchRatio = filteredRatio
         // Real frame timestamp, not a counted-frame clock — Vision's actual rate under AR load can dip
@@ -353,7 +390,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         packet: FramePacket,
         coverage: Double?
     ) {
-        let yawCandidates = YawAngleCalculator.angles(from: frame, confidenceGate: tuning.confidenceGate)
+        let yawCandidates = YawAngleCalculator.angles(from: frame, confidenceGate: tuning.confidenceGate, dyAspectCorrection: packet.dyAspectCorrection)
         // Yaw = horizontalSlide of pinchViewportPoint × gain (docs/GESTURES.md §2.3).
         let horizontalSlide: Double? = pinchViewportPoint.map { point in
             Double(point.x / max(cachedViewportSize.width, 1)) * tuning.horizontalSlideGain
@@ -563,6 +600,16 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         metrics.endGesture()
     }
 
+    /// Sole Vision→screen conversion. `arView.bounds.size` read live, not a cached SwiftUI size —
+    /// the crosshair is drawn over this view, so this is the only size that can be right.
+    func viewportPoint(_ vision: CGPoint, packet: FramePacket) -> CGPoint {
+        LandmarkSpace.visionToViewport(
+            vision,
+            uprightImageSize: packet.uprightImageSize,
+            viewportSize: arView.bounds.size
+        )
+    }
+
     /// Not `private` — +AdjustSlide.swift's `.began` case places the same way legacy Adjust/Move do.
     func placeFromHand(frame: LandmarkFrame, packet: FramePacket) {
         guard let visionPinch = frame.pinchPoint(confidenceGate: tuning.confidenceGate) else {
@@ -570,11 +617,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
             return
         }
 
-        let viewPoint = LandmarkSpace.visionToViewport(
-            visionPinch,
-            displayTransform: packet.displayTransform,
-            viewportSize: packet.viewportSize
-        )
+        let viewPoint = viewportPoint(visionPinch, packet: packet)
         pinchViewportPoint = viewPoint
 
         let result = placement.raycast(from: viewPoint, in: arView)
@@ -605,23 +648,26 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     private func updateOverlay(frame: LandmarkFrame, packet: FramePacket) {
         if showLandmarks {
             viewportJoints = frame.jointList.map { joint in
-                let p = LandmarkSpace.visionToViewport(
-                    CGPoint(x: joint.x, y: joint.y),
-                    displayTransform: packet.displayTransform,
-                    viewportSize: packet.viewportSize
-                )
+                let p = viewportPoint(CGPoint(x: joint.x, y: joint.y), packet: packet)
                 return (p, joint.confidence)
             }
         } else {
             viewportJoints = []
         }
 
+        // ponytail: coordinate-pipeline diagnostic, throttled to ~1/sec. Delete once the
+        // crosshair-offset question is settled (see chat).
+        if let wrist = frame.joints[.wrist], framesProcessed % 30 == 0 {
+            let visionPoint = CGPoint(x: wrist.x, y: wrist.y)
+            let viewPoint = viewportPoint(visionPoint, packet: packet)
+            print("""
+            [coord-debug] iface=\(cachedInterfaceOrientation.rawValue) visionOri=\(packet.visionOrientation.rawValue) \
+            arViewBounds=\(arView.bounds.size) uprightImageSize=\(packet.uprightImageSize) vision=\(visionPoint) view=\(viewPoint)
+            """)
+        }
+
         if let visionPinch = frame.pinchPoint(confidenceGate: tuning.confidenceGate) {
-            let viewPoint = LandmarkSpace.visionToViewport(
-                visionPinch,
-                displayTransform: packet.displayTransform,
-                viewportSize: packet.viewportSize
-            )
+            let viewPoint = viewportPoint(visionPinch, packet: packet)
             pinchViewportPoint = viewPoint
 
             // Live ray preview (no place); Move reuses previewWorldHit.
@@ -658,15 +704,25 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// Size: implausibly small (background) or large (shoved at the lens) → reject.
     /// Continuity: jumped too far from the last accepted hand in one frame → likely a
     /// different hand, reject and keep tracking the old position rather than snapping to it.
+    /// Past this many consecutive continuity rejections, the "old" centroid is presumed stale
+    /// (original hand left frame) rather than a bystander still crowding it out.
+    private static let maxConsecutiveHandGateRejections = 10
+
     private func passesHandGate(_ frame: LandmarkFrame, coverage: Double?) -> Bool {
         if let coverage, !(tuning.handCoverageMin...tuning.handCoverageMax).contains(coverage) {
+            consecutiveHandGateRejections += 1
             return false
         }
         guard let centroid = handCentroid(frame) else { return true }
         if let last = lastHandCentroid,
            hypot(centroid.x - last.x, centroid.y - last.y) > tuning.handJumpRejectRadius {
+            consecutiveHandGateRejections += 1
+            if consecutiveHandGateRejections > Self.maxConsecutiveHandGateRejections {
+                lastHandCentroid = nil
+            }
             return false
         }
+        consecutiveHandGateRejections = 0
         lastHandCentroid = centroid
         return true
     }
@@ -762,16 +818,16 @@ extension ARSessionCoordinator: ARSessionDelegate {
         // Count every callback, not only Vision hand-offs — else hides packet=nil failures.
         Task { @MainActor in self.framesReceived = received }
 
-        let viewport = cachedViewportSize
+        let interfaceOrientation = cachedInterfaceOrientation
 
         frameTapLock.lock()
-        let packet = frameTap.tryBegin(frame: frame, viewportSize: viewport, interfaceOrientation: .landscapeRight)
+        let packet = frameTap.tryBegin(frame: frame, interfaceOrientation: interfaceOrientation)
         frameTapLock.unlock()
 
         guard let packet else { return }
 
         Task {
-            let result = await detectorRef.detect(pixelBuffer: packet.pixelBuffer)
+            let result = await detectorRef.detect(pixelBuffer: packet.pixelBuffer, orientation: packet.visionOrientation)
             await MainActor.run {
                 self.handleVision(frame: result, packet: packet)
             }

@@ -91,7 +91,7 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: CoralAR
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationLandscapeRight
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
         INFOPLIST_KEY_NSCameraUsageDescription: Camera is used for AR world tracking and hand-gesture placement of the coral model.
         CODE_SIGN_STYLE: Automatic
         CURRENT_PROJECT_VERSION: "1"
