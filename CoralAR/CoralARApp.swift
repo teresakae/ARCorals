@@ -28,7 +28,8 @@ struct CoralARApp: App {
 
                 HandDebugOverlay(
                     pinchViewportPoint: session.pinchViewportPoint,
-                    raycastViewportPoint: session.raycastViewportPoint
+                    raycastViewportPoint: session.raycastViewportPoint,
+                    pointViewportPoint: session.pointViewportPoint
                 )
                 .ignoresSafeArea()
 
@@ -38,6 +39,24 @@ struct CoralARApp: App {
                     progress: session.pinchProgress
                 )
                 .ignoresSafeArea()
+
+                if session.demoMode == .point {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            PointTestButton(
+                                isHovering: session.isPointingAtTestButton,
+                                isSelected: session.activeAnnotationID == ARSessionCoordinator.testButtonID,
+                                dwellProgress: session.dwellProgress,
+                                onFrameChange: { session.updateTestButtonFrame($0) }
+                            )
+                            .padding(.trailing, 24)
+                        }
+                        .padding(.bottom, 100)
+                    }
+                    .ignoresSafeArea()
+                }
 
                 ARStatusHUD(session: session)
 

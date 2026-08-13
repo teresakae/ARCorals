@@ -33,6 +33,9 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
 
     @Published private(set) var pinchViewportPoint: CGPoint?
     @Published private(set) var raycastViewportPoint: CGPoint?
+    /// Index-fingertip point Point mode hit-tests against — distinct from `pinchViewportPoint`
+    /// (thumb+index midpoint) so the two can be visually compared. Written by +Point.swift.
+    @Published var pointViewportPoint: CGPoint?
     @Published private(set) var viewportJoints: [(point: CGPoint, confidence: Float)] = []
     /// Not `private(set)` — +AdjustSlide.swift writes this directly the same way applyManipulation() does.
     @Published var manipulationModeName = "—"
@@ -93,6 +96,15 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     }
     @Published var showLandmarks = true
     @Published var hudHidden = false
+    /// Layer-1 2D hit-test target for Point mode (posehandtest's `ControlPanelView` pattern) —
+    /// a fixed on-screen button, checked before the 3D annotation marker. Frame in the same
+    /// view space as `viewportPoint(_:packet:)` (SwiftUI `.global`, same window as `arView`).
+    /// Written by `PointTestButton`'s `.onGeometryChange`.
+    @Published var testButtonFrame: CGRect = .zero
+
+    func updateTestButtonFrame(_ rect: CGRect) {
+        testButtonFrame = rect
+    }
 
     /// Device-level property, not a second capture session — coexists with ARKit owning the camera;
     /// Control Center's toggle often can't reach the torch while another app holds it, this can.
@@ -121,6 +133,11 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     /// the index tip hit an annotation this frame. Written by ARSessionCoordinator+Point.swift.
     @Published var debugIsPointing = false
     @Published var debugPointTarget = false
+    /// True the instant `viewportPoint`/`testButtonFrame.contains` says the fingertip is over the
+    /// test button, before dwell completes — drives its live progress ring. Written by
+    /// +Point.swift's `handlePoint`; distinct from `activeAnnotationID`, which only flips on
+    /// `.hoverBegan` (i.e. after dwell already fired).
+    @Published var isPointingAtTestButton = false
     /// Live pinch-commit fill (0–1 during the pendingBegan hysteresis window, 1 once
     /// committed) — drives the user-facing pinch progress ring. See `PinchProgressOverlay`.
     @Published private(set) var pinchProgress: Double = 0
@@ -141,6 +158,8 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
     var pestMoveController = MoveController(tuning: .default)
     /// Not `private` — mutated only from +Point.swift's `handlePoint` outside `start()`.
     var pointStateMachine = PointStateMachine(tuning: .default)
+    /// Not `private` — +Point.swift's `handlePoint` drives this outside `start()`.
+    var pointSmoother = PointerSmoother()
     /// Not `private` — mutated only from +Wave.swift's `handleWave` outside `start()`.
     var waveDetector = WaveDetector(tuning: .default)
     /// Not `private` — fed only from +Carry.swift's `handleCarryRouting` outside `start()`.
@@ -224,6 +243,7 @@ final class ARSessionCoordinator: NSObject, ObservableObject {
         moveController.reset()
         adjustSlideScale.reset()
         pointStateMachine.reset()
+        pointSmoother.reset()
         waveDetector.tuning = tuning
         waveDetector.reset()
         waveCount = 0

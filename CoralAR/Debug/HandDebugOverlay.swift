@@ -1,9 +1,11 @@
 import SwiftUI
 
-/// Debug: mapped pinch point (cyan) + projected raycast hit (yellow). Misalignment = gap between them.
+/// Debug: mapped pinch point (cyan) + projected raycast hit (yellow) + Point-mode index-tip
+/// point (orange). Misalignment = gap between them.
 struct HandDebugOverlay: View {
     let pinchViewportPoint: CGPoint?
     let raycastViewportPoint: CGPoint?
+    var pointViewportPoint: CGPoint? = nil
 
     var body: some View {
         Canvas { context, _ in
@@ -18,6 +20,9 @@ struct HandDebugOverlay: View {
                     path.addLine(to: r)
                     context.stroke(path, with: .color(.white.opacity(0.55)), lineWidth: 1)
                 }
+            }
+            if let point = pointViewportPoint {
+                drawCrosshair(context: &context, at: point, color: .orange, label: "point")
             }
         }
         .allowsHitTesting(false)
