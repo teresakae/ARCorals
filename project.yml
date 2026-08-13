@@ -75,10 +75,17 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         TARGETED_DEVICE_FAMILY: 1
 
+  # The shipping app: room layer and AR layer in one target, one @main (CoralARApp.swift).
+  # The layering rule still holds where it matters — Networking/ imports no ARKit/RealityKit —
+  # it is now enforced by folder discipline and grep rather than by a target boundary.
   CoralAR:
     type: application
     platform: iOS
     sources:
+      - path: CoralARApp.swift
+      - path: Networking
+      - path: Model
+      - path: Views
       - path: CoralAR
         excludes:
           - "Resources/coral.usdz"
@@ -87,14 +94,31 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.ada.ch5b.CoralAR
         PRODUCT_NAME: CoralAR
         TARGETED_DEVICE_FAMILY: 1
-        GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: CoralAR
-        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationLandscapeRight
-        INFOPLIST_KEY_NSCameraUsageDescription: Camera is used for AR world tracking and hand-gesture placement of the coral model.
         CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: P23A73L3J8
         CURRENT_PROJECT_VERSION: "1"
         MARKETING_VERSION: "0.1.0"
+    # Hand-written plist rather than GENERATE_INFOPLIST_FILE. Verified against Xcode 26.6:
+    # there is no INFOPLIST_KEY_NSBonjourServices — array-valued Info.plist keys have no
+    # build-setting equivalent — so a real file is the only way to declare the services.
+    # Without them, and without the usage description, Bonjour finds nothing and reports no
+    # error. Generated from the properties below; edit them, not the plist.
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: CoralAR
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        # Landscape-only, unchanged from the AR-only build. The room screens are stock Forms
+        # and render fine sideways; letting the app rotate would change AR's orientation
+        # assumptions, which is not this change's business.
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeRight
+        NSCameraUsageDescription: Camera is used for AR world tracking and hand-gesture placement of the coral model.
+        NSLocalNetworkUsageDescription: Nearby players are discovered over the local network to join a coral room.
+        NSBonjourServices:
+          - _coral-rooms._tcp
+          - _coral-rooms._udp
     scheme:
       testTargets: []

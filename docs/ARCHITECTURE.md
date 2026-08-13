@@ -328,4 +328,48 @@ PinchGestureEvent.changed
 
 ## 7. What is deliberately absent
 
-No dependency injection container, no coordinator pattern beyond `ARSessionCoordinator` and its five gesture extensions, no protocol abstraction over `ARView` "in case we switch to `RealityView`" (we're not — [`DECISIONS.md`](DECISIONS.md) ADR-002), no persistence layer, no networking, no analytics. No automatic mode-switching — `moveOrAdjustTrigger` shipped, is tested, and is deliberately not called; `DemoMode` is a hard HUD override instead (ADR-019). No real occlusion — the model renders over the hand; LiDAR-only, not attempted. No content layer — no dirt patches, no pests, no quiz, no real annotation copy; the one `AnnotationPopup`/`testAnnotationID` in the tree exists to exercise point-and-dwell, not to teach anything about coral. No `coral.usdz` — Phase 6 has not started, and nothing has been built against a real asset's scale, pivot, or poly count.
+No dependency injection container, no coordinator pattern beyond `ARSessionCoordinator` and its five gesture extensions, no protocol abstraction over `ARView` "in case we switch to `RealityView`" (we're not — [`DECISIONS.md`](DECISIONS.md) ADR-002), no persistence layer, no analytics. Networking is the peer-to-peer room layer, which lives in the same target but imports nothing from `CoralAR/` — see §8. No automatic mode-switching — `moveOrAdjustTrigger` shipped, is tested, and is deliberately not called; `DemoMode` is a hard HUD override instead (ADR-019). No real occlusion — the model renders over the hand; LiDAR-only, not attempted. No content layer — no dirt patches, no pests, no quiz, no real annotation copy; the one `AnnotationPopup`/`testAnnotationID` in the tree exists to exercise point-and-dwell, not to teach anything about coral. No `coral.usdz` — Phase 6 has not started, and nothing has been built against a real asset's scale, pivot, or poly count.
+
+---
+
+## 8. The peer-to-peer room layer
+
+One app target, one `@main`, one scheme. The room layer and the AR layer ship in the same binary and the app always opens on the room flow — see [`DECISIONS.md`](DECISIONS.md) ADR-023.
+
+```
+CoralARApp.swift         @main. Opens RoomFlowView; startInARDirectly skips to AR
+Info.plist               camera + local network + Bonjour. Generated from project.yml
+Networking/              transport, discovery, packet framing — no ARKit/RealityKit
+  RoomService.swift        Bonjour service type + discoveryInfo keys
+  PeerName.swift           collision-proof peer display names
+  Packet.swift             tag byte + origin + body framing
+  PeerTransport.swift      MCSession owner; host-side relay
+  RoomAdvertiser.swift     MCNearbyServiceAdvertiser wrapper
+  RoomBrowser.swift        MCNearbyServiceBrowser wrapper
+  RoomLog.swift            shared os.Logger, category "rooms"
+Model/                   room state, roster, wire protocol
+  RoomCode.swift           4-digit code
+  RoomState.swift          RoomPhase, RoomPlayer, RoomRules, DiscoveryState
+  RoomMessage.swift        host→guest control messages
+  RoomSession.swift        phase, roster, host/join lifecycle
+  ARPayloadChannel.swift   the AR seam — declared, no conformer yet
+Views/                   plain SwiftUI placeholder screens
+  RoomFlowView.swift       owns the RoomSession; one screen per phase
+  HomeView / LobbyView / InSessionView / RosterSection / DiscoveryStatusSection
+CoralAR/                 the AR pipeline, §§1–7
+  ARRootView.swift         owns the ARSessionCoordinator; was CoralARApp's scene body
+```
+
+**Why `Info.plist` is a real file.** `NSBonjourServices` is an array, and array-valued Info.plist keys have no `INFOPLIST_KEY_` build-setting equivalent — checked against Xcode 26.6, `INFOPLIST_KEY_NSBonjourServices` does not exist. So this one target cannot use `GENERATE_INFOPLIST_FILE` the way `HandProbe` does. The file's contents come from `project.yml`; edit the properties there, not the plist.
+
+**Entry point.** `CoralARApp` opens `RoomFlowView` and holds no state of its own; the one-line `startInARDirectly` constant skips to AR as a development shortcut. `RoomFlowView` creates the `RoomSession` and `ARRootView` creates the `ARSessionCoordinator`, so no `ARSession` starts before the player enters AR from the session screen, and the shortcut path constructs no `MCSession`.
+
+**Data flow.** `RoomSession` is the only thing that drives the transport, and the three networking types know nothing above themselves — they publish state and call closures. Discovery filtering by room code happens in `RoomSession`, because that is a room rule and not a transport concern.
+
+**Star topology.** Guests transmit only to the host; the host relays each frame to everyone but the original sender. Two guests in the same `MCSession` are not guaranteed to be connected to each other, so a broadcast-to-all-connected-peers works at two players and silently breaks at three. The relay is byte-for-byte: the frame's tag byte carries the author's reliability choice and the frame carries the author's peer name, so the host forwards without re-deriving either.
+
+**Concurrency.** Same shape as the AR side. Everything is `@MainActor`; MultipeerConnectivity's delegate callbacks arrive on arbitrary queues and are therefore `nonisolated`, hopping via `Task { @MainActor in … }`. Only `Sendable` values cross the hop — `MCPeerID` and `MCSession` carry no `Sendable` annotation, so a peer's `displayName` is extracted first and the session is read back off `self`. The two places that genuinely need to carry an Objective-C object across the hop (`MCPeerID` from discovery, the invitation-response block) use narrowly-scoped `@unchecked Sendable` boxes with the reason written at the definition.
+
+**The AR seam.** `ARPayloadChannel` is a `@MainActor` protocol moving opaque `Data` plus three lifecycle hooks. `RoomSession` holds it `weak` and it is `nil` today. Outbound recipients are chosen by `RoomSession`, so a future conformer never learns that a star topology exists. Adding `CoralAR` as a conformer requires no change under `Networking/`.
+
+**Verified on Simulator, not on device.** Three- and five-peer runs across booted Simulators covered discovery, roster agreement, host departure, relayed payloads and the room-full path. Local Network permission cannot be exercised there — the Simulator inherits the Mac's grant and never prompts — which is exactly why discovery state is surfaced on-screen.
