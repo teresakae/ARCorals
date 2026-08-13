@@ -27,6 +27,8 @@ ADR-style log. One entry per decision. All evidence traces to [`AR-hand-gesture-
 | [019](#adr-019--pick-up-and-move-multi-object-placement-and-real-object-selection--built-two-bugs-found-and-fixed-testing-them) | Pick up and move, multi-object placement, and real object selection — built, two bugs found and fixed testing them | Accepted |
 | [020](#adr-020--roaming-handheld-not-desk-stand) | Roaming handheld use; desk-stand was calibration/de-risking only | Accepted |
 | [021](#adr-021--bystander-hand-rejection-size--continuity-gate-not-chirality) | Bystander-hand rejection: size + continuity gate, not chirality | Accepted (revisit — thresholds uncalibrated) |
+| [022](#adr-022--peer-to-peer-rooms-as-their-own-target-star-topology-and-a-protocol-seam-to-ar) | Peer-to-peer rooms as their own target; star topology; protocol seam to AR | Superseded in part — see [023](#adr-023--one-app-one-main-two-schemes) |
+| [023](#adr-023--one-app-one-main-one-scheme-rooms-first) | One app, one `@main`, one scheme — rooms first | Accepted |
 
 ---
 
@@ -522,3 +524,58 @@ No Apple API and no third-party prior art (checked: WWDC 2020/2021/2024 sessions
 - A fast, large motion of the user's *own* hand (e.g. a big reach) can trip the continuity gate and get treated as "no hand" for a frame — same failure mode as any other single-frame gate, recoverable next frame since the gate re-locks on the first accepted centroid.
 - Gate lives entirely in `handleVision()` (`ARSessionCoordinator.swift`) — no new files, no new dependency, reuses `handCoveragePct()`.
 - Still no true depth/distance measurement (ADR-003 stands) — "size" here means apparent size in the 2D frame, same caveat as everywhere else in this project.
+
+---
+
+## ADR-022 — Peer-to-peer rooms as their own target, star topology, and a protocol seam to AR
+
+**Date:** 2026-08-13 · **Status:** Superseded in part by [ADR-023](#adr-023--one-app-one-main-two-schemes) — **decision 1 (separate target) no longer holds.** Decisions 2–5 stand unchanged.
+
+**Context.** Local multiplayer rooms (4-digit code, max 4 players, one host, home → lobby → in-session) needed building, with AR joining later. The hard requirement was that the networking layer must not know AR exists — no `ARKit` or `RealityKit` under `Networking/` — so that dropping AR in later touches nothing below the room layer.
+
+**Decision.**
+
+1. **A third app target, `CoralRooms`,** rather than folders inside `CoralAR`. `CoralAR` is already a full AR app whose `@main` starts an `ARSession`; adding the room screens there would have meant editing AR code (out of scope) and would have made two-instance Simulator verification impossible, since `ARWorldTrackingConfiguration` has no camera there. A separate target makes "the room layer does not depend on AR" mechanically true instead of a convention someone has to remember. Layout mirrors `CoralAR/`: `Networking/`, `Model/`, `Views/`, plus the app entry at the root.
+
+2. **Star topology, not broadcast.** Two guests that both joined the host's `MCSession` are not guaranteed to be connected to each other. Guests transmit only to the host; the host re-sends to everyone but the original sender. A naive send-to-all-connected-peers looks correct at two players and silently drops traffic at three or four.
+
+3. **Reliability encoded in the packet's tag byte.** Frame layout is `[tag][originLength][origin][body]`. The host relays a guest's frame byte-for-byte, so it needs the author's delivery guarantee out of the frame itself rather than from per-sender state it has no business owning. `origin` is in the frame for the same reason: `MCSession` reports the peer it received *from*, which for a relayed packet is the host, not the author.
+
+4. **`ARPayloadChannel` is declared with no conformer.** `RoomSession` holds a `weak var arChannel` and routes opaque `Data` through it in both directions; outbound recipients are chosen by the room layer, so the star topology never leaks into AR code. `CoralAR` adopts it later with zero changes under `Networking/`.
+
+5. **Occupancy rides in `discoveryInfo` alongside the room code.** A declined invitation is delivered as nothing at all — no callback, no error — so a full room would otherwise be indistinguishable from a wrong code until the join timed out. Publishing the player count lets the guest report "full" immediately; the host still declines invites, and still sends a `.roomFull` control message for the race where two invitations are accepted before either connection lands.
+
+**Consequences.**
+
+- Discovery state (advertising / browsing / rooms seen / matching code) is surfaced on-screen. A denied Local Network permission on a real device fails silently and permanently, and the Simulator inherits the Mac's grant and never prompts — these counters are the only evidence available. **This has not been exercised on a real device.**
+- Every room gets a fresh `PeerTransport`: a disconnected `MCSession` is not documented as reusable. The peer-name suffix therefore changes per room, which is fine because roster identity is per-room.
+- `NSBonjourServices` must list both `_coral-rooms._tcp` and `_coral-rooms._udp`, which has no `INFOPLIST_KEY_` equivalent — hence a hand-written `Info.plist` for this target only, generated from `project.yml`.
+- The UI is a deliberate lo-fi wireframe: stock `Form`/`List`/`Section`, semantic colours, default spacing, no custom styles. It is placeholder work and is expected to be replaced.
+
+---
+
+## ADR-023 — One app, one `@main`, one scheme — rooms first
+
+**Date:** 2026-08-13 · **Status:** Accepted · **Supersedes:** [ADR-022](#adr-022--peer-to-peer-rooms-as-their-own-target-star-topology-and-a-protocol-seam-to-ar) decision 1
+
+**Context.** ADR-022 put the room layer in its own app target so that "the room layer does not depend on AR" was enforced by the target boundary. That worked for building and verifying rooms in isolation, but it left two installable apps and two `@main` entry points and no way to run the actual product — rooms leading into AR.
+
+**Decision.** One app target, `CoralAR`, keeping bundle id `com.ada.ch5b.CoralAR`, one scheme, the stock `Debug`/`Release` configurations. `CoralRooms` is deleted and its sources move to top-level `Networking/`, `Model/` and `Views/`, with `CoralARApp.swift` and `Info.plist` at the repo root. `CoralARApp` is the only `@main`.
+
+The app **always starts on the room flow**: Home → Lobby → Session, and AR is entered from the session screen. A single `private let startInARDirectly = false` on `CoralARApp` skips straight to AR when flipped — a development shortcut, one line, no build configuration behind it.
+
+**Alternatives considered.**
+
+| Option | Verdict |
+|---|---|
+| Two targets sharing one `@main` | Still two installable apps on the home screen, which is the thing being removed |
+| Extra build configurations defining an `AR_ONLY` compilation condition, selected by a second scheme | Built, then reverted. It worked, but four configurations and two schemes is a lot of project machinery for "which screen opens first" — the cost is paid by every future reader of `project.yml`, not just the person who wanted the shortcut |
+| Runtime toggle on the Home screen | Debug affordance shipping in the product |
+
+**Consequences.**
+
+- **The layering rule is no longer enforced by the compiler.** `Networking/` importing `ARKit` would now compile. It is enforced by folder discipline and a grep instead — that grep belongs in the checks for any change here. The rule currently holds: nothing under `Networking/` imports `ARKit`, `RealityKit`, `Vision` or `SceneKit`.
+- **The app is landscape-only**, unchanged from the AR-only build. The room screens are stock `Form`s and render sideways without breaking, but they are cramped. Letting the app rotate would change AR's orientation assumptions (see the coordinate gotchas in [`AGENTS.md`](AGENTS.md)), which is out of scope here — flip `UISupportedInterfaceOrientations` in `project.yml` if the room screens turn out to matter more.
+- `ARSessionCoordinator` is created by `ARRootView`, not at launch, so no camera and no world tracking until the player enters AR from the session screen.
+- `Info.plist` is a checked-in file rather than `GENERATE_INFOPLIST_FILE`, unlike `HandProbe`. Forced, not chosen: `NSBonjourServices` is an array and no `INFOPLIST_KEY_NSBonjourServices` exists in Xcode 26.6. Its contents are generated from `project.yml`.
+- The AR seam is still unwired: `RoomSession.arChannel` is `nil`, nothing conforms to `ARPayloadChannel`, and entering AR from a room gives every player their own independent scene. Multiplayer AR state sync is the next piece of work, and it needs no change under `Networking/`.
