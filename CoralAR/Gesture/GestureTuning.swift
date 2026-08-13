@@ -5,6 +5,8 @@ struct GestureTuning: Sendable, Equatable {
     static let `default` = GestureTuning()
 
     /// palmWidth pinchRatio below this → pinch intent. Re-derived per ADR-017; see docs/GESTURES.md §3.
+    /// ⚠️ Calibrated before the `.up` orientation fix + PinchRatioCalculator dy de-skew — re-measure
+    /// on-device (ADR-017 procedure) before trusting this number.
     var pinchThreshold: Double = 1.98
 
     /// Pinch hysteresis band. Measured — ADR-017 addendum static hold; see docs/GESTURES.md §3.

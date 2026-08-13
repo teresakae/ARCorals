@@ -23,16 +23,14 @@ extension ARSessionCoordinator {
               let markerPoint = waveTargetViewportPoint
         else { return nil }
 
-        let wristViewportPoint = LandmarkSpace.visionToViewport(
-            CGPoint(x: wrist.x, y: wrist.y),
-            displayTransform: packet.displayTransform,
-            viewportSize: packet.viewportSize
-        )
+        let wristViewportPoint = viewportPoint(CGPoint(x: wrist.x, y: wrist.y), packet: packet)
         let dx = wristViewportPoint.x - markerPoint.x
         let dy = wristViewportPoint.y - markerPoint.y
         guard sqrt(dx * dx + dy * dy) <= Self.waveProximityRadiusPt else { return nil }
 
-        return Double(wrist.x)
+        // Screen-space x, not raw Vision x — wave amplitude/reversal must be measured on the
+        // axis the user actually sees, not whatever axis Vision's un-rotated frame happens to use.
+        return Double(wristViewportPoint.x / arView.bounds.width)
     }
 
     /// Placeholder target: projected top-face center of active cube (docs/GESTURES.md §2.10).

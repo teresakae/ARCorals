@@ -1,31 +1,66 @@
 import CoreGraphics
 import Foundation
+import UIKit
 import Vision
 
-/// Sole coordinate-conversion site: Vision → image-norm → viewport via displayTransform.
+/// Sole coordinate-conversion site: Vision → viewport, aspect-fill. Ported from posehandtest's
+/// `PointerCoordinateMapper` — the version verified on device — after `ARFrame.displayTransform`
+/// composed with a cached SwiftUI viewport size turned out to disagree with where RealityKit's
+/// `ARView` actually draws the camera feed (see chat: crosshair offset investigation). No
+/// `displayTransform`, no cached size: `viewportSize` must be `arView.bounds.size` read live.
 enum LandmarkSpace {
-    /// ⚠️ `.right` Vision upright ≠ landscape displayTransform — axis-swap, not y-flip (AGENTS #1–3).
-    static func visionToImageNormalized(_ vision: CGPoint) -> CGPoint {
-        CGPoint(x: 1 - vision.y, y: 1 - vision.x)
+    /// Size of the camera buffer *after* Vision has rotated it upright.
+    static func uprightImageSize(_ imageResolution: CGSize, orientation: CGImagePropertyOrientation) -> CGSize {
+        switch orientation {
+        case .left, .leftMirrored, .right, .rightMirrored:
+            return CGSize(width: imageResolution.height, height: imageResolution.width)
+        default:
+            return imageResolution
+        }
     }
 
-    /// Vision-normalized → image pixels (upper-left origin). Prefer for overlay diagnostics.
-    static func visionToImagePixels(_ vision: CGPoint, imageSize: CGSize) -> CGPoint {
-        let normalized = NormalizedPoint(x: vision.x, y: vision.y)
-        return normalized.toImageCoordinates(imageSize, origin: .upperLeft)
-    }
-
-    /// Vision-normalized → viewport pixels using a transform snapshotted with the ARFrame.
+    /// Vision-normalized (bottom-left origin, upright) → viewport points (top-left origin),
+    /// aspect-fill — matches how `ARView` renders the camera feed, so the crosshair stays glued
+    /// to the fingertip instead of drifting toward the edges.
     static func visionToViewport(
         _ vision: CGPoint,
-        displayTransform: CGAffineTransform,
+        uprightImageSize: CGSize,
         viewportSize: CGSize
     ) -> CGPoint {
-        let imageNorm = visionToImageNormalized(vision)
-        let viewNorm = imageNorm.applying(displayTransform)
+        guard uprightImageSize.width > 0, uprightImageSize.height > 0,
+              viewportSize.width > 0, viewportSize.height > 0 else { return .zero }
+
+        let scale = max(viewportSize.width / uprightImageSize.width,
+                         viewportSize.height / uprightImageSize.height)
+        let displayed = CGSize(width: uprightImageSize.width * scale,
+                                height: uprightImageSize.height * scale)
+        let originX = (viewportSize.width - displayed.width) / 2
+        let originY = (viewportSize.height - displayed.height) / 2
+
         return CGPoint(
-            x: viewNorm.x * viewportSize.width,
-            y: viewNorm.y * viewportSize.height
+            x: originX + vision.x * displayed.width,
+            y: originY + (1 - vision.y) * displayed.height
         )
+    }
+
+    /// `UIInterfaceOrientation` → the Vision `orientation:` that makes `request.perform` see an
+    /// upright hand. Table verified against posehandtest's `PointerMapping.swift:82-89`.
+    static func visionOrientation(for interfaceOrientation: UIInterfaceOrientation) -> CGImagePropertyOrientation {
+        switch interfaceOrientation {
+        case .landscapeRight: return .up
+        case .landscapeLeft: return .down
+        case .portraitUpsideDown: return .left
+        default: return .right // .portrait, .unknown
+        }
+    }
+
+    /// dy in normalized coords needs this to compare fairly against dx — a horizontal and
+    /// vertical span of equal physical length otherwise measure unequal once the buffer isn't
+    /// square. Derived from the actual buffer resolution, not a hardcoded 1920×1440 — correct
+    /// even if ARKit picks a non-4:3 video format.
+    static func dyAspectCorrection(for orientation: CGImagePropertyOrientation, imageResolution: CGSize) -> Double {
+        let upright = uprightImageSize(imageResolution, orientation: orientation)
+        guard upright.width > 0 else { return 1 }
+        return Double(upright.height / upright.width)
     }
 }

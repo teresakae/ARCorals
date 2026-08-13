@@ -12,14 +12,10 @@ extension ARSessionCoordinator {
         var isPointing = false
 
         if demoMode.allowsPoint, let frame {
-            isPointing = HandShapeClassifier.isPointing(joints: frame.joints, confidenceGate: tuning.confidenceGate, tuning: tuning)
+            isPointing = HandShapeClassifier.isPointing(joints: frame.joints, confidenceGate: tuning.confidenceGate, tuning: tuning, dyAspectCorrection: packet.dyAspectCorrection)
 
             if let visionPoint = frame.indexTipPoint(confidenceGate: tuning.confidenceGate) {
-                let viewPoint = LandmarkSpace.visionToViewport(
-                    visionPoint,
-                    displayTransform: packet.displayTransform,
-                    viewportSize: packet.viewportSize
-                )
+                let viewPoint = viewportPoint(visionPoint, packet: packet)
                 target = scene.selectAnnotation(at: viewPoint)
             }
         }
@@ -35,6 +31,8 @@ extension ARSessionCoordinator {
         let observation = PointObservation(timestamp: machineTime, target: target, isPointing: isPointing, pinchActive: pinchActive)
         let events = pointStateMachine.process(observation)
         dwellProgress = pointStateMachine.dwellProgress
+        debugIsPointing = isPointing
+        debugPointTarget = target != nil
 
         for event in events {
             switch event {

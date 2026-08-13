@@ -1,5 +1,6 @@
 import RealityKit
 import SwiftUI
+import UIKit
 
 @main
 struct CoralARApp: App {
@@ -11,6 +12,16 @@ struct CoralARApp: App {
                 ARViewContainer(session: session)
                     .ignoresSafeArea()
                     .onGeometryChange(for: CGSize.self) { $0.size } action: { session.updateViewportSize($0) }
+                    // Interface orientation, not UIDevice.orientation (unreliable near-horizontal —
+                    // .faceUp/.faceDown). All 4 orientations supported; each rotation re-derives the
+                    // Vision orientation + coordinate mapping (see LandmarkSpace.visionOrientation(for:)).
+                    .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                        pushInterfaceOrientation()
+                    }
+                    .onAppear {
+                        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+                        pushInterfaceOrientation()
+                    }
 
                 LandmarkDotsOverlay(viewportJoints: session.viewportJoints)
                     .ignoresSafeArea()
@@ -37,6 +48,14 @@ struct CoralARApp: App {
             .onAppear { session.start() }
             .onDisappear { session.stop() }
         }
+    }
+
+    private func pushInterfaceOrientation() {
+        let orientation = UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.interfaceOrientation }
+            .first
+        guard let orientation else { return }
+        session.updateInterfaceOrientation(orientation)
     }
 }
 

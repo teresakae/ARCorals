@@ -84,6 +84,11 @@ struct ARStatusHUD: View {
             Text("Mode: \(session.manipulationModeName)")
                 .font(.caption.monospacedDigit().weight(.semibold))
                 .foregroundStyle(modeColor(session.manipulationModeName))
+            if session.demoMode == .point {
+                Text("isPointing: \(session.debugIsPointing ? "yes" : "no")  target: \(session.debugPointTarget ? "hit" : "—")")
+                    .font(.caption.monospacedDigit().weight(.semibold))
+                    .foregroundStyle(session.debugIsPointing ? .green : .red)
+            }
             Text("Wave: \(session.waveCount)")
                 .font(.caption.monospacedDigit().weight(.semibold))
             Text("Raycast: \(tierLabel(session.lastRaycastTier))")

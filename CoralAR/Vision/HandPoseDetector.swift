@@ -3,7 +3,9 @@ import Foundation
 import QuartzCore
 import Vision
 
-/// Runs `DetectHumanHandPoseRequest` on a serial actor. orientation: `.right` (hardcoded).
+/// Runs `DetectHumanHandPoseRequest` on a serial actor. `orientation:` is passed in per-frame
+/// (derived live from interface orientation — see `LandmarkSpace.visionOrientation(for:)`),
+/// not hardcoded — app supports all 4 orientations.
 actor HandPoseDetector {
     private var request = DetectHumanHandPoseRequest()
 
@@ -11,11 +13,11 @@ actor HandPoseDetector {
         request.maximumHandCount = 1
     }
 
-    func detect(pixelBuffer: CVPixelBuffer) async -> LandmarkFrame? {
+    func detect(pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) async -> LandmarkFrame? {
         let start = CACurrentMediaTime()
         do {
             nonisolated(unsafe) let buffer = pixelBuffer
-            let observations = try await request.perform(on: buffer, orientation: .right)
+            let observations = try await request.perform(on: buffer, orientation: orientation)
             let elapsed = CACurrentMediaTime() - start
             let hz = elapsed > 0 ? 1.0 / elapsed : 0
 
